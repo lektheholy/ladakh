@@ -200,6 +200,22 @@
         <span class="topbar-title" id="panel-title">DASHBOARD</span>
       </div>
       <div class="topbar-actions">
+        <div id="topbar-user-chip" style="display:none;align-items:center;gap:.7rem;">
+          <img id="topbar-avatar" src="" alt="" referrerpolicy="no-referrer"
+            style="width:28px;height:28px;border-radius:50%;border:1px solid var(--border2);object-fit:cover;flex-shrink:0;" />
+          <span id="topbar-user-name"
+            style="font-size:0.72rem;letter-spacing:.06em;color:var(--text-muted);
+                   max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
+          <button onclick="doLogout()"
+            style="font-size:0.65rem;letter-spacing:.12em;text-transform:uppercase;
+                   padding:.35rem .85rem;border:1px solid rgba(255,85,85,0.3);
+                   color:rgba(255,85,85,0.75);background:transparent;cursor:pointer;
+                   font-family:var(--font-body);transition:all .3s;white-space:nowrap;"
+            onmouseenter="this.style.borderColor='#ff5555';this.style.color='#ff5555';this.style.background='rgba(255,85,85,0.08)'"
+            onmouseleave="this.style.borderColor='rgba(255,85,85,0.3)';this.style.color='rgba(255,85,85,0.75)';this.style.background='transparent'">
+            ออกจากระบบ
+          </button>
+        </div>
         <a href="index.html" class="btn btn-secondary btn-sm" target="_blank">← View Site</a>
       </div>
     </div>
@@ -375,13 +391,21 @@
   function showAdmin(user) {
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('admin-wrap').classList.add('visible');
-    // fill user info
+    // fill user info — sidebar
     const avatar = user.photoURL || '';
     document.getElementById('user-avatar').src    = avatar;
     document.getElementById('user-name-display').textContent = user.displayName || user.email;
+    // fill user info — settings
     document.getElementById('settings-avatar').src = avatar;
     document.getElementById('settings-name').textContent  = user.displayName || '—';
     document.getElementById('settings-email').textContent = user.email;
+    // fill user info — topbar chip
+    const chip = document.getElementById('topbar-user-chip');
+    if (chip) {
+      document.getElementById('topbar-avatar').src = avatar;
+      document.getElementById('topbar-user-name').textContent = user.displayName || user.email;
+      chip.style.display = 'flex';
+    }
     loadAll();
   }
 
