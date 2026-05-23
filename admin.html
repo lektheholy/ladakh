@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Serif+Thai:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:        #F5F5F0;
+      --sand:      #E6D8C3;
+      --tan:       #C2A68C;
+      --green:     #5D866C;
+      --green-dk:  #3f5e4a;
+      --green-lt:  #e8f1eb;
+      --text:      #2a2a25;
+      --text-muted:#7a7a70;
+      --radius:    8px;
+      --transition: 0.3s cubic-bezier(.4,0,.2,1);
+      --shadow:    0 2px 16px rgba(93,134,108,0.10);
+      --font-serif: 'Playfair Display', 'Noto Serif Thai', Georgia, serif;
+      --font-body:  'Noto Serif Thai', Georgia, serif;
+      --sidebar-w: 240px;
+      --danger: #c0392b;
+      --danger-lt: #fdf0ef;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* ===== LOGIN SCREEN ===== */
+    .login-screen {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bg);
+    }
+    .login-box {
+      background: #fff;
+      border-radius: 20px;
+      padding: 3rem 2.5rem;
+      width: 100%; max-width: 400px;
+      box-shadow: 0 8px 48px rgba(93,134,108,0.14);
+    }
+    .login-logo {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: .15em;
+      text-align: center;
+      margin-bottom: .4rem;
+      color: var(--text);
+    }
+    .login-sub {
+      font-size: 0.78rem;
+      text-align: center;
+      color: var(--text-muted);
+      margin-bottom: 2.2rem;
+      letter-spacing: .08em;
+    }
+    .form-group { margin-bottom: 1.2rem; }
+    .form-label {
+      display: block;
+      font-size: 0.75rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: .45rem;
+    }
+    .form-input {
+      width: 100%;
+      padding: .75rem 1rem;
+      border: 1.5px solid var(--sand);
+      border-radius: var(--radius);
+      background: var(--bg);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color var(--transition);
+    }
+    .form-input:focus { border-color: var(--green); }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+      padding: .75rem 1.5rem;
+      border: none; border-radius: 50px;
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      letter-spacing: .08em;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .btn-primary { background: var(--green); color: #fff; width: 100%; }
+    .btn-primary:hover { background: var(--green-dk); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(93,134,108,0.3); }
+    .btn-secondary { background: var(--sand); color: var(--text); }
+    .btn-secondary:hover { background: var(--tan); color: #fff; }
+    .btn-danger { background: var(--danger-lt); color: var(--danger); font-size: 0.78rem; padding: .4rem .9rem; border-radius: 50px; }
+    .btn-danger:hover { background: var(--danger); color: #fff; }
+    .btn-sm { padding: .4rem 1rem; font-size: 0.78rem; }
+    .login-error {
+      background: #fdf0ef; color: var(--danger);
+      border-radius: var(--radius); padding: .6rem 1rem;
+      font-size: 0.82rem; margin-bottom: 1rem;
+      display: none;
+    }
+    .login-hint {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: 1.2rem;
+    }
+
+    /* ===== ADMIN LAYOUT ===== */
+    .admin-wrap { display: none; min-height: 100vh; }
+    .admin-wrap.visible { display: flex; }
+
+    /* Sidebar */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--text);
+      color: var(--bg);
+      display: flex; flex-direction: column;
+      position: fixed; top: 0; left: 0; bottom: 0;
+      z-index: 50;
+      overflow-y: auto;
+    }
+    .sidebar-logo {
+      padding: 1.8rem 1.5rem 1.4rem;
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      border-bottom: 1px solid rgba(245,245,240,0.1);
+    }
+    .sidebar-logo span { display: block; font-size: 0.65rem; letter-spacing: .18em; color: var(--tan); margin-top: .2rem; font-style: normal; font-family: var(--font-body); }
+    .sidebar-nav { padding: 1.2rem 0; flex: 1; }
+    .sidebar-item {
+      display: flex; align-items: center; gap: .8rem;
+      padding: .7rem 1.5rem;
+      font-size: 0.82rem;
+      letter-spacing: .06em;
+      color: rgba(245,245,240,0.6);
+      cursor: pointer;
+      transition: all var(--transition);
+      border-left: 2px solid transparent;
+      user-select: none;
+    }
+    .sidebar-item:hover { color: var(--bg); background: rgba(245,245,240,0.06); }
+    .sidebar-item.active { color: var(--bg); border-left-color: var(--green); background: rgba(93,134,108,0.15); }
+    .sidebar-icon { width: 18px; text-align: center; font-size: 1rem; }
+    .sidebar-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid rgba(245,245,240,0.1);
+      font-size: 0.75rem;
+      color: rgba(245,245,240,0.35);
+    }
+    .logout-btn {
+      display: flex; align-items: center; gap: .6rem;
+      color: rgba(245,245,240,0.5);
+      cursor: pointer; font-size: 0.8rem;
+      transition: color var(--transition);
+      background: none; border: none; font-family: var(--font-body);
+      padding: 0; width: 100%; text-align: left;
+    }
+    .logout-btn:hover { color: #e74c3c; }
+
+    /* Main content */
+    .admin-main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      padding: 0;
+      display: flex; flex-direction: column;
+    }
+    .admin-topbar {
+      background: #fff;
+      padding: 1rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--sand);
+      position: sticky; top: 0; z-index: 40;
+    }
+    .topbar-title { font-family: var(--font-serif); font-size: 1.15rem; font-weight: 700; }
+    .topbar-actions { display: flex; gap: .8rem; align-items: center; }
+
+    .admin-content { padding: 2rem; flex: 1; }
+
+    /* ===== PANELS ===== */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* ===== STATS ===== */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 1rem; margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1.4rem;
+      box-shadow: var(--shadow);
+    }
+    .stat-card-num {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--green);
+      line-height: 1;
+      margin-bottom: .3rem;
+    }
+    .stat-card-label { font-size: 0.75rem; color: var(--text-muted); letter-spacing: .06em; }
+
+    /* ===== TABLE ===== */
+    .table-wrap {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .table-toolbar {
+      padding: 1rem 1.4rem;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--sand); gap: 1rem; flex-wrap: wrap;
+    }
+    .search-input {
+      padding: .5rem 1rem;
+      border: 1.5px solid var(--sand);
+      border-radius: 50px;
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      width: 220px;
+      outline: none;
+      transition: border-color var(--transition);
+      background: var(--bg);
+    }
+    .search-input:focus { border-color: var(--green); }
+    table { width: 100%; border-collapse: collapse; }
+    thead tr { background: var(--bg); }
+    th {
+      text-align: left; padding: .7rem 1rem;
+      font-size: 0.7rem; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--text-muted); font-weight: 600;
+      border-bottom: 1px solid var(--sand);
+    }
+    td { padding: .85rem 1rem; border-bottom: 1px solid var(--sand); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(230,216,195,0.12); }
+    .td-thumb {
+      width: 48px; height: 36px;
+      background: var(--sand);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; overflow: hidden;
+    }
+    .td-thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; }
+    .td-title { font-weight: 600; font-size: 0.9rem; }
+    .td-desc { font-size: 0.78rem; color: var(--text-muted); max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .badge {
+      display: inline-block;
+      padding: .2rem .65rem;
+      border-radius: 50px;
+      font-size: 0.7rem;
+      letter-spacing: .06em;
+      font-weight: 600;
+    }
+    .badge-design { background: #e8f1eb; color: var(--green); }
+    .badge-photo  { background: #f0ebe4; color: var(--tan); }
+    .badge-art    { background: #fdf5ec; color: #c47d26; }
+    .td-actions { display: flex; gap: .5rem; }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      display: none;
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(42,42,37,0.7);
+      backdrop-filter: blur(6px);
+      align-items: center; justify-content: center; padding: 1.5rem;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: #fff;
+      border-radius: 18px;
+      padding: 2rem 2.2rem 2.2rem;
+      max-width: 520px; width: 100%;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.25);
+      max-height: 90vh; overflow-y: auto;
+    }
+    .modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+    .modal-title { font-family: var(--font-serif); font-size: 1.3rem; font-weight: 700; }
+    .modal-close {
+      background: var(--sand); border: none; border-radius: 50%;
+      width: 32px; height: 32px; font-size: 1rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background var(--transition);
+    }
+    .modal-close:hover { background: var(--tan); color: #fff; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-select {
+      width: 100%;
+      padding: .7rem 1rem;
+      border: 1.5px solid var(--sand);
+      border-radius: var(--radius);
+      background: var(--bg);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      color: var(--text);
+      outline: none;
+      appearance: none;
+      transition: border-color var(--transition);
+    }
+    .form-select:focus { border-color: var(--green); }
+    .form-textarea {
+      width: 100%;
+      padding: .75rem 1rem;
+      border: 1.5px solid var(--sand);
+      border-radius: var(--radius);
+      background: var(--bg);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      color: var(--text);
+      outline: none;
+      resize: vertical;
+      min-height: 90px;
+      transition: border-color var(--transition);
+    }
+    .form-textarea:focus { border-color: var(--green); }
+    .modal-actions { display: flex; gap: .8rem; justify-content: flex-end; margin-top: 1.5rem; }
+    .emoji-picker {
+      display: flex; gap: .5rem; flex-wrap: wrap; margin-top: .5rem;
+    }
+    .emoji-opt {
+      width: 36px; height: 36px;
+      border: 1.5px solid var(--sand);
+      border-radius: 8px;
+      background: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; cursor: pointer;
+      transition: all var(--transition);
+    }
+    .emoji-opt:hover, .emoji-opt.selected { border-color: var(--green); background: var(--green-lt); }
+
+    /* ===== PASSWORD CHANGE ===== */
+    .settings-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 1.8rem;
+      max-width: 480px;
+      box-shadow: var(--shadow);
+      margin-bottom: 1.4rem;
+    }
+    .settings-card h3 {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      margin-bottom: 1.2rem;
+      padding-bottom: .8rem;
+      border-bottom: 1px solid var(--sand);
+    }
+    .toast {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 999;
+      background: var(--text); color: var(--bg);
+      padding: .85rem 1.4rem;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      transform: translateY(20px); opacity: 0;
+      transition: all .35s ease;
+      pointer-events: none;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { border-left: 3px solid var(--green); }
+    .toast.error { border-left: 3px solid var(--danger); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); transition: transform var(--transition); }
+      .sidebar.open { transform: translateX(0); }
+      .admin-main { margin-left: 0; }
+      .form-row { grid-template-columns: 1fr; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      .mobile-menu-btn { display: flex !important; }
+    }
+    .mobile-menu-btn {
+      display: none;
+      background: none; border: none; cursor: pointer;
+      flex-direction: column; gap: 4px; padding: 4px;
+    }
+    .mobile-menu-btn span {
+      display: block; width: 20px; height: 1.5px; background: var(--text);
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-screen" id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">PORTFOLIO</div>
+    <div class="login-sub">ADMIN PANEL</div>
+    <div class="login-error" id="login-error">ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง</div>
+    <div class="form-group">
+      <label class="form-label">ชื่อผู้ใช้</label>
+      <input type="text" class="form-input" id="login-user" placeholder="admin" autocomplete="username" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">รหัสผ่าน</label>
+      <input type="password" class="form-input" id="login-pass" placeholder="••••••••" autocomplete="current-password" />
+    </div>
+    <button class="btn btn-primary" onclick="doLogin()">เข้าสู่ระบบ</button>
+    <p class="login-hint">Default: admin / admin1234</p>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div class="admin-wrap" id="admin-wrap">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      PORTFOLIO
+      <span>ADMIN PANEL</span>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-item active" data-panel="dashboard" onclick="switchPanel('dashboard', this)">
+        <span class="sidebar-icon">◈</span> แดชบอร์ด
+      </div>
+      <div class="sidebar-item" data-panel="works" onclick="switchPanel('works', this)">
+        <span class="sidebar-icon">✦</span> จัดการผลงาน
+      </div>
+      <div class="sidebar-item" data-panel="settings" onclick="switchPanel('settings', this)">
+        <span class="sidebar-icon">⚙</span> ตั้งค่า
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="logout-btn" onclick="doLogout()">
+        ⎋ ออกจากระบบ
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div style="display:flex;align-items:center;gap:1rem;">
+        <button class="mobile-menu-btn" id="mobile-menu-btn" onclick="toggleSidebar()">
+          <span></span><span></span><span></span>
+        </button>
+        <span class="topbar-title" id="panel-title">แดชบอร์ด</span>
+      </div>
+      <div class="topbar-actions">
+        <a href="index.html" class="btn btn-secondary btn-sm" target="_blank">← ดูเว็บไซต์</a>
+      </div>
+    </div>
+
+    <div class="admin-content">
+
+      <!-- DASHBOARD -->
+      <div class="panel active" id="panel-dashboard">
+        <div class="stats-row" id="stats-row"></div>
+        <div class="table-wrap">
+          <div class="table-toolbar">
+            <span style="font-weight:600;font-size:.9rem;">ผลงานล่าสุด</span>
+            <button class="btn btn-primary btn-sm" onclick="openModal()">+ เพิ่มผลงาน</button>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th>ชื่อผลงาน</th>
+                <th>หมวดหมู่</th>
+                <th>ปี</th>
+              </tr>
+            </thead>
+            <tbody id="dash-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- WORKS -->
+      <div class="panel" id="panel-works">
+        <div class="table-wrap">
+          <div class="table-toolbar">
+            <input type="text" class="search-input" placeholder="ค้นหาผลงาน…" id="search-box" oninput="renderTable()" />
+            <button class="btn btn-primary btn-sm" onclick="openModal()">+ เพิ่มผลงาน</button>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th>ชื่อผลงาน</th>
+                <th>หมวดหมู่</th>
+                <th>ปี</th>
+                <th>จัดการ</th>
+              </tr>
+            </thead>
+            <tbody id="works-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div class="panel" id="panel-settings">
+        <div class="settings-card">
+          <h3>เปลี่ยนรหัสผ่าน Admin</h3>
+          <div class="form-group">
+            <label class="form-label">รหัสผ่านปัจจุบัน</label>
+            <input type="password" class="form-input" id="old-pass" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">รหัสผ่านใหม่</label>
+            <input type="password" class="form-input" id="new-pass" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">ยืนยันรหัสผ่านใหม่</label>
+            <input type="password" class="form-input" id="confirm-pass" />
+          </div>
+          <button class="btn btn-primary" onclick="changePassword()" style="width:auto;">บันทึกรหัสผ่าน</button>
+        </div>
+        <div class="settings-card">
+          <h3>ข้อมูลบัญชี</h3>
+          <p style="font-size:.85rem;color:var(--text-muted);">ชื่อผู้ใช้: <strong id="current-user-display"></strong></p>
+        </div>
+      </div>
+
+    </div><!-- /.admin-content -->
+  </div><!-- /.admin-main -->
+</div><!-- /.admin-wrap -->
+
+<!-- ADD/EDIT MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modal-title">เพิ่มผลงานใหม่</h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <input type="hidden" id="edit-id" />
+    <div class="form-group">
+      <label class="form-label">ชื่อผลงาน *</label>
+      <input type="text" class="form-input" id="f-title" placeholder="ชื่อผลงาน" />
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">หมวดหมู่ *</label>
+        <select class="form-select" id="f-cat">
+          <option value="design">ออกแบบ</option>
+          <option value="photo">ภาพถ่าย</option>
+          <option value="art">ศิลปะ</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">ปี</label>
+        <input type="text" class="form-input" id="f-year" placeholder="2024" maxlength="4" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">คำอธิบาย</label>
+      <textarea class="form-textarea" id="f-desc" placeholder="อธิบายผลงานโดยย่อ"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">URL รูปภาพ (ถ้ามี)</label>
+      <input type="text" class="form-input" id="f-image" placeholder="https://..." />
+    </div>
+    <div class="form-group">
+      <label class="form-label">ไอคอนสัญลักษณ์</label>
+      <div class="emoji-picker" id="emoji-picker">
+        <div class="emoji-opt selected" data-v="✦">✦</div>
+        <div class="emoji-opt" data-v="◈">◈</div>
+        <div class="emoji-opt" data-v="◉">◉</div>
+        <div class="emoji-opt" data-v="◌">◌</div>
+        <div class="emoji-opt" data-v="◎">◎</div>
+        <div class="emoji-opt" data-v="☀">☀</div>
+        <div class="emoji-opt" data-v="❋">❋</div>
+        <div class="emoji-opt" data-v="✿">✿</div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal()">ยกเลิก</button>
+      <button class="btn btn-primary" onclick="saveWork()">บันทึก</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="nav.js"></script>
+<script>
+  // ===== AUTH =====
+  const DEFAULT_CREDS = { user: 'admin', pass: 'admin1234' };
+
+  function getCreds() {
+    try {
+      return JSON.parse(localStorage.getItem('admin_creds')) || DEFAULT_CREDS;
+    } catch { return DEFAULT_CREDS; }
+  }
+
+  function isLoggedIn() {
+    return sessionStorage.getItem('admin_logged') === '1';
+  }
+
+  function doLogin() {
+    const u = document.getElementById('login-user').value.trim();
+    const p = document.getElementById('login-pass').value;
+    const creds = getCreds();
+    const errEl = document.getElementById('login-error');
+    if (u === creds.user && p === creds.pass) {
+      sessionStorage.setItem('admin_logged', '1');
+      sessionStorage.setItem('admin_user', u);
+      errEl.style.display = 'none';
+      showAdmin();
+    } else {
+      errEl.style.display = 'block';
+    }
+  }
+
+  document.getElementById('login-pass').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doLogin();
+  });
+
+  function doLogout() {
+    sessionStorage.removeItem('admin_logged');
+    document.getElementById('admin-wrap').classList.remove('visible');
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('login-pass').value = '';
+  }
+
+  function showAdmin() {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('admin-wrap').classList.add('visible');
+    const u = sessionStorage.getItem('admin_user') || 'admin';
+    document.getElementById('current-user-display').textContent = u;
+    renderStats();
+    renderTable();
+    renderDashTable();
+  }
+
+  if (isLoggedIn()) showAdmin();
+
+  // ===== DATA =====
+  const SAMPLE_DATA = [
+    { id: 1, title: "Brand Identity Vol.1", category: "design", desc: "การออกแบบอัตลักษณ์แบรนด์สำหรับธุรกิจขนาดเล็ก โดยใช้โทนสีธรรมชาติและตัวอักษรคลาสสิก", year: "2024", emoji: "◈" },
+    { id: 2, title: "Golden Hour", category: "photo", desc: "ชุดภาพถ่ายในช่วงเวลาทองของวัน ที่ดึงเอาแสงและเงาออกมาอย่างนุ่มนวล", year: "2024", emoji: "☀" },
+    { id: 3, title: "Forest Study", category: "art", desc: "ผลงานจิตรกรรมน้ำมันที่บันทึกความงามของป่าในฤดูใบไม้ร่วง", year: "2023", emoji: "✦" },
+    { id: 4, title: "Packaging Design", category: "design", desc: "ออกแบบบรรจุภัณฑ์สำหรับผลิตภัณฑ์ออร์แกนิก เน้นความเรียบง่ายและเป็นมิตรกับสิ่งแวดล้อม", year: "2024", emoji: "◉" },
+    { id: 5, title: "Quiet Morning", category: "photo", desc: "บรรยากาศเงียบสงบของเช้าวันใหม่ผ่านเลนส์ฟิล์ม", year: "2023", emoji: "◌" },
+    { id: 6, title: "Ceramic Series", category: "art", desc: "งานเซรามิกที่ได้แรงบันดาลใจจากรูปทรงอินทรีย์ของก้อนหิน", year: "2024", emoji: "◎" },
+  ];
+
+  function getWorks() {
+    try {
+      const saved = localStorage.getItem('portfolio_works');
+      return saved ? JSON.parse(saved) : SAMPLE_DATA;
+    } catch { return SAMPLE_DATA; }
+  }
+  function saveWorks(arr) { localStorage.setItem('portfolio_works', JSON.stringify(arr)); }
+
+  // ===== PANELS =====
+  const PANEL_NAMES = { dashboard: 'แดชบอร์ด', works: 'จัดการผลงาน', settings: 'ตั้งค่า' };
+  function switchPanel(id, el) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
+    document.getElementById('panel-' + id).classList.add('active');
+    el.classList.add('active');
+    document.getElementById('panel-title').textContent = PANEL_NAMES[id];
+    if (id === 'works') { renderTable(); }
+    if (id === 'dashboard') { renderStats(); renderDashTable(); }
+    // close sidebar on mobile
+    document.getElementById('sidebar').classList.remove('open');
+  }
+
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+  }
+
+  // ===== STATS =====
+  function renderStats() {
+    const works = getWorks();
+    const cats = { design: 0, photo: 0, art: 0 };
+    works.forEach(w => { if (cats[w.category] !== undefined) cats[w.category]++; });
+    document.getElementById('stats-row').innerHTML = `
+      <div class="stat-card"><div class="stat-card-num">${works.length}</div><div class="stat-card-label">ผลงานทั้งหมด</div></div>
+      <div class="stat-card"><div class="stat-card-num">${cats.design}</div><div class="stat-card-label">งานออกแบบ</div></div>
+      <div class="stat-card"><div class="stat-card-num">${cats.photo}</div><div class="stat-card-label">ภาพถ่าย</div></div>
+      <div class="stat-card"><div class="stat-card-num">${cats.art}</div><div class="stat-card-label">ศิลปะ</div></div>
+    `;
+  }
+
+  // ===== TABLES =====
+  const CAT_LABEL = { design: 'ออกแบบ', photo: 'ภาพถ่าย', art: 'ศิลปะ' };
+  const CAT_BADGE = { design: 'badge-design', photo: 'badge-photo', art: 'badge-art' };
+
+  function renderDashTable() {
+    const works = getWorks().slice(-5).reverse();
+    document.getElementById('dash-table-body').innerHTML = works.map(w => `
+      <tr>
+        <td><div class="td-thumb">${w.image ? `<img src="${w.image}" alt="">` : w.emoji || '✦'}</div></td>
+        <td><div class="td-title">${w.title}</div><div class="td-desc">${w.desc}</div></td>
+        <td><span class="badge ${CAT_BADGE[w.category] || ''}">${CAT_LABEL[w.category] || w.category}</span></td>
+        <td>${w.year || '-'}</td>
+      </tr>
+    `).join('') || '<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:2rem;">ยังไม่มีผลงาน</td></tr>';
+  }
+
+  function renderTable() {
+    const q = (document.getElementById('search-box')?.value || '').toLowerCase();
+    let works = getWorks();
+    if (q) works = works.filter(w => w.title.toLowerCase().includes(q) || w.desc.toLowerCase().includes(q));
+    document.getElementById('works-table-body').innerHTML = works.map(w => `
+      <tr>
+        <td><div class="td-thumb">${w.image ? `<img src="${w.image}" alt="">` : w.emoji || '✦'}</div></td>
+        <td><div class="td-title">${w.title}</div><div class="td-desc">${w.desc}</div></td>
+        <td><span class="badge ${CAT_BADGE[w.category] || ''}">${CAT_LABEL[w.category] || w.category}</span></td>
+        <td>${w.year || '-'}</td>
+        <td>
+          <div class="td-actions">
+            <button class="btn btn-secondary btn-sm" onclick="editWork(${w.id})">แก้ไข</button>
+            <button class="btn btn-danger" onclick="deleteWork(${w.id})">ลบ</button>
+          </div>
+        </td>
+      </tr>
+    `).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:2rem;">ไม่พบผลงาน</td></tr>';
+  }
+
+  // ===== MODAL =====
+  let selectedEmoji = '✦';
+
+  function openModal(reset = true) {
+    if (reset) {
+      document.getElementById('modal-title').textContent = 'เพิ่มผลงานใหม่';
+      document.getElementById('edit-id').value = '';
+      document.getElementById('f-title').value = '';
+      document.getElementById('f-cat').value = 'design';
+      document.getElementById('f-year').value = new Date().getFullYear();
+      document.getElementById('f-desc').value = '';
+      document.getElementById('f-image').value = '';
+      selectedEmoji = '✦';
+      setEmoji('✦');
+    }
+    document.getElementById('modal').classList.add('open');
+  }
+
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+  }
+
+  document.getElementById('modal').addEventListener('click', e => {
+    if (e.target === document.getElementById('modal')) closeModal();
+  });
+
+  document.querySelectorAll('.emoji-opt').forEach(opt => {
+    opt.addEventListener('click', () => {
+      selectedEmoji = opt.dataset.v;
+      setEmoji(opt.dataset.v);
+    });
+  });
+
+  function setEmoji(v) {
+    document.querySelectorAll('.emoji-opt').forEach(o => {
+      o.classList.toggle('selected', o.dataset.v === v);
+    });
+    selectedEmoji = v;
+  }
+
+  function saveWork() {
+    const title = document.getElementById('f-title').value.trim();
+    if (!title) { showToast('กรุณากรอกชื่อผลงาน', 'error'); return; }
+    const works = getWorks();
+    const editId = parseInt(document.getElementById('edit-id').value);
+    const work = {
+      id: editId || Date.now(),
+      title,
+      category: document.getElementById('f-cat').value,
+      year: document.getElementById('f-year').value.trim(),
+      desc: document.getElementById('f-desc').value.trim(),
+      image: document.getElementById('f-image').value.trim(),
+      emoji: selectedEmoji,
+    };
+    if (editId) {
+      const idx = works.findIndex(w => w.id === editId);
+      if (idx >= 0) works[idx] = work;
+    } else {
+      works.push(work);
+    }
+    saveWorks(works);
+    closeModal();
+    renderStats(); renderTable(); renderDashTable();
+    showToast(editId ? 'อัพเดตผลงานแล้ว ✓' : 'เพิ่มผลงานใหม่แล้ว ✓', 'success');
+  }
+
+  function editWork(id) {
+    const w = getWorks().find(x => x.id === id);
+    if (!w) return;
+    document.getElementById('modal-title').textContent = 'แก้ไขผลงาน';
+    document.getElementById('edit-id').value = w.id;
+    document.getElementById('f-title').value = w.title;
+    document.getElementById('f-cat').value = w.category;
+    document.getElementById('f-year').value = w.year || '';
+    document.getElementById('f-desc').value = w.desc || '';
+    document.getElementById('f-image').value = w.image || '';
+    setEmoji(w.emoji || '✦');
+    openModal(false);
+  }
+
+  function deleteWork(id) {
+    if (!confirm('ต้องการลบผลงานนี้ใช่ไหม?')) return;
+    const works = getWorks().filter(w => w.id !== id);
+    saveWorks(works);
+    renderStats(); renderTable(); renderDashTable();
+    showToast('ลบผลงานแล้ว', 'success');
+  }
+
+  // ===== SETTINGS =====
+  function changePassword() {
+    const old = document.getElementById('old-pass').value;
+    const nw  = document.getElementById('new-pass').value;
+    const cf  = document.getElementById('confirm-pass').value;
+    const creds = getCreds();
+    if (old !== creds.pass) { showToast('รหัสผ่านปัจจุบันไม่ถูกต้อง', 'error'); return; }
+    if (nw.length < 6) { showToast('รหัสผ่านใหม่ต้องมีอย่างน้อย 6 ตัว', 'error'); return; }
+    if (nw !== cf) { showToast('รหัสผ่านใหม่ไม่ตรงกัน', 'error'); return; }
+    localStorage.setItem('admin_creds', JSON.stringify({ user: creds.user, pass: nw }));
+    document.getElementById('old-pass').value = '';
+    document.getElementById('new-pass').value = '';
+    document.getElementById('confirm-pass').value = '';
+    showToast('เปลี่ยนรหัสผ่านสำเร็จ ✓', 'success');
+  }
+
+  // ===== TOAST =====
+  function showToast(msg, type = 'success') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = `toast ${type}`;
+    void t.offsetWidth;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+</script>
+</body>
+</html>
