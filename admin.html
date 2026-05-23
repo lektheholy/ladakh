@@ -8,219 +8,295 @@
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Noto+Sans+Thai:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg:#080808;--bg2:#0e0e0e;--surface:#141414;--surface2:#1c1c1c;
-      --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
-      --accent:#c8f55a;--text:#f0f0f0;--text-muted:rgba(240,240,240,0.4);
-      --danger:#ff5555;--danger-bg:rgba(255,85,85,0.08);--success:#c8f55a;
-      --sidebar-w:220px;--transition:0.35s cubic-bezier(.16,1,.3,1);
-      --font-display:'Bebas Neue',sans-serif;--font-body:'DM Sans','Noto Sans Thai',sans-serif;
+      --bg:#080808; --bg2:#0e0e0e; --surface:#141414; --surface2:#1c1c1c;
+      --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.12);
+      --accent:#c8f55a; --text:#f0f0f0; --text-muted:rgba(240,240,240,0.4);
+      --danger:#ff5555; --danger-bg:rgba(255,85,85,0.08);
+      --transition:0.45s cubic-bezier(.16,1,.3,1);
+      --font-display:'Bebas Neue',sans-serif;
+      --font-body:'DM Sans','Noto Sans Thai',sans-serif;
     }
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:14px;line-height:1.6;}
+    *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--bg); color:var(--text); font-family:var(--font-body); font-size:15px; line-height:1.6; overflow-x:hidden; }
 
-    /* ===== LOGIN / GOOGLE ===== */
-    .login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);position:relative;overflow:hidden;}
-    .login-screen::before{content:'ADMIN';position:absolute;font-family:var(--font-display);font-size:30vw;line-height:1;color:rgba(255,255,255,0.02);pointer-events:none;user-select:none;letter-spacing:-.02em;}
-    .login-box{background:var(--surface);border:1px solid var(--border2);padding:3rem 2.8rem;width:100%;max-width:420px;position:relative;z-index:1;}
-    .login-logo{font-family:var(--font-display);font-size:2rem;letter-spacing:.18em;text-align:center;margin-bottom:.3rem;color:var(--text);}
-    .login-sub{font-size:0.65rem;letter-spacing:.22em;text-transform:uppercase;text-align:center;color:var(--accent);margin-bottom:2.5rem;}
-    .login-divider{display:flex;align-items:center;gap:1rem;margin:1.5rem 0;color:var(--text-muted);font-size:.7rem;letter-spacing:.1em;}
-    .login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:var(--border);}
-    .btn-google{
-      display:flex;align-items:center;justify-content:center;gap:.75rem;
-      width:100%;padding:.75rem 1.4rem;
-      background:#fff;color:#3c4043;border:1px solid #dadce0;
-      font-family:var(--font-body);font-size:.85rem;font-weight:500;
-      cursor:pointer;transition:all .3s;letter-spacing:.02em;
+    /* noise overlay */
+    body::before { content:''; position:fixed; inset:0; z-index:9997; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E"); opacity:.02; pointer-events:none; }
+
+    /* ===== NAV (same as index.html) ===== */
+    .main-nav {
+      position:fixed; top:0; left:0; right:0; z-index:100;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:1.6rem 3rem;
+      background:rgba(8,8,8,0.92);
+      backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--border);
+      transition:padding var(--transition), background var(--transition);
     }
-    .btn-google:hover{background:#f8f8f8;box-shadow:0 2px 8px rgba(0,0,0,.2);}
-    .btn-google svg{width:18px;height:18px;flex-shrink:0;}
-    .login-error{background:var(--danger-bg);color:var(--danger);border:1px solid rgba(255,85,85,0.2);padding:.6rem 1rem;font-size:.8rem;margin-bottom:1rem;display:none;}
-    .login-hint{font-size:0.68rem;color:var(--text-muted);text-align:center;margin-top:1.5rem;line-height:1.8;}
-    .login-loading{text-align:center;color:var(--text-muted);font-size:.8rem;letter-spacing:.1em;padding:1rem 0;display:none;}
+    .nav-logo a { font-family:var(--font-display); font-size:1.5rem; letter-spacing:.18em; color:var(--text); text-decoration:none; }
+    .nav-links { display:flex; gap:0; align-items:center; }
+    .nav-link {
+      font-size:0.75rem; letter-spacing:.14em; text-transform:uppercase;
+      color:var(--text-muted); text-decoration:none; position:relative; overflow:hidden;
+      display:inline-block; transition:color var(--transition); padding:.4rem 1.2rem;
+    }
+    .nav-link span { display:inline-block; transition:transform .4s var(--transition); }
+    .nav-link::after { content:attr(data-label); position:absolute; left:1.2rem; top:100%; font-size:0.75rem; letter-spacing:.14em; color:var(--accent); white-space:nowrap; }
+    .nav-link:hover span { transform:translateY(-100%); }
+    .nav-link:hover { color:var(--accent); }
 
-    /* ===== ADMIN LAYOUT ===== */
-    .admin-wrap{display:none;min-height:100vh;}
-    .admin-wrap.visible{display:flex;}
-    .sidebar{width:var(--sidebar-w);background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:50;overflow-y:auto;}
-    .sidebar-logo{padding:1.8rem 1.5rem 1.4rem;font-family:var(--font-display);font-size:1.2rem;letter-spacing:.14em;border-bottom:1px solid var(--border);color:var(--text);}
-    .sidebar-logo span{display:block;font-size:0.6rem;letter-spacing:.2em;color:var(--accent);margin-top:.2rem;font-family:var(--font-body);font-weight:400;}
-    /* user chip in sidebar */
-    .user-chip{display:flex;align-items:center;gap:.6rem;padding:.8rem 1.5rem;border-bottom:1px solid var(--border);overflow:hidden;}
-    .user-avatar{width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid var(--border2);flex-shrink:0;background:var(--bg2);}
-    .user-name{font-size:.72rem;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-    .sidebar-nav{padding:1.2rem 0;flex:1;}
-    .sidebar-item{display:flex;align-items:center;gap:.75rem;padding:.65rem 1.5rem;font-size:0.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);cursor:pointer;transition:all var(--transition);border-left:1px solid transparent;}
-    .sidebar-item:hover{color:var(--text);background:rgba(255,255,255,0.03);}
-    .sidebar-item.active{color:var(--accent);border-left-color:var(--accent);background:rgba(200,245,90,0.04);}
-    .sidebar-icon{font-size:.9rem;opacity:.7;}
-    .sidebar-footer{padding:1rem 1.5rem;border-top:1px solid var(--border);}
-    .logout-btn{display:flex;align-items:center;gap:.6rem;color:var(--text-muted);cursor:pointer;font-size:0.72rem;letter-spacing:.1em;text-transform:uppercase;background:none;border:none;font-family:var(--font-body);padding:0;width:100%;transition:color .3s;}
-    .logout-btn:hover{color:var(--danger);}
-    .admin-main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;}
-    .admin-topbar{background:var(--surface);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:40;}
-    .topbar-title{font-family:var(--font-display);font-size:1.3rem;letter-spacing:.08em;}
-    .topbar-actions{display:flex;gap:.8rem;align-items:center;}
-    .admin-content{padding:2rem;flex:1;}
-    .panel{display:none;} .panel.active{display:block;}
+    /* divider between public nav and admin nav */
+    .nav-divider {
+      width:1px; height:20px; background:var(--border2); margin:0 .8rem; flex-shrink:0;
+    }
+
+    /* admin nav items — accent tint */
+    .nav-link.admin-link { color:rgba(200,245,90,0.5); }
+    .nav-link.admin-link::after { color:var(--accent); }
+    .nav-link.admin-link:hover { color:var(--accent); }
+    .nav-link.admin-link.active-panel { color:var(--accent); background:rgba(200,245,90,0.04); }
+    .nav-link.admin-link.active-panel span { transform:translateY(-100%); }
+
+    .nav-actions { display:flex; align-items:center; gap:1rem; }
+    .nav-btn {
+      font-size:0.72rem; letter-spacing:.14em; text-transform:uppercase;
+      padding:.5rem 1.4rem; border:1px solid var(--border);
+      color:var(--text-muted); text-decoration:none; transition:all var(--transition); background:transparent; cursor:pointer; font-family:var(--font-body);
+    }
+    .nav-btn:hover { border-color:var(--accent); color:var(--accent); background:rgba(200,245,90,0.05); }
+
+    /* user chip in nav */
+    .nav-user-chip { display:none; align-items:center; gap:.6rem; }
+    .nav-user-chip.visible { display:flex; }
+    .nav-user-avatar { width:26px; height:26px; border-radius:50%; border:1px solid var(--border2); object-fit:cover; flex-shrink:0; }
+    .nav-user-name { font-size:0.68rem; letter-spacing:.06em; color:var(--text-muted); max-width:120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .nav-logout-btn {
+      font-size:0.65rem; letter-spacing:.12em; text-transform:uppercase;
+      padding:.38rem .9rem; border:1px solid rgba(255,85,85,0.3);
+      color:rgba(255,85,85,0.75); background:transparent; cursor:pointer; font-family:var(--font-body); transition:all .3s; white-space:nowrap;
+    }
+    .nav-logout-btn:hover { border-color:#ff5555; color:#ff5555; background:rgba(255,85,85,0.08); }
+
+    /* hamburger */
+    .hamburger { display:none; flex-direction:column; gap:6px; background:none; border:none; cursor:pointer; padding:4px; }
+    .hamburger span { display:block; height:1px; background:var(--text); transition:var(--transition); }
+    .hamburger span:first-child { width:24px; }
+    .hamburger span:last-child { width:16px; }
+    .hamburger.active span:first-child { width:20px; transform:translateY(3.5px) rotate(45deg); }
+    .hamburger.active span:last-child { width:20px; transform:translateY(-3.5px) rotate(-45deg); }
+
+    /* ===== PAGE WRAPPER ===== */
+    .page-wrap { padding-top:72px; min-height:100vh; }
+
+    /* ===== LOGIN SCREEN ===== */
+    .login-screen {
+      min-height:100vh; display:flex; align-items:center; justify-content:center;
+      background:var(--bg); position:relative; overflow:hidden;
+    }
+    .login-screen::before {
+      content:'ADMIN'; position:absolute; font-family:var(--font-display);
+      font-size:30vw; line-height:1; color:rgba(255,255,255,0.02);
+      pointer-events:none; user-select:none; letter-spacing:-.02em;
+    }
+    .login-box { background:var(--surface); border:1px solid var(--border2); padding:3rem 2.8rem; width:100%; max-width:420px; position:relative; z-index:1; }
+    .login-logo { font-family:var(--font-display); font-size:2rem; letter-spacing:.18em; text-align:center; margin-bottom:.3rem; color:var(--text); }
+    .login-sub { font-size:0.65rem; letter-spacing:.22em; text-transform:uppercase; text-align:center; color:var(--accent); margin-bottom:2.5rem; }
+    .btn-google {
+      display:flex; align-items:center; justify-content:center; gap:.75rem;
+      width:100%; padding:.75rem 1.4rem;
+      background:#fff; color:#3c4043; border:1px solid #dadce0;
+      font-family:var(--font-body); font-size:.85rem; font-weight:500;
+      cursor:pointer; transition:all .3s; letter-spacing:.02em;
+    }
+    .btn-google:hover { background:#f8f8f8; box-shadow:0 2px 8px rgba(0,0,0,.2); }
+    .btn-google svg { width:18px; height:18px; flex-shrink:0; }
+    .login-error { background:var(--danger-bg); color:var(--danger); border:1px solid rgba(255,85,85,0.2); padding:.6rem 1rem; font-size:.8rem; margin-bottom:1rem; display:none; }
+    .login-hint { font-size:0.68rem; color:var(--text-muted); text-align:center; margin-top:1.5rem; line-height:1.8; }
+    .login-loading { text-align:center; color:var(--text-muted); font-size:.8rem; letter-spacing:.1em; padding:1rem 0; display:none; }
+
+    /* ===== ADMIN CONTENT ===== */
+    .admin-wrap { display:none; }
+    .admin-wrap.visible { display:block; }
+
+    /* section header inside admin */
+    .admin-section-bar {
+      display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;
+      padding:1.8rem 3rem 1.2rem;
+      border-bottom:1px solid var(--border);
+    }
+    .admin-section-title { font-family:var(--font-display); font-size:2.2rem; letter-spacing:.06em; line-height:1; }
+    .admin-section-eyebrow { font-size:0.65rem; letter-spacing:.22em; text-transform:uppercase; color:var(--accent); margin-bottom:.3rem; }
+
+    .admin-content { padding:2.5rem 3rem; }
+    .panel { display:none; } .panel.active { display:block; }
 
     /* ===== STATS ===== */
-    .stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1px;margin-bottom:2rem;border:1px solid var(--border);background:var(--border);}
-    .stat-card{background:var(--surface);padding:1.4rem 1.6rem;}
-    .stat-card-num{font-family:var(--font-display);font-size:2.8rem;letter-spacing:.04em;color:var(--accent);line-height:1;margin-bottom:.2rem;}
-    .stat-card-label{font-size:0.65rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted);}
+    .stats-row { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:1px; margin-bottom:2rem; border:1px solid var(--border); background:var(--border); }
+    .stat-card { background:var(--surface); padding:1.4rem 1.6rem; }
+    .stat-card-num { font-family:var(--font-display); font-size:2.8rem; letter-spacing:.04em; color:var(--accent); line-height:1; margin-bottom:.2rem; }
+    .stat-card-label { font-size:0.65rem; letter-spacing:.14em; text-transform:uppercase; color:var(--text-muted); }
 
     /* ===== TABLE ===== */
-    .table-wrap{background:var(--surface);border:1px solid var(--border);overflow:hidden;}
-    .table-toolbar{padding:1rem 1.4rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);gap:1rem;flex-wrap:wrap;}
-    .table-label{font-size:0.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted);}
-    .search-input{padding:.45rem .9rem;border:1px solid var(--border2);background:var(--bg2);font-family:var(--font-body);font-size:0.82rem;width:200px;outline:none;color:var(--text);transition:border-color .3s;}
-    .search-input::placeholder{color:rgba(240,240,240,0.2);}
-    .search-input:focus{border-color:var(--accent);}
-    table{width:100%;border-collapse:collapse;}
-    thead tr{background:var(--bg2);}
-    th{text-align:left;padding:.6rem 1rem;font-size:0.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--text-muted);font-weight:500;border-bottom:1px solid var(--border);}
-    td{padding:.8rem 1rem;border-bottom:1px solid var(--border);vertical-align:middle;}
-    tr:last-child td{border-bottom:none;}
-    tbody tr:hover td{background:rgba(255,255,255,0.02);}
-    .td-thumb{width:44px;height:32px;background:var(--bg2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1rem;overflow:hidden;color:var(--text-muted);}
-    .td-thumb img{width:100%;height:100%;object-fit:cover;}
-    .td-title{font-weight:500;font-size:.88rem;color:var(--text);}
-    .td-desc{font-size:0.75rem;color:var(--text-muted);max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-    .badge{display:inline-block;padding:.18rem .6rem;font-size:0.62rem;letter-spacing:.1em;text-transform:uppercase;border:1px solid;}
-    .badge-design{color:var(--accent);border-color:rgba(200,245,90,0.2);background:rgba(200,245,90,0.05);}
-    .badge-photo{color:#7bb8f5;border-color:rgba(123,184,245,0.2);background:rgba(123,184,245,0.05);}
-    .badge-art{color:#d4a2ff;border-color:rgba(212,162,255,0.2);background:rgba(212,162,255,0.05);}
-    .td-actions{display:flex;gap:.5rem;}
+    .table-wrap { background:var(--surface); border:1px solid var(--border); overflow:hidden; }
+    .table-toolbar { padding:1rem 1.4rem; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); gap:1rem; flex-wrap:wrap; }
+    .table-label { font-size:0.7rem; letter-spacing:.14em; text-transform:uppercase; color:var(--text-muted); }
+    .search-input { padding:.45rem .9rem; border:1px solid var(--border2); background:var(--bg2); font-family:var(--font-body); font-size:0.82rem; width:220px; outline:none; color:var(--text); transition:border-color .3s; }
+    .search-input::placeholder { color:rgba(240,240,240,0.2); }
+    .search-input:focus { border-color:var(--accent); }
+    table { width:100%; border-collapse:collapse; }
+    thead tr { background:var(--bg2); }
+    th { text-align:left; padding:.6rem 1rem; font-size:0.62rem; letter-spacing:.16em; text-transform:uppercase; color:var(--text-muted); font-weight:500; border-bottom:1px solid var(--border); }
+    td { padding:.8rem 1rem; border-bottom:1px solid var(--border); vertical-align:middle; }
+    tr:last-child td { border-bottom:none; }
+    tbody tr:hover td { background:rgba(255,255,255,0.02); }
+    .td-thumb { width:44px; height:32px; background:var(--bg2); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:1rem; overflow:hidden; color:var(--text-muted); }
+    .td-thumb img { width:100%; height:100%; object-fit:cover; }
+    .td-title { font-weight:500; font-size:.88rem; color:var(--text); }
+    .td-desc { font-size:0.75rem; color:var(--text-muted); max-width:240px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .badge { display:inline-block; padding:.18rem .6rem; font-size:0.62rem; letter-spacing:.1em; text-transform:uppercase; border:1px solid; }
+    .badge-design { color:var(--accent); border-color:rgba(200,245,90,0.2); background:rgba(200,245,90,0.05); }
+    .badge-photo { color:#7bb8f5; border-color:rgba(123,184,245,0.2); background:rgba(123,184,245,0.05); }
+    .badge-art { color:#d4a2ff; border-color:rgba(212,162,255,0.2); background:rgba(212,162,255,0.05); }
+    .td-actions { display:flex; gap:.5rem; }
 
     /* ===== BUTTONS ===== */
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.65rem 1.4rem;border:none;font-family:var(--font-body);font-size:0.75rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all var(--transition);}
-    .btn-primary{background:var(--accent);color:var(--bg);width:100%;font-weight:600;}
-    .btn-primary:hover{background:#d4ff6e;}
-    .btn-secondary{background:var(--surface2);color:var(--text-muted);border:1px solid var(--border);}
-    .btn-secondary:hover{border-color:var(--border2);color:var(--text);}
-    .btn-danger{background:var(--danger-bg);color:var(--danger);border:1px solid rgba(255,85,85,0.15);font-size:0.7rem;padding:.35rem .9rem;}
-    .btn-danger:hover{background:var(--danger);color:#fff;}
-    .btn-sm{padding:.38rem 1rem;font-size:0.7rem;}
+    .btn { display:inline-flex; align-items:center; justify-content:center; gap:.5rem; padding:.65rem 1.4rem; border:none; font-family:var(--font-body); font-size:0.75rem; letter-spacing:.12em; text-transform:uppercase; cursor:pointer; transition:all var(--transition); }
+    .btn-primary { background:var(--accent); color:var(--bg); font-weight:600; }
+    .btn-primary:hover { background:#d4ff6e; }
+    .btn-secondary { background:var(--surface2); color:var(--text-muted); border:1px solid var(--border); }
+    .btn-secondary:hover { border-color:var(--border2); color:var(--text); }
+    .btn-danger { background:var(--danger-bg); color:var(--danger); border:1px solid rgba(255,85,85,0.15); font-size:0.7rem; padding:.35rem .9rem; }
+    .btn-danger:hover { background:var(--danger); color:#fff; }
+    .btn-sm { padding:.38rem 1rem; font-size:0.7rem; }
 
     /* ===== MODAL ===== */
-    .modal-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(8,8,8,0.9);backdrop-filter:blur(16px);align-items:center;justify-content:center;padding:1.5rem;}
-    .modal-overlay.open{display:flex;}
-    .modal{background:var(--surface);border:1px solid var(--border2);padding:2rem 2.2rem 2.2rem;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;}
-    .modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.6rem;padding-bottom:1rem;border-bottom:1px solid var(--border);}
-    .modal-title{font-family:var(--font-display);font-size:1.5rem;letter-spacing:.06em;}
-    .modal-close{background:var(--bg2);border:1px solid var(--border);width:30px;height:30px;font-size:.8rem;cursor:pointer;color:var(--text-muted);display:flex;align-items:center;justify-content:center;transition:all .3s;}
-    .modal-close:hover{border-color:var(--accent);color:var(--accent);}
-    .form-group{margin-bottom:1.2rem;}
-    .form-label{display:block;font-size:0.65rem;letter-spacing:.16em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.45rem;}
-    .form-input{width:100%;padding:.7rem .9rem;border:1px solid var(--border2);background:var(--bg2);font-family:var(--font-body);font-size:.9rem;color:var(--text);outline:none;transition:border-color var(--transition);}
-    .form-input::placeholder{color:rgba(240,240,240,0.2);}
-    .form-input:focus{border-color:var(--accent);}
-    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
-    .form-select{width:100%;padding:.65rem .9rem;border:1px solid var(--border2);background:var(--bg2);font-family:var(--font-body);font-size:.88rem;color:var(--text);outline:none;appearance:none;transition:border-color .3s;}
-    .form-select:focus{border-color:var(--accent);}
-    .form-textarea{width:100%;padding:.7rem .9rem;border:1px solid var(--border2);background:var(--bg2);font-family:var(--font-body);font-size:.88rem;color:var(--text);outline:none;resize:vertical;min-height:90px;transition:border-color .3s;}
-    .form-textarea:focus{border-color:var(--accent);}
-    .modal-actions{display:flex;gap:.8rem;justify-content:flex-end;margin-top:1.5rem;}
-    .emoji-picker{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.5rem;}
-    .emoji-opt{width:34px;height:34px;border:1px solid var(--border);background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:1rem;cursor:pointer;transition:all .3s;color:var(--text-muted);}
-    .emoji-opt:hover,.emoji-opt.selected{border-color:var(--accent);background:rgba(200,245,90,0.06);color:var(--text);}
+    .modal-overlay { display:none; position:fixed; inset:0; z-index:200; background:rgba(8,8,8,0.9); backdrop-filter:blur(16px); align-items:center; justify-content:center; padding:1.5rem; }
+    .modal-overlay.open { display:flex; }
+    .modal { background:var(--surface); border:1px solid var(--border2); padding:2rem 2.2rem 2.2rem; max-width:520px; width:100%; max-height:90vh; overflow-y:auto; }
+    .modal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.6rem; padding-bottom:1rem; border-bottom:1px solid var(--border); }
+    .modal-title { font-family:var(--font-display); font-size:1.5rem; letter-spacing:.06em; }
+    .modal-close { background:var(--bg2); border:1px solid var(--border); width:30px; height:30px; font-size:.8rem; cursor:pointer; color:var(--text-muted); display:flex; align-items:center; justify-content:center; transition:all .3s; }
+    .modal-close:hover { border-color:var(--accent); color:var(--accent); }
+    .form-group { margin-bottom:1.2rem; }
+    .form-label { display:block; font-size:0.65rem; letter-spacing:.16em; text-transform:uppercase; color:var(--text-muted); margin-bottom:.45rem; }
+    .form-input { width:100%; padding:.7rem .9rem; border:1px solid var(--border2); background:var(--bg2); font-family:var(--font-body); font-size:.9rem; color:var(--text); outline:none; transition:border-color var(--transition); }
+    .form-input::placeholder { color:rgba(240,240,240,0.2); }
+    .form-input:focus { border-color:var(--accent); }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .form-select { width:100%; padding:.65rem .9rem; border:1px solid var(--border2); background:var(--bg2); font-family:var(--font-body); font-size:.88rem; color:var(--text); outline:none; appearance:none; transition:border-color .3s; }
+    .form-select:focus { border-color:var(--accent); }
+    .form-textarea { width:100%; padding:.7rem .9rem; border:1px solid var(--border2); background:var(--bg2); font-family:var(--font-body); font-size:.88rem; color:var(--text); outline:none; resize:vertical; min-height:90px; transition:border-color .3s; }
+    .form-textarea:focus { border-color:var(--accent); }
+    .modal-actions { display:flex; gap:.8rem; justify-content:flex-end; margin-top:1.5rem; }
+    .emoji-picker { display:flex; gap:.4rem; flex-wrap:wrap; margin-top:.5rem; }
+    .emoji-opt { width:34px; height:34px; border:1px solid var(--border); background:var(--bg2); display:flex; align-items:center; justify-content:center; font-size:1rem; cursor:pointer; transition:all .3s; color:var(--text-muted); }
+    .emoji-opt:hover,.emoji-opt.selected { border-color:var(--accent); background:rgba(200,245,90,0.06); color:var(--text); }
 
     /* ===== SETTINGS ===== */
-    .settings-card{background:var(--surface);border:1px solid var(--border);padding:1.8rem;max-width:480px;margin-bottom:1rem;}
-    .settings-card h3{font-family:var(--font-display);font-size:1.3rem;letter-spacing:.06em;margin-bottom:1.2rem;padding-bottom:.8rem;border-bottom:1px solid var(--border);color:var(--text);}
+    .settings-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(360px,1fr)); gap:1.5rem; }
+    .settings-card { background:var(--surface); border:1px solid var(--border); padding:1.8rem; }
+    .settings-card h3 { font-family:var(--font-display); font-size:1.3rem; letter-spacing:.06em; margin-bottom:1.2rem; padding-bottom:.8rem; border-bottom:1px solid var(--border); color:var(--text); }
 
     /* ===== TOAST ===== */
-    .toast{position:fixed;bottom:2rem;right:2rem;z-index:999;background:var(--surface2);color:var(--text);border:1px solid var(--border2);padding:.8rem 1.4rem;font-size:0.8rem;letter-spacing:.04em;transform:translateY(20px);opacity:0;transition:all .35s var(--transition);pointer-events:none;}
-    .toast.show{transform:translateY(0);opacity:1;}
-    .toast.success{border-left:2px solid var(--accent);}
-    .toast.error{border-left:2px solid var(--danger);}
+    .toast { position:fixed; bottom:2rem; right:2rem; z-index:9999; background:var(--surface2); color:var(--text); border:1px solid var(--border2); padding:.8rem 1.4rem; font-size:0.8rem; letter-spacing:.04em; transform:translateY(20px); opacity:0; transition:all .35s var(--transition); pointer-events:none; }
+    .toast.show { transform:translateY(0); opacity:1; }
+    .toast.success { border-left:2px solid var(--accent); }
+    .toast.error { border-left:2px solid var(--danger); }
 
-    body::before{content:'';position:fixed;inset:0;z-index:9997;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");opacity:.02;pointer-events:none;}
-
-    @media(max-width:768px){
-      .sidebar{transform:translateX(-100%);transition:transform var(--transition);}
-      .sidebar.open{transform:translateX(0);}
-      .admin-main{margin-left:0;}
-      .form-row{grid-template-columns:1fr;}
-      .stats-row{grid-template-columns:1fr 1fr;}
-      .mobile-menu-btn{display:flex!important;}
+    /* ===== MOBILE ===== */
+    @media(max-width:900px) {
+      .main-nav { padding:1.2rem 1.5rem; }
+      .nav-links { display:none; flex-direction:column; position:fixed; top:60px; left:0; right:0; background:rgba(8,8,8,0.97); backdrop-filter:blur(24px); border-bottom:1px solid var(--border); padding:1.5rem; gap:.5rem; z-index:99; }
+      .nav-links.open { display:flex; }
+      .nav-link { padding:.7rem 0; }
+      .nav-divider { display:none; }
+      .hamburger { display:flex; }
+      .admin-section-bar { padding:1.4rem 1.5rem 1rem; }
+      .admin-content { padding:1.5rem; }
+      .form-row { grid-template-columns:1fr; }
+      .stats-row { grid-template-columns:1fr 1fr; }
+      .nav-user-name { display:none; }
     }
-    .mobile-menu-btn{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:5px;padding:4px;}
-    .mobile-menu-btn span{display:block;width:20px;height:1px;background:var(--text);}
   </style>
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
-<div class="login-screen" id="login-screen">
-  <div class="login-box">
-    <div class="login-logo">PORTFOLIO</div>
-    <div class="login-sub">Admin Panel</div>
-    <div class="login-error" id="login-error">ไม่มีสิทธิ์เข้าถึง กรุณาใช้อีเมลที่ได้รับอนุญาต</div>
-    <div class="login-loading" id="login-loading">กำลังเข้าสู่ระบบ...</div>
-
-    <button class="btn-google" id="btn-google-login" onclick="signInWithGoogle()">
-      <!-- Google "G" logo SVG -->
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
-        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-      </svg>
-      เข้าสู่ระบบด้วย Google
-    </button>
-
-    <p class="login-hint">เฉพาะอีเมลที่ได้รับอนุญาตเท่านั้น<br>ที่สามารถเข้าใช้ Admin Panel ได้</p>
+<!-- NAV -->
+<nav class="main-nav" id="main-nav">
+  <div class="nav-logo">
+    <a href="index.html">PORTFOLIO</a>
   </div>
-</div>
 
-<!-- ADMIN PANEL -->
-<div class="admin-wrap" id="admin-wrap">
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-logo">PORTFOLIO<span>Admin Panel</span></div>
-    <div class="user-chip" id="user-chip">
-      <img class="user-avatar" id="user-avatar" src="" alt="" />
-      <span class="user-name" id="user-name-display">—</span>
-    </div>
-    <nav class="sidebar-nav">
-      <div class="sidebar-item active" onclick="switchPanel('dashboard',this)"><span class="sidebar-icon">◈</span> แดชบอร์ด</div>
-      <div class="sidebar-item" onclick="switchPanel('works',this)"><span class="sidebar-icon">✦</span> จัดการผลงาน</div>
-      <div class="sidebar-item" onclick="switchPanel('settings',this)"><span class="sidebar-icon">⚙</span> ตั้งค่า</div>
-    </nav>
-    <div class="sidebar-footer">
-      <button class="logout-btn" onclick="doLogout()">⎋ ออกจากระบบ</button>
-    </div>
-  </aside>
+  <div class="nav-links" id="nav-links">
+    <!-- เมนูหน้าหลัก -->
+    <a href="index.html#all"    class="nav-link" data-label="ผลงานทั้งหมด"><span>ผลงานทั้งหมด</span></a>
+    <a href="index.html#design" class="nav-link" data-label="ออกแบบ"><span>ออกแบบ</span></a>
+    <a href="index.html#photo"  class="nav-link" data-label="ภาพถ่าย"><span>ภาพถ่าย</span></a>
+    <a href="index.html#art"    class="nav-link" data-label="ศิลปะ"><span>ศิลปะ</span></a>
+    <a href="index.html#about"  class="nav-link" data-label="เกี่ยวกับ"><span>เกี่ยวกับ</span></a>
 
-  <div class="admin-main">
-    <div class="admin-topbar">
-      <div style="display:flex;align-items:center;gap:1rem;">
-        <button class="mobile-menu-btn" onclick="toggleSidebar()"><span></span><span></span><span></span></button>
-        <span class="topbar-title" id="panel-title">DASHBOARD</span>
+    <!-- divider -->
+    <div class="nav-divider"></div>
+
+    <!-- เมนู Admin -->
+    <a href="#" class="nav-link admin-link active-panel" data-panel="dashboard" data-label="◈ แดชบอร์ด" onclick="switchPanelFromNav('dashboard',this);return false;"><span>◈ แดชบอร์ด</span></a>
+    <a href="#" class="nav-link admin-link" data-panel="works" data-label="✦ ผลงาน" onclick="switchPanelFromNav('works',this);return false;"><span>✦ ผลงาน</span></a>
+    <a href="#" class="nav-link admin-link" data-panel="settings" data-label="⚙ ตั้งค่า" onclick="switchPanelFromNav('settings',this);return false;"><span>⚙ ตั้งค่า</span></a>
+  </div>
+
+  <div class="nav-actions" id="nav-actions">
+    <!-- user chip (แสดงเมื่อ login แล้ว) -->
+    <div class="nav-user-chip" id="nav-user-chip">
+      <img class="nav-user-avatar" id="nav-user-avatar" src="" alt="" referrerpolicy="no-referrer" />
+      <span class="nav-user-name" id="nav-user-name">—</span>
+      <button class="nav-logout-btn" onclick="doLogout()">ออกจากระบบ</button>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="เมนู">
+      <span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- PAGE WRAP -->
+<div class="page-wrap">
+
+  <!-- LOGIN SCREEN -->
+  <div class="login-screen" id="login-screen">
+    <div class="login-box">
+      <div class="login-logo">PORTFOLIO</div>
+      <div class="login-sub">Admin Panel</div>
+      <div class="login-error" id="login-error">ไม่มีสิทธิ์เข้าถึง กรุณาใช้อีเมลที่ได้รับอนุญาต</div>
+      <div class="login-loading" id="login-loading">กำลังเข้าสู่ระบบ...</div>
+      <button class="btn-google" id="btn-google-login" onclick="signInWithGoogle()">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+        </svg>
+        เข้าสู่ระบบด้วย Google
+      </button>
+      <p class="login-hint">เฉพาะอีเมลที่ได้รับอนุญาตเท่านั้น<br>ที่สามารถเข้าใช้ Admin Panel ได้</p>
+    </div>
+  </div>
+
+  <!-- ADMIN WRAP -->
+  <div class="admin-wrap" id="admin-wrap">
+
+    <!-- section bar -->
+    <div class="admin-section-bar">
+      <div>
+        <div class="admin-section-eyebrow">Admin Panel</div>
+        <h1 class="admin-section-title" id="panel-title">DASHBOARD</h1>
       </div>
-      <div class="topbar-actions">
-        <div id="topbar-user-chip" style="display:none;align-items:center;gap:.7rem;">
-          <img id="topbar-avatar" src="" alt="" referrerpolicy="no-referrer"
-            style="width:28px;height:28px;border-radius:50%;border:1px solid var(--border2);object-fit:cover;flex-shrink:0;" />
-          <span id="topbar-user-name"
-            style="font-size:0.72rem;letter-spacing:.06em;color:var(--text-muted);
-                   max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
-          <button onclick="doLogout()"
-            style="font-size:0.65rem;letter-spacing:.12em;text-transform:uppercase;
-                   padding:.35rem .85rem;border:1px solid rgba(255,85,85,0.3);
-                   color:rgba(255,85,85,0.75);background:transparent;cursor:pointer;
-                   font-family:var(--font-body);transition:all .3s;white-space:nowrap;"
-            onmouseenter="this.style.borderColor='#ff5555';this.style.color='#ff5555';this.style.background='rgba(255,85,85,0.08)'"
-            onmouseleave="this.style.borderColor='rgba(255,85,85,0.3)';this.style.color='rgba(255,85,85,0.75)';this.style.background='transparent'">
-            ออกจากระบบ
-          </button>
-        </div>
+      <div style="display:flex;gap:.8rem;align-items:center;flex-wrap:wrap;">
+        <button class="btn btn-primary btn-sm" id="bar-add-btn" onclick="openModal()" style="display:none;">+ เพิ่มผลงาน</button>
         <a href="index.html" class="btn btn-secondary btn-sm" target="_blank">← View Site</a>
       </div>
     </div>
 
     <div class="admin-content">
+
       <!-- DASHBOARD -->
       <div class="panel active" id="panel-dashboard">
         <div class="stats-row" id="stats-row"></div>
@@ -229,8 +305,10 @@
             <span class="table-label">ผลงานล่าสุด</span>
             <button class="btn btn-primary btn-sm" onclick="openModal()">+ เพิ่มผลงาน</button>
           </div>
-          <table><thead><tr><th></th><th>ชื่อผลงาน</th><th>หมวดหมู่</th><th>ปี</th></tr></thead>
-          <tbody id="dash-table-body"></tbody></table>
+          <table>
+            <thead><tr><th></th><th>ชื่อผลงาน</th><th>หมวดหมู่</th><th>ปี</th></tr></thead>
+            <tbody id="dash-table-body"></tbody>
+          </table>
         </div>
       </div>
 
@@ -241,35 +319,42 @@
             <input type="text" class="search-input" placeholder="ค้นหาผลงาน…" id="search-box" oninput="renderTable()" />
             <button class="btn btn-primary btn-sm" onclick="openModal()">+ เพิ่มผลงาน</button>
           </div>
-          <table><thead><tr><th></th><th>ชื่อผลงาน</th><th>หมวดหมู่</th><th>ปี</th><th>จัดการ</th></tr></thead>
-          <tbody id="works-table-body"></tbody></table>
+          <table>
+            <thead><tr><th></th><th>ชื่อผลงาน</th><th>หมวดหมู่</th><th>ปี</th><th>จัดการ</th></tr></thead>
+            <tbody id="works-table-body"></tbody>
+          </table>
         </div>
       </div>
 
       <!-- SETTINGS -->
       <div class="panel" id="panel-settings">
-        <div class="settings-card">
-          <h3>บัญชีผู้ใช้</h3>
-          <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;">
-            <img id="settings-avatar" src="" alt="" style="width:48px;height:48px;border-radius:50%;border:1px solid var(--border2);object-fit:cover;" />
-            <div>
-              <p style="font-size:.88rem;color:var(--text);" id="settings-name">—</p>
-              <p style="font-size:.75rem;color:var(--text-muted);" id="settings-email">—</p>
+        <div class="settings-grid">
+          <div class="settings-card">
+            <h3>บัญชีผู้ใช้</h3>
+            <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem;">
+              <img id="settings-avatar" src="" alt="" referrerpolicy="no-referrer"
+                style="width:52px;height:52px;border-radius:50%;border:1px solid var(--border2);object-fit:cover;" />
+              <div>
+                <p style="font-size:.92rem;color:var(--text);font-weight:500;" id="settings-name">—</p>
+                <p style="font-size:.75rem;color:var(--text-muted);margin-top:.15rem;" id="settings-email">—</p>
+              </div>
             </div>
+            <button class="btn btn-danger" style="width:auto;" onclick="doLogout()">⎋ ออกจากระบบ</button>
           </div>
-          <button class="btn btn-danger" style="width:auto;" onclick="doLogout()">ออกจากระบบ</button>
-        </div>
-        <div class="settings-card">
-          <h3>อีเมลที่อนุญาต</h3>
-          <p style="font-size:.82rem;color:var(--text-muted);line-height:1.7;">
-            แก้ไขรายชื่ออีเมลผู้ดูแลใน <code style="color:var(--accent);font-size:.8rem;">admin.html</code><br>
-            ที่ตัวแปร <code style="color:var(--accent);font-size:.8rem;">ALLOWED_EMAILS</code>
-          </p>
+          <div class="settings-card">
+            <h3>อีเมลที่อนุญาต</h3>
+            <p style="font-size:.82rem;color:var(--text-muted);line-height:1.8;">
+              แก้ไขรายชื่ออีเมลผู้ดูแลใน <code style="color:var(--accent);font-size:.8rem;">admin.html</code><br>
+              ที่ตัวแปร <code style="color:var(--accent);font-size:.8rem;">ALLOWED_EMAILS</code>
+            </p>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
+
+    </div><!-- /admin-content -->
+  </div><!-- /admin-wrap -->
+
+</div><!-- /page-wrap -->
 
 <!-- MODAL -->
 <div class="modal-overlay" id="modal">
@@ -327,9 +412,8 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="nav.js"></script>
 <script type="module">
-  import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import {
     getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -356,15 +440,19 @@
   const ALLOWED_EMAILS = [
     "lektheholy@gmail.com",
   ];
-  // ถ้า ALLOWED_EMAILS ว่างเปล่า = อนุญาตทุกอีเมล Google
-  // (เหมาะสำหรับเจ้าของคนเดียว ถ้ายังไม่ได้ตั้งค่า)
 
   const app      = initializeApp(firebaseConfig);
   const auth     = getAuth(app);
   const db       = getFirestore(app);
   const provider = new GoogleAuthProvider();
 
-  let currentUser = null;
+  // ===== HAMBURGER =====
+  const hamburger = document.getElementById('hamburger');
+  const navLinks  = document.getElementById('nav-links');
+  hamburger.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+    hamburger.classList.toggle('active');
+  });
 
   // ===== AUTH STATE =====
   onAuthStateChanged(auth, user => {
@@ -374,12 +462,11 @@
         showError('ไม่มีสิทธิ์เข้าถึง: ' + user.email);
         return;
       }
-      currentUser = user;
       showAdmin(user);
     } else {
-      currentUser = null;
       document.getElementById('admin-wrap').classList.remove('visible');
       document.getElementById('login-screen').style.display = 'flex';
+      document.getElementById('nav-user-chip').classList.remove('visible');
     }
   });
 
@@ -391,25 +478,20 @@
   function showAdmin(user) {
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('admin-wrap').classList.add('visible');
-    // fill user info — sidebar
+
     const avatar = user.photoURL || '';
-    document.getElementById('user-avatar').src    = avatar;
-    document.getElementById('user-name-display').textContent = user.displayName || user.email;
-    // fill user info — settings
+    // nav chip
+    document.getElementById('nav-user-avatar').src = avatar;
+    document.getElementById('nav-user-name').textContent = user.displayName || user.email;
+    document.getElementById('nav-user-chip').classList.add('visible');
+    // settings
     document.getElementById('settings-avatar').src = avatar;
     document.getElementById('settings-name').textContent  = user.displayName || '—';
     document.getElementById('settings-email').textContent = user.email;
-    // fill user info — topbar chip
-    const chip = document.getElementById('topbar-user-chip');
-    if (chip) {
-      document.getElementById('topbar-avatar').src = avatar;
-      document.getElementById('topbar-user-name').textContent = user.displayName || user.email;
-      chip.style.display = 'flex';
-    }
+
     loadAll();
   }
 
-  // expose to global onclick
   window.signInWithGoogle = async function() {
     document.getElementById('login-error').style.display = 'none';
     document.getElementById('login-loading').style.display = 'block';
@@ -428,6 +510,27 @@
     showToast('ออกจากระบบแล้ว', 'success');
   };
 
+  // ===== PANEL SWITCHING =====
+  const PANEL_LABELS = { dashboard:'DASHBOARD', works:'WORKS', settings:'SETTINGS' };
+
+  window.switchPanelFromNav = function(id, el) {
+    // update panels
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel-' + id).classList.add('active');
+    // update nav active state
+    document.querySelectorAll('.nav-link.admin-link').forEach(a => a.classList.remove('active-panel'));
+    el.classList.add('active-panel');
+    // update section title
+    document.getElementById('panel-title').textContent = PANEL_LABELS[id];
+    // close mobile menu
+    navLinks.classList.remove('open');
+    hamburger.classList.remove('active');
+    // re-render
+    if (id === 'works') renderTable();
+    if (id === 'dashboard') { renderStats(); renderDashTable(); }
+    window.scrollTo({ top:0, behavior:'smooth' });
+  };
+
   // ===== DATA =====
   let allWorks = [];
 
@@ -440,23 +543,9 @@
     renderStats(); renderTable(); renderDashTable();
   }
 
-  // ===== PANELS =====
-  const PANEL_LABELS = { dashboard:'DASHBOARD', works:'WORKS', settings:'SETTINGS' };
-  window.switchPanel = function(id, el) {
-    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
-    document.getElementById('panel-' + id).classList.add('active');
-    el.classList.add('active');
-    document.getElementById('panel-title').textContent = PANEL_LABELS[id];
-    if (id === 'works') renderTable();
-    if (id === 'dashboard') { renderStats(); renderDashTable(); }
-    document.getElementById('sidebar').classList.remove('open');
-  };
-  window.toggleSidebar = function() { document.getElementById('sidebar').classList.toggle('open'); };
-
   // ===== STATS =====
   function renderStats() {
-    const cats = { design: 0, photo: 0, art: 0 };
+    const cats = { design:0, photo:0, art:0 };
     allWorks.forEach(w => { if (cats[w.category] !== undefined) cats[w.category]++; });
     document.getElementById('stats-row').innerHTML = `
       <div class="stat-card"><div class="stat-card-num">${allWorks.length}</div><div class="stat-card-label">ผลงานทั้งหมด</div></div>
@@ -502,6 +591,7 @@
 
   // ===== MODAL =====
   let selectedEmoji = '✦';
+
   window.openModal = function(reset = true) {
     if (reset) {
       document.getElementById('modal-title').textContent = 'เพิ่มผลงาน';
@@ -513,9 +603,10 @@
     }
     document.getElementById('modal').classList.add('open');
   };
+
   window.closeModal = function() { document.getElementById('modal').classList.remove('open'); };
   document.getElementById('modal').addEventListener('click', e => { if (e.target === document.getElementById('modal')) closeModal(); });
-  document.querySelectorAll('.emoji-opt').forEach(opt => { opt.addEventListener('click', () => setEmoji(opt.dataset.v)); });
+  document.querySelectorAll('.emoji-opt').forEach(opt => opt.addEventListener('click', () => setEmoji(opt.dataset.v)));
   function setEmoji(v) { document.querySelectorAll('.emoji-opt').forEach(o => o.classList.toggle('selected', o.dataset.v === v)); selectedEmoji = v; }
 
   window.saveWork = async function() {
