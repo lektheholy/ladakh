@@ -6,55 +6,47 @@
   <title>Admin — Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Noto+Sans+Thai:wght@300;400;500&display=swap" rel="stylesheet" />
-
-  <!-- ✦ Shared styles — แก้ nav.css เพื่อเปลี่ยนสไตล์ทั้งเว็บ -->
   <link rel="stylesheet" href="nav.css" />
 
   <style>
-    /* ============================================================
-       admin.html — PAGE-SPECIFIC STYLES
-       สไตล์เฉพาะหน้า admin (nav/footer/buttons อยู่ใน nav.css)
-       ============================================================ */
-
     body { font-size: 15px; }
 
-    /* ===== PAGE WRAPPER ===== */
     .page-wrap { padding-top: var(--nav-height); min-height: 100vh; }
 
     /* ===== LOGIN SCREEN ===== */
     .login-screen {
       min-height: 100vh;
       display: flex; align-items: center; justify-content: center;
-      background: var(--bg); position: relative; overflow: hidden;
+      background: #fff; position: relative; overflow: hidden;
     }
     .login-screen::before {
       content: 'ADMIN';
       position: absolute; font-family: var(--font-display);
-      font-size: 30vw; line-height: 1;
-      color: rgba(255,255,255,0.02);
+      font-size: 28vw; line-height: 1;
+      color: rgba(0,0,0,0.025);
       pointer-events: none; user-select: none; letter-spacing: -.02em;
     }
     .login-box {
-      background: var(--surface); border: 1px solid var(--border2);
-      padding: 3rem 2.8rem; width: 100%; max-width: 420px;
+      background: #fff; border: 1px solid var(--border2);
+      padding: 3rem 2.8rem; width: 100%; max-width: 400px;
       position: relative; z-index: 1;
     }
-    .login-logo  { font-family: var(--font-display); font-size: 2rem; letter-spacing: .18em; text-align: center; margin-bottom: .3rem; color: var(--text); }
-    .login-sub   { font-size: 0.65rem; letter-spacing: .22em; text-transform: uppercase; text-align: center; color: var(--accent); margin-bottom: 2.5rem; }
+    .login-logo  { font-family: var(--font-display); font-size: 2rem; letter-spacing: .18em; text-align: center; margin-bottom: .2rem; color: var(--text); }
+    .login-sub   { font-size: 0.62rem; letter-spacing: .24em; text-transform: uppercase; text-align: center; color: var(--text-muted); margin-bottom: 2.5rem; }
     .btn-google  {
       display: flex; align-items: center; justify-content: center; gap: .75rem;
       width: 100%; padding: .75rem 1.4rem;
       background: #fff; color: #3c4043; border: 1px solid #dadce0;
       font-family: var(--font-body); font-size: .85rem; font-weight: 500;
-      cursor: pointer; transition: all .3s; letter-spacing: .02em;
+      cursor: pointer; transition: all .3s;
     }
-    .btn-google:hover { background: #f8f8f8; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
+    .btn-google:hover { background: #f6f6f6; box-shadow: 0 2px 8px rgba(0,0,0,.1); }
     .btn-google svg   { width: 18px; height: 18px; flex-shrink: 0; }
-    .login-error   { background: var(--danger-bg); color: var(--danger); border: 1px solid rgba(255,85,85,0.2); padding: .6rem 1rem; font-size: .8rem; margin-bottom: 1rem; display: none; }
-    .login-hint    { font-size: 0.68rem; color: var(--text-muted); text-align: center; margin-top: 1.5rem; line-height: 1.8; }
+    .login-hint    { font-size: 0.65rem; color: var(--text-muted); text-align: center; margin-top: 1.5rem; line-height: 1.8; }
     .login-loading { text-align: center; color: var(--text-muted); font-size: .8rem; letter-spacing: .1em; padding: 1rem 0; display: none; }
+    .login-error   { background: var(--danger-bg); color: var(--danger); border: 1px solid rgba(204,51,51,0.2); padding: .6rem 1rem; font-size: .78rem; margin-bottom: 1rem; display: none; }
 
-    /* ===== ADMIN CONTENT ===== */
+    /* ===== ADMIN WRAP ===== */
     .admin-wrap { display: none; }
     .admin-wrap.visible { display: block; }
 
@@ -64,272 +56,370 @@
       padding: 1.8rem 3rem 1.2rem;
       border-bottom: 1px solid var(--border);
     }
-    .admin-section-eyebrow { font-size: 0.65rem; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin-bottom: .3rem; }
-    .admin-section-title   { font-family: var(--font-display); font-size: 2.2rem; letter-spacing: .06em; line-height: 1; }
+    .admin-section-eyebrow { font-size: 0.62rem; letter-spacing: .22em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .2rem; }
+    .admin-section-title   { font-family: var(--font-display); font-size: 2rem; letter-spacing: .06em; line-height: 1; }
 
-    .admin-content { padding: 2.5rem 3rem; }
+    .admin-content { padding: 2.5rem 3rem; max-width: 900px; }
     .panel { display: none; }
     .panel.active { display: block; }
 
-    /* ===== STATS ===== */
+    /* ===== STATS (dashboard) ===== */
     .stats-row {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(160px,1fr));
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(150px,1fr));
       gap: 1px; margin-bottom: 2rem;
       border: 1px solid var(--border); background: var(--border);
     }
-    .stat-card { background: var(--surface); padding: 1.4rem 1.6rem; }
-    .stat-card-num   { font-family: var(--font-display); font-size: 2.8rem; letter-spacing: .04em; color: var(--accent); line-height: 1; margin-bottom: .2rem; }
-    .stat-card-label { font-size: 0.65rem; letter-spacing: .14em; text-transform: uppercase; color: var(--text-muted); }
+    .stat-card { background: var(--surface); padding: 1.3rem 1.5rem; }
+    .stat-card-num   { font-family: var(--font-display); font-size: 2.6rem; color: var(--text); line-height: 1; margin-bottom: .2rem; }
+    .stat-card-label { font-size: 0.62rem; letter-spacing: .14em; text-transform: uppercase; color: var(--text-muted); }
 
-    /* ===== TABLE ===== */
-    .table-wrap { background: var(--surface); border: 1px solid var(--border); overflow: hidden; }
-    .table-toolbar {
-      padding: 1rem 1.4rem;
-      display: flex; align-items: center; justify-content: space-between;
-      border-bottom: 1px solid var(--border); gap: 1rem; flex-wrap: wrap;
+    /* ===== SETTINGS PANEL ===== */
+    .settings-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
     }
-    .table-label  { font-size: 0.7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--text-muted); }
-    .search-input {
-      padding: .45rem .9rem; border: 1px solid var(--border2);
-      background: var(--bg2); font-family: var(--font-body); font-size: 0.82rem;
-      width: 220px; outline: none; color: var(--text); transition: border-color .3s;
+    @media (max-width: 700px) { .settings-grid { grid-template-columns: 1fr; } }
+
+    .settings-card {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      padding: 2rem;
     }
-    .search-input::placeholder { color: rgba(240,240,240,0.2); }
-    .search-input:focus { border-color: var(--accent); }
-
-    table   { width: 100%; border-collapse: collapse; }
-    thead tr { background: var(--bg2); }
-    th { text-align: left; padding: .6rem 1rem; font-size: 0.62rem; letter-spacing: .16em; text-transform: uppercase; color: var(--text-muted); font-weight: 500; border-bottom: 1px solid var(--border); }
-    td { padding: .8rem 1rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
-    tr:last-child td { border-bottom: none; }
-    tbody tr:hover td { background: rgba(255,255,255,0.02); }
-
-    .td-thumb { width: 44px; height: 32px; background: var(--bg2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1rem; overflow: hidden; color: var(--text-muted); }
-    .td-thumb img { width: 100%; height: 100%; object-fit: cover; }
-    .td-title { font-weight: 500; font-size: .88rem; color: var(--text); }
-    .td-desc  { font-size: 0.75rem; color: var(--text-muted); max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .td-actions { display: flex; gap: .5rem; }
-
-    /* ===== BADGES ===== */
-    .badge { display: inline-block; padding: .18rem .6rem; font-size: 0.62rem; letter-spacing: .1em; text-transform: uppercase; border: 1px solid; }
-    .badge-design { color: #7a4f30;  border-color: rgba(139,94,60,0.25);  background: rgba(139,94,60,0.07); }
-    .badge-photo  { color: #4a7a5e;  border-color: rgba(74,122,94,0.25);  background: rgba(74,122,94,0.07); }
-    .badge-art    { color: #7a5a30;  border-color: rgba(122,90,48,0.25);  background: rgba(122,90,48,0.07); }
-
-    /* ===== MODAL ===== */
-    .modal-overlay { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(44,33,24,0.55); backdrop-filter: blur(16px); align-items: center; justify-content: center; padding: 1.5rem; }
-    .modal-overlay.open { display: flex; }
-    .modal { background: var(--surface); border: 1px solid var(--border2); padding: 2rem 2.2rem 2.2rem; max-width: 520px; width: 100%; max-height: 90vh; overflow-y: auto; }
-    .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.6rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
-    .modal-title  { font-family: var(--font-display); font-size: 1.5rem; letter-spacing: .06em; }
-    .modal-close  { background: var(--bg2); border: 1px solid var(--border); width: 30px; height: 30px; font-size: .8rem; cursor: pointer; color: var(--text-muted); display: flex; align-items: center; justify-content: center; transition: all .3s; }
-    .modal-close:hover { border-color: var(--accent); color: var(--accent); }
-    .modal-actions { display: flex; gap: .8rem; justify-content: flex-end; margin-top: 1.5rem; }
+    .settings-card-title {
+      font-size: 0.65rem; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 1.4rem;
+      padding-bottom: .8rem; border-bottom: 1px solid var(--border);
+    }
 
     /* ===== FORM ===== */
-    .form-group    { margin-bottom: 1.2rem; }
-    .form-label    { display: block; font-size: 0.65rem; letter-spacing: .16em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .45rem; }
-    .form-input    { width: 100%; padding: .7rem .9rem; border: 1px solid var(--border2); background: var(--bg2); font-family: var(--font-body); font-size: .9rem; color: var(--text); outline: none; transition: border-color var(--transition); }
-    .form-input::placeholder { color: rgba(44,33,24,0.25); }
+    .form-group    { margin-bottom: 1.3rem; }
+    .form-label    { display: block; font-size: 0.62rem; letter-spacing: .16em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .45rem; }
+    .form-input    { width: 100%; padding: .68rem .9rem; border: 1px solid var(--border2); background: var(--bg2); font-family: var(--font-body); font-size: .88rem; color: var(--text); outline: none; transition: border-color .3s; }
+    .form-input::placeholder { color: rgba(17,17,17,0.22); }
     .form-input:focus { border-color: var(--accent); }
-    .form-row      { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .form-select   { width: 100%; padding: .65rem .9rem; border: 1px solid var(--border2); background: var(--bg2); font-family: var(--font-body); font-size: .88rem; color: var(--text); outline: none; appearance: none; transition: border-color .3s; }
-    .form-select:focus { border-color: var(--accent); }
-    .form-textarea { width: 100%; padding: .7rem .9rem; border: 1px solid var(--border2); background: var(--bg2); font-family: var(--font-body); font-size: .88rem; color: var(--text); outline: none; resize: vertical; min-height: 90px; transition: border-color .3s; }
-    .form-textarea:focus { border-color: var(--accent); }
-    .emoji-picker  { display: flex; gap: .4rem; flex-wrap: wrap; margin-top: .5rem; }
-    .emoji-opt     { width: 34px; height: 34px; border: 1px solid var(--border); background: var(--bg2); display: flex; align-items: center; justify-content: center; font-size: 1rem; cursor: pointer; transition: all .3s; color: var(--text-muted); }
-    .emoji-opt:hover, .emoji-opt.selected { border-color: var(--accent); background: rgba(139,94,60,0.08); color: var(--text); }
+    .form-hint     { font-size: 0.65rem; color: var(--text-muted); margin-top: .35rem; }
 
-    /* ===== SETTINGS ===== */
-    .settings-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px,1fr)); gap: 1.5rem; }
-    .settings-card { background: var(--surface); border: 1px solid var(--border); padding: 1.8rem; }
-    .settings-card h3 { font-family: var(--font-display); font-size: 1.3rem; letter-spacing: .06em; margin-bottom: 1.2rem; padding-bottom: .8rem; border-bottom: 1px solid var(--border); color: var(--text); }
+    /* Color input */
+    .color-row { display: flex; align-items: center; gap: .8rem; }
+    .color-swatch {
+      width: 38px; height: 38px;
+      border: 1px solid var(--border2);
+      cursor: pointer; flex-shrink: 0;
+      overflow: hidden; position: relative;
+    }
+    .color-swatch input[type="color"] {
+      position: absolute; inset: -4px;
+      width: calc(100% + 8px); height: calc(100% + 8px);
+      border: none; cursor: pointer; opacity: 0;
+    }
+    .color-swatch-preview {
+      position: absolute; inset: 0;
+      pointer-events: none;
+    }
 
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 900px) {
-      .admin-section-bar { padding: 1.4rem 1.5rem 1rem; }
-      .admin-content     { padding: 1.5rem; }
-      .form-row          { grid-template-columns: 1fr; }
-      .stats-row         { grid-template-columns: 1fr 1fr; }
+    /* Logo upload */
+    .logo-upload-area {
+      border: 1px dashed var(--border2);
+      padding: 1.5rem; text-align: center;
+      cursor: pointer; transition: border-color .3s, background .3s;
+      background: var(--bg2); position: relative;
+    }
+    .logo-upload-area:hover { border-color: var(--accent); background: #f8f8f8; }
+    .logo-upload-area input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+    .logo-preview {
+      max-height: 60px; max-width: 180px;
+      margin: 0 auto .5rem; display: none;
+    }
+    .logo-preview.visible { display: block; }
+    .logo-upload-icon { font-size: 1.5rem; color: var(--text-muted); margin-bottom: .3rem; }
+    .logo-upload-text { font-size: 0.7rem; color: var(--text-muted); letter-spacing: .08em; }
+    .logo-url-toggle { font-size: 0.65rem; color: var(--text-muted); margin-top: .8rem; cursor: pointer; text-decoration: underline; }
+
+    /* Preview box */
+    .site-preview {
+      border: 1px solid var(--border);
+      background: #fff;
+      padding: 0;
+      overflow: hidden;
+    }
+    .preview-nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .8rem 1.2rem;
+      border-bottom: 1px solid var(--border);
+      background: #fff;
+    }
+    .preview-logo {
+      font-family: var(--font-display);
+      font-size: 1.1rem; letter-spacing: .18em;
+      color: #111;
+    }
+    .preview-btn {
+      font-size: 0.6rem; letter-spacing: .12em;
+      padding: .3rem .8rem; border: 1px solid #111;
+      background: #111; color: #fff;
+    }
+    .preview-hero {
+      padding: 3rem 1.2rem;
+      text-align: center;
+    }
+    .preview-hero-title {
+      font-family: var(--font-display);
+      font-size: 3.5rem; line-height: .9;
+      letter-spacing: -.01em;
+      margin-bottom: .8rem;
+    }
+    .preview-hero-desc {
+      font-size: .72rem; color: rgba(17,17,17,0.5);
+      max-width: 28ch; margin: 0 auto;
+    }
+    .preview-label {
+      font-size: 0.58rem; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--text-muted); padding: .5rem 1.2rem;
+      border-top: 1px solid var(--border); text-align: center;
+    }
+
+    /* Color palette group */
+    .color-palette-group { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
+
+    /* Save bar */
+    .settings-save-bar {
+      margin-top: 2rem; padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .save-status {
+      font-size: 0.7rem; color: var(--text-muted); letter-spacing: .08em;
     }
   </style>
 </head>
 <body>
 
-<!-- Nav inject point — nav.js จะ inject nav พร้อมเมนู admin ให้ -->
+<!-- Nav inject point -->
 <div id="nav-root"></div>
 
-<div class="page-wrap">
-
-  <!-- LOGIN SCREEN -->
-  <div class="login-screen" id="login-screen">
-    <div class="login-box">
-      <div class="login-logo">PORTFOLIO</div>
-      <div class="login-sub">Admin Panel</div>
-      <div class="login-error" id="login-error">ไม่มีสิทธิ์เข้าถึง กรุณาใช้อีเมลที่ได้รับอนุญาต</div>
-      <div class="login-loading" id="login-loading">กำลังเข้าสู่ระบบ...</div>
-      <button class="btn-google" id="btn-google-login" onclick="signInWithGoogle()">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
-          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-        </svg>
-        เข้าสู่ระบบด้วย Google
-      </button>
-      <p class="login-hint">เฉพาะอีเมลที่ได้รับอนุญาตเท่านั้น<br>ที่สามารถเข้าใช้ Admin Panel ได้</p>
-    </div>
-  </div>
-
-  <!-- ADMIN WRAP -->
-  <div class="admin-wrap" id="admin-wrap">
-
-    <div class="admin-section-bar">
-      <div>
-        <div class="admin-section-eyebrow">Admin Panel</div>
-        <h1 class="admin-section-title" id="panel-title">DASHBOARD</h1>
-      </div>
-      <div style="display:flex;gap:.8rem;align-items:center;flex-wrap:wrap;">
-        <button class="btn btn-primary btn-sm" id="bar-add-btn" onclick="openModal()" style="display:none;">+ เพิ่มผลงาน</button>
-        <a href="index.html" class="btn btn-secondary btn-sm" target="_blank">← View Site</a>
-      </div>
-    </div>
-
-    <div class="admin-content">
-
-      <!-- DASHBOARD -->
-      <div class="panel active" id="panel-dashboard">
-        <div class="stats-row" id="stats-row"></div>
-        <div class="table-wrap">
-          <div class="table-toolbar">
-            <span class="table-label">ผลงานล่าสุด</span>
-            <button class="btn btn-primary btn-sm" onclick="openModal()">+ เพิ่มผลงาน</button>
-          </div>
-          <table>
-            <thead><tr><th></th><th>ชื่อผลงาน</th><th>หมวดหมู่</th><th>ปี</th></tr></thead>
-            <tbody id="dash-table-body"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- WORKS -->
-      <div class="panel" id="panel-works">
-        <div class="table-wrap">
-          <div class="table-toolbar">
-            <input type="text" class="search-input" placeholder="ค้นหาผลงาน…" id="search-box" oninput="renderTable()" />
-            <button class="btn btn-primary btn-sm" onclick="openModal()">+ เพิ่มผลงาน</button>
-          </div>
-          <table>
-            <thead><tr><th></th><th>ชื่อผลงาน</th><th>หมวดหมู่</th><th>ปี</th><th>จัดการ</th></tr></thead>
-            <tbody id="works-table-body"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- SETTINGS -->
-      <div class="panel" id="panel-settings">
-        <div class="settings-grid">
-          <div class="settings-card">
-            <h3>บัญชีผู้ใช้</h3>
-            <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem;">
-              <img id="settings-avatar" src="" alt="" referrerpolicy="no-referrer"
-                style="width:52px;height:52px;border-radius:50%;border:1px solid var(--border2);object-fit:cover;" />
-              <div>
-                <p style="font-size:.92rem;color:var(--text);font-weight:500;" id="settings-name">—</p>
-                <p style="font-size:.75rem;color:var(--text-muted);margin-top:.15rem;" id="settings-email">—</p>
-              </div>
-            </div>
-            <button class="btn btn-danger" style="width:auto;" onclick="doLogout()">⎋ ออกจากระบบ</button>
-          </div>
-          <div class="settings-card">
-            <h3>อีเมลที่อนุญาต</h3>
-            <p style="font-size:.82rem;color:var(--text-muted);line-height:1.8;">
-              แก้ไขรายชื่ออีเมลผู้ดูแลใน <code style="color:var(--accent);font-size:.8rem;">admin.html</code><br>
-              ที่ตัวแปร <code style="color:var(--accent);font-size:.8rem;">ALLOWED_EMAILS</code>
-            </p>
-          </div>
-        </div>
-      </div>
-
-    </div><!-- /admin-content -->
-  </div><!-- /admin-wrap -->
-
-</div><!-- /page-wrap -->
-
-<!-- MODAL -->
-<div class="modal-overlay" id="modal">
-  <div class="modal">
-    <div class="modal-header">
-      <h2 class="modal-title" id="modal-title">เพิ่มผลงาน</h2>
-      <button class="modal-close" onclick="closeModal()">✕</button>
-    </div>
-    <input type="hidden" id="edit-id" />
-    <div class="form-group">
-      <label class="form-label">ชื่อผลงาน *</label>
-      <input type="text" class="form-input" id="f-title" placeholder="ชื่อผลงาน" />
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">หมวดหมู่ *</label>
-        <select class="form-select" id="f-cat">
-          <option value="design">ออกแบบ</option>
-          <option value="photo">ภาพถ่าย</option>
-          <option value="art">ศิลปะ</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">ปี</label>
-        <input type="text" class="form-input" id="f-year" placeholder="2024" maxlength="4" />
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="form-label">คำอธิบาย</label>
-      <textarea class="form-textarea" id="f-desc" placeholder="อธิบายผลงานโดยย่อ"></textarea>
-    </div>
-    <div class="form-group">
-      <label class="form-label">URL รูปภาพ (ถ้ามี)</label>
-      <input type="text" class="form-input" id="f-image" placeholder="https://..." />
-    </div>
-    <div class="form-group">
-      <label class="form-label">ไอคอน</label>
-      <div class="emoji-picker">
-        <div class="emoji-opt selected" data-v="✦">✦</div>
-        <div class="emoji-opt" data-v="◈">◈</div>
-        <div class="emoji-opt" data-v="◉">◉</div>
-        <div class="emoji-opt" data-v="◌">◌</div>
-        <div class="emoji-opt" data-v="◎">◎</div>
-        <div class="emoji-opt" data-v="☀">☀</div>
-        <div class="emoji-opt" data-v="❋">❋</div>
-        <div class="emoji-opt" data-v="✿">✿</div>
-      </div>
-    </div>
-    <div class="modal-actions">
-      <button class="btn btn-secondary" onclick="closeModal()">ยกเลิก</button>
-      <button class="btn btn-primary"   onclick="saveWork()">บันทึก</button>
-    </div>
+<!-- ========================================================
+     LOGIN SCREEN
+     ======================================================== -->
+<div class="login-screen" id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">PORTFOLIO</div>
+    <div class="login-sub">Admin Panel</div>
+    <div class="login-error" id="login-error"></div>
+    <div class="login-loading" id="login-loading">กำลังเข้าสู่ระบบ…</div>
+    <button class="btn-google" id="btn-google-login">
+      <svg viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
+        <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/>
+        <path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/>
+        <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/>
+      </svg>
+      เข้าสู่ระบบด้วย Google
+    </button>
+    <p class="login-hint">เฉพาะผู้ดูแลระบบเท่านั้น</p>
   </div>
 </div>
 
+<!-- ========================================================
+     ADMIN AREA (hidden until login)
+     ======================================================== -->
+<div class="admin-wrap page-wrap" id="admin-wrap">
+
+  <!-- Section bar -->
+  <div class="admin-section-bar">
+    <div>
+      <div class="admin-section-eyebrow" id="panel-eyebrow">Admin</div>
+      <div class="admin-section-title"  id="panel-title">แดชบอร์ด</div>
+    </div>
+  </div>
+
+  <!-- Panels -->
+  <div class="admin-content">
+
+    <!-- ====== DASHBOARD PANEL ====== -->
+    <div class="panel active" id="panel-dashboard">
+      <div class="stats-row" id="stats-row">
+        <div class="stat-card"><div class="stat-card-num">—</div><div class="stat-card-label">กำลังโหลด…</div></div>
+      </div>
+      <p style="color:var(--text-muted);font-size:.82rem;line-height:1.9;">
+        ยินดีต้อนรับเข้าสู่ระบบจัดการเว็บไซต์<br>
+        ใช้เมนูด้านบนเพื่อจัดการเนื้อหาและตั้งค่าเว็บไซต์
+      </p>
+    </div>
+
+    <!-- ====== SETTINGS PANEL ====== -->
+    <div class="panel" id="panel-settings">
+
+      <div class="settings-grid">
+
+        <!-- LEFT: site settings form -->
+        <div>
+
+          <!-- Site Identity -->
+          <div class="settings-card" style="margin-bottom:1.5rem;">
+            <div class="settings-card-title">ข้อมูลเว็บไซต์</div>
+
+            <div class="form-group">
+              <label class="form-label">ชื่อเว็บไซต์ (Site Name)</label>
+              <input class="form-input" id="cfg-sitename" type="text" placeholder="PORTFOLIO" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">คำอธิบายสั้น (Tagline)</label>
+              <input class="form-input" id="cfg-tagline" type="text" placeholder="Creative Works & Projects" />
+            </div>
+          </div>
+
+          <!-- Logo -->
+          <div class="settings-card" style="margin-bottom:1.5rem;">
+            <div class="settings-card-title">โลโก้</div>
+
+            <div class="form-group">
+              <label class="form-label">ประเภทโลโก้</label>
+              <div style="display:flex;gap:.6rem;margin-bottom:1rem;">
+                <label style="display:flex;align-items:center;gap:.4rem;font-size:.8rem;cursor:pointer;">
+                  <input type="radio" name="logo-type" value="text" id="logo-text-radio" checked onchange="switchLogoType('text')" />
+                  ข้อความ
+                </label>
+                <label style="display:flex;align-items:center;gap:.4rem;font-size:.8rem;cursor:pointer;">
+                  <input type="radio" name="logo-type" value="image" id="logo-image-radio" onchange="switchLogoType('image')" />
+                  รูปภาพ
+                </label>
+              </div>
+            </div>
+
+            <!-- text logo -->
+            <div id="logo-text-section" class="form-group">
+              <label class="form-label">ข้อความโลโก้</label>
+              <input class="form-input" id="cfg-logotext" type="text" placeholder="PORTFOLIO" />
+              <p class="form-hint">ข้อความจะแสดงใน nav bar และ footer</p>
+            </div>
+
+            <!-- image logo -->
+            <div id="logo-image-section" class="form-group" style="display:none;">
+              <label class="form-label">อัพโหลดโลโก้ (PNG / SVG / WebP)</label>
+              <div class="logo-upload-area" id="logo-upload-area">
+                <img id="logo-preview-img" class="logo-preview" src="" alt="logo preview" />
+                <div class="logo-upload-icon" id="logo-upload-icon">⬆</div>
+                <div class="logo-upload-text" id="logo-upload-text">คลิกหรือลากไฟล์มาวาง</div>
+                <input type="file" id="logo-file-input" accept="image/*" onchange="handleLogoFile(this)" />
+              </div>
+              <div class="form-group" style="margin-top:.8rem;margin-bottom:0;">
+                <label class="form-label">หรือใส่ URL รูปภาพ</label>
+                <input class="form-input" id="cfg-logo-url" type="url" placeholder="https://..." oninput="previewLogoUrl(this.value)" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Colors -->
+          <div class="settings-card" style="margin-bottom:1.5rem;">
+            <div class="settings-card-title">สีเว็บไซต์</div>
+            <div class="color-palette-group">
+
+              <div class="form-group">
+                <label class="form-label">สีพื้นหลัง</label>
+                <div class="color-row">
+                  <div class="color-swatch" id="swatch-bg">
+                    <div class="color-swatch-preview" id="preview-bg" style="background:#ffffff;"></div>
+                    <input type="color" id="cfg-bg" value="#ffffff" oninput="updateColorPreview('bg',this.value)" />
+                  </div>
+                  <input class="form-input" id="cfg-bg-hex" type="text" value="#ffffff" placeholder="#ffffff"
+                         oninput="syncColorFromHex('bg',this.value)" style="font-family:monospace;font-size:.82rem;" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">สีหลัก (Accent)</label>
+                <div class="color-row">
+                  <div class="color-swatch" id="swatch-accent">
+                    <div class="color-swatch-preview" id="preview-accent" style="background:#111111;"></div>
+                    <input type="color" id="cfg-accent" value="#111111" oninput="updateColorPreview('accent',this.value)" />
+                  </div>
+                  <input class="form-input" id="cfg-accent-hex" type="text" value="#111111" placeholder="#111111"
+                         oninput="syncColorFromHex('accent',this.value)" style="font-family:monospace;font-size:.82rem;" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">สีข้อความ</label>
+                <div class="color-row">
+                  <div class="color-swatch">
+                    <div class="color-swatch-preview" id="preview-text" style="background:#111111;"></div>
+                    <input type="color" id="cfg-text" value="#111111" oninput="updateColorPreview('text',this.value)" />
+                  </div>
+                  <input class="form-input" id="cfg-text-hex" type="text" value="#111111" placeholder="#111111"
+                         oninput="syncColorFromHex('text',this.value)" style="font-family:monospace;font-size:.82rem;" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">สีปุ่ม Login</label>
+                <div class="color-row">
+                  <div class="color-swatch">
+                    <div class="color-swatch-preview" id="preview-btnbg" style="background:#111111;"></div>
+                    <input type="color" id="cfg-btnbg" value="#111111" oninput="updateColorPreview('btnbg',this.value)" />
+                  </div>
+                  <input class="form-input" id="cfg-btnbg-hex" type="text" value="#111111" placeholder="#111111"
+                         oninput="syncColorFromHex('btnbg',this.value)" style="font-family:monospace;font-size:.82rem;" />
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Save -->
+          <div class="settings-save-bar">
+            <button class="btn btn-primary" onclick="saveSettings()">บันทึกการตั้งค่า</button>
+            <button class="btn btn-secondary" onclick="resetSettings()">รีเซ็ต</button>
+            <span class="save-status" id="save-status"></span>
+          </div>
+
+        </div>
+
+        <!-- RIGHT: live preview -->
+        <div>
+          <div class="settings-card-title" style="font-size:0.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--text-muted);margin-bottom:1rem;">ตัวอย่างหน้าเว็บ</div>
+          <div class="site-preview" id="site-preview">
+            <div class="preview-nav">
+              <div class="preview-logo" id="prev-logo-text">PORTFOLIO</div>
+              <div class="preview-btn" id="prev-btn" style="background:#111;color:#fff;border-color:#111;">เข้าสู่ระบบ</div>
+            </div>
+            <div class="preview-hero" id="prev-hero" style="background:#fff;">
+              <div class="preview-hero-title" id="prev-title" style="color:#111;">PORTFOLIO</div>
+              <div class="preview-hero-desc" id="prev-desc">พื้นที่สำหรับรวบรวมผลงาน ความคิด และนวัตกรรม</div>
+            </div>
+            <div class="preview-label">— ตัวอย่างหน้าแรก —</div>
+          </div>
+
+          <!-- Logo preview in nav -->
+          <div style="margin-top:1rem; padding:1rem; border:1px solid var(--border); background:#fff; display:flex; align-items:center; gap:.8rem;">
+            <img id="prev-logo-img" src="" alt="" style="max-height:32px; display:none;" />
+            <span style="font-size:.65rem;color:var(--text-muted);letter-spacing:.1em;">ตัวอย่างโลโก้ใน Nav</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- end settings panel -->
+
+  </div>
+</div>
+
+<!-- Toast -->
 <div class="toast" id="toast"></div>
 
-<!-- ✦ Shared nav/footer logic -->
+<!-- Shared nav/footer logic -->
 <script src="nav.js"></script>
 
-<!-- Firebase + Admin Logic -->
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import {
-    getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged
-  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-  import {
-    getFirestore, collection, doc,
-    getDocs, addDoc, setDoc, deleteDoc,
-    query, orderBy, serverTimestamp
-  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import { initializeApp, getApps, getApp }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getFirestore, doc, getDoc, setDoc }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  // ===== FIREBASE CONFIG =====
-  const firebaseConfig = {
+  const FIREBASE_CONFIG = {
     apiKey:            "AIzaSyAFuMPVoy0jUamQtAFyTF_xZipjqjomEto",
     authDomain:        "ladakh-l.firebaseapp.com",
     projectId:         "ladakh-l",
@@ -339,235 +429,281 @@
     measurementId:     "G-58SK2SMS4D"
   };
 
-  // ====================================================
-  // 🔒 แก้ไขอีเมลที่อนุญาตให้เข้า Admin ที่นี่
-  // ====================================================
-  const ALLOWED_EMAILS = [
-    "lektheholy@gmail.com",
-  ];
-
-  const app      = initializeApp(firebaseConfig);
-  const auth     = getAuth(app);
-  const db       = getFirestore(app);
+  const app  = getApps().length ? getApp() : initializeApp(FIREBASE_CONFIG);
+  const auth = getAuth(app);
+  const db   = getFirestore(app);
   const provider = new GoogleAuthProvider();
 
-  // ===== INJECT NAV (admin mode) =====
-  // initNav('admin', true) → inject nav พร้อมเมนู admin + user chip
-  initNav('admin', true);
+  // expose for nav.js doLogout
+  window._auth = auth;
+  window.doLogout = () => signOut(auth).then(() => location.href = 'index.html');
 
-  // ===== AUTH STATE =====
+  // ===== PANEL SWITCHING =====
+  const PANEL_LABELS = {
+    dashboard: { eyebrow: 'Admin', title: 'แดชบอร์ด' },
+    settings:  { eyebrow: 'ตั้งค่า', title: 'ตั้งค่าเว็บไซต์' },
+  };
+
+  window.switchPanelFromNav = function(panelId, linkEl) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    const target = document.getElementById('panel-' + panelId);
+    if (target) target.classList.add('active');
+
+    document.querySelectorAll('.admin-link').forEach(a => a.classList.remove('active-panel'));
+    if (linkEl) linkEl.classList.add('active-panel');
+
+    const labels = PANEL_LABELS[panelId] || { eyebrow: 'Admin', title: panelId };
+    document.getElementById('panel-eyebrow').textContent = labels.eyebrow;
+    document.getElementById('panel-title').textContent   = labels.title;
+
+    if (panelId === 'dashboard') loadDashboard();
+    if (panelId === 'settings')  loadSettings();
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // ===== AUTH =====
+  document.getElementById('btn-google-login').addEventListener('click', async () => {
+    const errEl  = document.getElementById('login-error');
+    const loadEl = document.getElementById('login-loading');
+    errEl.style.display  = 'none';
+    loadEl.style.display = 'block';
+    try {
+      await signInWithPopup(auth, provider);
+    } catch (e) {
+      loadEl.style.display = 'none';
+      errEl.textContent    = 'เข้าสู่ระบบไม่สำเร็จ: ' + e.message;
+      errEl.style.display  = 'block';
+    }
+  });
+
   onAuthStateChanged(auth, user => {
+    const loginScreen = document.getElementById('login-screen');
+    const adminWrap   = document.getElementById('admin-wrap');
+    const chip        = document.getElementById('nav-user-chip');
+    const avatarEl    = document.getElementById('nav-user-avatar');
+    const nameEl      = document.getElementById('nav-user-name');
+
     if (user) {
-      if (ALLOWED_EMAILS.length > 0 && !ALLOWED_EMAILS.includes(user.email)) {
-        signOut(auth);
-        showError('ไม่มีสิทธิ์เข้าถึง: ' + user.email);
-        return;
-      }
-      showAdmin(user);
+      loginScreen.style.display = 'none';
+      adminWrap.classList.add('visible');
+      if (chip)     chip.classList.add('visible');
+      if (avatarEl) avatarEl.src = user.photoURL || '';
+      if (nameEl)   nameEl.textContent = user.displayName || user.email;
+      loadDashboard();
+      loadSettings();
     } else {
-      document.getElementById('admin-wrap').classList.remove('visible');
-      document.getElementById('login-screen').style.display = 'flex';
-      const chip = document.getElementById('nav-user-chip');
+      loginScreen.style.display = '';
+      adminWrap.classList.remove('visible');
       if (chip) chip.classList.remove('visible');
     }
   });
 
-  function showError(msg) {
-    const el = document.getElementById('login-error');
-    el.textContent = msg; el.style.display = 'block';
-  }
+  // inject nav
+  initNav('admin', true);
 
-  function showAdmin(user) {
-    document.getElementById('login-screen').style.display  = 'none';
-    document.getElementById('admin-wrap').classList.add('visible');
-
-    // update nav chip (injected by renderNav)
-    const avatarEl = document.getElementById('nav-user-avatar');
-    const nameEl   = document.getElementById('nav-user-name');
-    const chipEl   = document.getElementById('nav-user-chip');
-    if (avatarEl) avatarEl.src          = user.photoURL || '';
-    if (nameEl)   nameEl.textContent    = user.displayName || user.email;
-    if (chipEl)   chipEl.classList.add('visible');
-
-    // update settings panel
-    document.getElementById('settings-avatar').src         = user.photoURL || '';
-    document.getElementById('settings-name').textContent   = user.displayName || '—';
-    document.getElementById('settings-email').textContent  = user.email;
-
-    loadAll();
-  }
-
-  window.signInWithGoogle = async function() {
-    document.getElementById('login-error').style.display   = 'none';
-    document.getElementById('login-loading').style.display = 'block';
-    document.getElementById('btn-google-login').disabled   = true;
+  // ===== DASHBOARD =====
+  async function loadDashboard() {
+    const statsEl = document.getElementById('stats-row');
+    if (!statsEl) return;
+    // load site config to show info
     try {
-      await signInWithPopup(auth, provider);
-    } catch (err) {
-      document.getElementById('login-loading').style.display = 'none';
-      document.getElementById('btn-google-login').disabled   = false;
-      showError('เกิดข้อผิดพลาด: ' + err.message);
-    }
-  };
-
-  window.doLogout = async function() {
-    await signOut(auth);
-    showToast('ออกจากระบบแล้ว', 'success');
-  };
-
-  // ===== PANEL SWITCHING =====
-  // ADMIN_NAV ใน nav.js กำหนดเมนู — ดึง label จาก data-label attribute
-  window.switchPanelFromNav = function(id, el) {
-    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-    document.getElementById('panel-' + id)?.classList.add('active');
-    document.querySelectorAll('.nav-link.admin-link').forEach(a => a.classList.remove('active-panel'));
-    el.classList.add('active-panel');
-    // update section title: ใช้ชื่อ panel id เป็น title (uppercase)
-    document.getElementById('panel-title').textContent = id.toUpperCase();
-    // show/hide add button
-    document.getElementById('bar-add-btn').style.display = id === 'works' ? '' : 'none';
-    // close mobile menu
-    document.getElementById('nav-links')?.classList.remove('open');
-    document.getElementById('hamburger')?.classList.remove('active');
-    if (id === 'works')     renderTable();
-    if (id === 'dashboard') { renderStats(); renderDashTable(); }
-    window.scrollTo({ top:0, behavior:'smooth' });
-  };
-
-  // ===== DATA =====
-  let allWorks = [];
-
-  async function loadAll() {
-    try {
-      const q    = query(collection(db,'works'), orderBy('createdAt','desc'));
-      const snap = await getDocs(q);
-      allWorks   = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    } catch (e) { console.warn('Load error:', e); allWorks = []; }
-    renderStats(); renderTable(); renderDashTable();
-  }
-
-  const CAT_LABEL = { design:'Design', photo:'Photo', art:'Art' };
-  const CAT_BADGE = { design:'badge-design', photo:'badge-photo', art:'badge-art' };
-
-  // ===== STATS =====
-  function renderStats() {
-    const cats = { design:0, photo:0, art:0 };
-    allWorks.forEach(w => { if (cats[w.category] !== undefined) cats[w.category]++; });
-    document.getElementById('stats-row').innerHTML = `
-      <div class="stat-card"><div class="stat-card-num">${allWorks.length}</div><div class="stat-card-label">ผลงานทั้งหมด</div></div>
-      <div class="stat-card"><div class="stat-card-num">${cats.design}</div><div class="stat-card-label">งานออกแบบ</div></div>
-      <div class="stat-card"><div class="stat-card-num">${cats.photo}</div><div class="stat-card-label">ภาพถ่าย</div></div>
-      <div class="stat-card"><div class="stat-card-num">${cats.art}</div><div class="stat-card-label">ศิลปะ</div></div>
-    `;
-  }
-
-  function renderDashTable() {
-    document.getElementById('dash-table-body').innerHTML = allWorks.slice(0,5).map(w => `
-      <tr>
-        <td><div class="td-thumb">${w.image?`<img src="${w.image}" alt="">`:w.emoji||'✦'}</div></td>
-        <td><div class="td-title">${w.title}</div><div class="td-desc">${w.desc||''}</div></td>
-        <td><span class="badge ${CAT_BADGE[w.category]||''}">${CAT_LABEL[w.category]||w.category}</span></td>
-        <td style="color:var(--text-muted);font-size:.8rem;">${w.year||'-'}</td>
-      </tr>
-    `).join('') || '<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:2rem;font-size:.8rem;">— ยังไม่มีผลงาน —</td></tr>';
-  }
-
-  window.renderTable = function() {
-    const q = (document.getElementById('search-box')?.value||'').toLowerCase();
-    const works = q ? allWorks.filter(w => w.title.toLowerCase().includes(q)||(w.desc||'').toLowerCase().includes(q)) : allWorks;
-    document.getElementById('works-table-body').innerHTML = works.map(w => `
-      <tr>
-        <td><div class="td-thumb">${w.image?`<img src="${w.image}" alt="">`:w.emoji||'✦'}</div></td>
-        <td><div class="td-title">${w.title}</div><div class="td-desc">${w.desc||''}</div></td>
-        <td><span class="badge ${CAT_BADGE[w.category]||''}">${CAT_LABEL[w.category]||w.category}</span></td>
-        <td style="color:var(--text-muted);font-size:.8rem;">${w.year||'-'}</td>
-        <td>
-          <div class="td-actions">
-            <button class="btn btn-secondary btn-sm" onclick="editWork('${w.id}')">แก้ไข</button>
-            <button class="btn btn-danger"           onclick="deleteWork('${w.id}')">ลบ</button>
+      const snap = await getDoc(doc(db, 'config', 'site'));
+      const cfg  = snap.exists() ? snap.data() : {};
+      statsEl.innerHTML = `
+        <div class="stat-card">
+          <div class="stat-card-num" style="font-size:1.4rem;letter-spacing:.04em;">${cfg.siteName || 'PORTFOLIO'}</div>
+          <div class="stat-card-label">ชื่อเว็บไซต์</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-num" style="font-size:1.4rem;letter-spacing:.04em;">${cfg.logoType === 'image' ? '🖼' : 'Aa'}</div>
+          <div class="stat-card-label">ประเภทโลโก้</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-num" style="font-size:1.4rem;letter-spacing:.04em;">
+            <span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:${cfg.colorAccent||'#111'};vertical-align:middle;border:1px solid #ccc;"></span>
           </div>
-        </td>
-      </tr>
-    `).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:2rem;font-size:.8rem;">— ไม่พบผลงาน —</td></tr>';
-  };
-
-  // ===== MODAL =====
-  let selectedEmoji = '✦';
-
-  window.openModal = function(reset = true) {
-    if (reset) {
-      document.getElementById('modal-title').textContent = 'เพิ่มผลงาน';
-      document.getElementById('edit-id').value = '';
-      ['f-title','f-desc','f-image'].forEach(id => document.getElementById(id).value = '');
-      document.getElementById('f-cat').value  = 'design';
-      document.getElementById('f-year').value = new Date().getFullYear();
-      selectedEmoji = '✦'; setEmoji('✦');
+          <div class="stat-card-label">สีหลัก</div>
+        </div>
+      `;
+    } catch(e) {
+      statsEl.innerHTML = '<div class="stat-card"><div class="stat-card-label" style="padding:.5rem 0;">ยังไม่มีการตั้งค่า</div></div>';
     }
-    document.getElementById('modal').classList.add('open');
-  };
+  }
 
-  window.closeModal = function() { document.getElementById('modal').classList.remove('open'); };
-  document.getElementById('modal').addEventListener('click', e => { if (e.target === document.getElementById('modal')) closeModal(); });
-  document.querySelectorAll('.emoji-opt').forEach(opt => opt.addEventListener('click', () => setEmoji(opt.dataset.v)));
-  function setEmoji(v) { document.querySelectorAll('.emoji-opt').forEach(o => o.classList.toggle('selected', o.dataset.v === v)); selectedEmoji = v; }
-
-  window.saveWork = async function() {
-    const title = document.getElementById('f-title').value.trim();
-    if (!title) { showToast('กรุณากรอกชื่อผลงาน','error'); return; }
-    const editId = document.getElementById('edit-id').value;
-    const work = {
-      title,
-      category:  document.getElementById('f-cat').value,
-      year:      document.getElementById('f-year').value.trim(),
-      desc:      document.getElementById('f-desc').value.trim(),
-      image:     document.getElementById('f-image').value.trim(),
-      emoji:     selectedEmoji,
-      updatedAt: serverTimestamp(),
-    };
+  // ===== SETTINGS =====
+  async function loadSettings() {
     try {
-      if (editId) {
-        await setDoc(doc(db,'works',editId), work, { merge:true });
-        showToast('อัพเดตผลงานแล้ว ✓','success');
-      } else {
-        work.createdAt = serverTimestamp();
-        await addDoc(collection(db,'works'), work);
-        showToast('เพิ่มผลงานใหม่แล้ว ✓','success');
+      const snap = await getDoc(doc(db, 'config', 'site'));
+      if (!snap.exists()) return;
+      const cfg = snap.data();
+
+      if (cfg.siteName)    document.getElementById('cfg-sitename').value = cfg.siteName;
+      if (cfg.tagline)     document.getElementById('cfg-tagline').value  = cfg.tagline;
+      if (cfg.logoText)    document.getElementById('cfg-logotext').value = cfg.logoText;
+      if (cfg.logoUrl)     document.getElementById('cfg-logo-url').value = cfg.logoUrl;
+
+      // colors
+      const colors = { bg: cfg.colorBg||'#ffffff', accent: cfg.colorAccent||'#111111', text: cfg.colorText||'#111111', btnbg: cfg.colorBtnBg||'#111111' };
+      for (const [key, val] of Object.entries(colors)) {
+        updateColorPreview(key, val);
+        const inp = document.getElementById('cfg-' + key);
+        const hex = document.getElementById('cfg-' + key + '-hex');
+        if (inp) inp.value = val;
+        if (hex) hex.value = val;
       }
-      closeModal();
-      await loadAll();
-    } catch (err) { showToast('เกิดข้อผิดพลาด: '+err.message,'error'); }
-  };
 
-  window.editWork = function(id) {
-    const w = allWorks.find(x => x.id === id);
-    if (!w) return;
-    document.getElementById('modal-title').textContent = 'แก้ไขผลงาน';
-    document.getElementById('edit-id').value  = w.id;
-    document.getElementById('f-title').value  = w.title;
-    document.getElementById('f-cat').value    = w.category;
-    document.getElementById('f-year').value   = w.year  || '';
-    document.getElementById('f-desc').value   = w.desc  || '';
-    document.getElementById('f-image').value  = w.image || '';
-    setEmoji(w.emoji || '✦');
-    openModal(false);
-  };
+      // logo type
+      if (cfg.logoType === 'image') {
+        document.getElementById('logo-image-radio').checked = true;
+        switchLogoType('image');
+        if (cfg.logoUrl) previewLogoUrl(cfg.logoUrl);
+      }
 
-  window.deleteWork = async function(id) {
-    if (!confirm('ต้องการลบผลงานนี้ใช่ไหม?')) return;
+      // update preview
+      updateAllPreviews();
+    } catch(e) { /* no settings yet */ }
+  }
+
+  // ===== SAVE =====
+  window.saveSettings = async function() {
+    const statusEl = document.getElementById('save-status');
+    statusEl.textContent = 'กำลังบันทึก…';
+
+    const logoType = document.querySelector('input[name="logo-type"]:checked')?.value || 'text';
+    const data = {
+      siteName:    document.getElementById('cfg-sitename').value.trim() || 'PORTFOLIO',
+      tagline:     document.getElementById('cfg-tagline').value.trim(),
+      logoType,
+      logoText:    document.getElementById('cfg-logotext').value.trim(),
+      logoUrl:     document.getElementById('cfg-logo-url').value.trim(),
+      colorBg:     document.getElementById('cfg-bg-hex').value.trim(),
+      colorAccent: document.getElementById('cfg-accent-hex').value.trim(),
+      colorText:   document.getElementById('cfg-text-hex').value.trim(),
+      colorBtnBg:  document.getElementById('cfg-btnbg-hex').value.trim(),
+      updatedAt:   new Date().toISOString(),
+    };
+
     try {
-      await deleteDoc(doc(db,'works',id));
-      showToast('ลบผลงานแล้ว','success');
-      await loadAll();
-    } catch (err) { showToast('ลบไม่สำเร็จ: '+err.message,'error'); }
+      await setDoc(doc(db, 'config', 'site'), data, { merge: true });
+      statusEl.textContent = '✓ บันทึกแล้ว';
+      showToast('บันทึกการตั้งค่าแล้ว ✓', 'success');
+      setTimeout(() => statusEl.textContent = '', 3000);
+    } catch(e) {
+      statusEl.textContent = '';
+      showToast('เกิดข้อผิดพลาด: ' + e.message, 'error');
+    }
+  };
+
+  window.resetSettings = function() {
+    if (!confirm('รีเซ็ตการตั้งค่าทั้งหมดกลับเป็นค่าเริ่มต้น?')) return;
+    ['cfg-sitename','cfg-tagline','cfg-logotext','cfg-logo-url'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+    const defaults = { bg:'#ffffff', accent:'#111111', text:'#111111', btnbg:'#111111' };
+    for (const [key, val] of Object.entries(defaults)) {
+      updateColorPreview(key, val);
+      const inp = document.getElementById('cfg-' + key);
+      const hex = document.getElementById('cfg-' + key + '-hex');
+      if (inp) inp.value = val;
+      if (hex) hex.value = val;
+    }
+    switchLogoType('text');
+    document.getElementById('logo-text-radio').checked = true;
+    updateAllPreviews();
   };
 
   // ===== TOAST =====
   window.showToast = function(msg, type = 'success') {
     const t = document.getElementById('toast');
-    t.textContent = msg; t.className = `toast ${type}`;
-    void t.offsetWidth; t.classList.add('show');
+    t.textContent = msg;
+    t.className   = `toast ${type}`;
+    void t.offsetWidth;
+    t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 3000);
   };
+
+  // ===== COLOR HELPERS =====
+  window.updateColorPreview = function(key, val) {
+    const preview = document.getElementById('preview-' + key);
+    if (preview) preview.style.background = val;
+    const colorInput = document.getElementById('cfg-' + key);
+    if (colorInput) colorInput.value = val;
+    const hexInput = document.getElementById('cfg-' + key + '-hex');
+    if (hexInput) hexInput.value = val;
+    updateAllPreviews();
+  };
+
+  window.syncColorFromHex = function(key, val) {
+    const colorInput = document.getElementById('cfg-' + key);
+    const preview    = document.getElementById('preview-' + key);
+    if (/^#[0-9a-fA-F]{6}$/.test(val)) {
+      if (colorInput) colorInput.value = val;
+      if (preview)    preview.style.background = val;
+    }
+    updateAllPreviews();
+  };
+
+  function updateAllPreviews() {
+    const bg     = document.getElementById('cfg-bg-hex')?.value     || '#ffffff';
+    const accent = document.getElementById('cfg-accent-hex')?.value || '#111111';
+    const text   = document.getElementById('cfg-text-hex')?.value   || '#111111';
+    const btnbg  = document.getElementById('cfg-btnbg-hex')?.value  || '#111111';
+    const name   = document.getElementById('cfg-sitename')?.value   || 'PORTFOLIO';
+
+    const prevHero = document.getElementById('prev-hero');
+    if (prevHero) prevHero.style.background = bg;
+
+    const prevTitle = document.getElementById('prev-title');
+    if (prevTitle) { prevTitle.textContent = name; prevTitle.style.color = text; }
+
+    const prevLogoText = document.getElementById('prev-logo-text');
+    if (prevLogoText) prevLogoText.textContent = name;
+
+    const prevBtn = document.getElementById('prev-btn');
+    if (prevBtn) { prevBtn.style.background = btnbg; prevBtn.style.borderColor = btnbg; prevBtn.style.color = '#fff'; }
+  }
+
+  // ===== LOGO HELPERS =====
+  window.switchLogoType = function(type) {
+    document.getElementById('logo-text-section').style.display  = type === 'text'  ? '' : 'none';
+    document.getElementById('logo-image-section').style.display = type === 'image' ? '' : 'none';
+  };
+
+  window.handleLogoFile = function(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const src = e.target.result;
+      showLogoPreview(src);
+      document.getElementById('cfg-logo-url').value = src; // store as base64
+    };
+    reader.readAsDataURL(file);
+  };
+
+  window.previewLogoUrl = function(url) {
+    if (url) showLogoPreview(url);
+  };
+
+  function showLogoPreview(src) {
+    const img    = document.getElementById('logo-preview-img');
+    const icon   = document.getElementById('logo-upload-icon');
+    const text   = document.getElementById('logo-upload-text');
+    const navImg = document.getElementById('prev-logo-img');
+    if (img)    { img.src = src; img.classList.add('visible'); }
+    if (icon)   icon.style.display = 'none';
+    if (text)   text.style.display = 'none';
+    if (navImg) { navImg.src = src; navImg.style.display = 'block'; }
+  }
+
+  // Watch sitename input for live preview
+  document.getElementById('cfg-sitename')?.addEventListener('input', updateAllPreviews);
+  document.getElementById('cfg-bg-hex')?.addEventListener('input', updateAllPreviews);
+  document.getElementById('cfg-accent-hex')?.addEventListener('input', updateAllPreviews);
+  document.getElementById('cfg-text-hex')?.addEventListener('input', updateAllPreviews);
+  document.getElementById('cfg-btnbg-hex')?.addEventListener('input', updateAllPreviews);
 </script>
 </body>
 </html>
