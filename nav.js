@@ -36,7 +36,7 @@ function renderNav(activePage = "index") {
           <a href="${isAdmin ? SITE_CONFIG.indexPath : item.href}"
              class="nav-link ${item.filter ? 'filter-link' : ''}"
              data-filter="${item.filter || ''}"
-          >${item.label}</a>
+          ><span>${item.label}</span></a>
         `).join('')}
       </div>
       <div class="nav-actions">
@@ -45,7 +45,7 @@ function renderNav(activePage = "index") {
           : `<a href="${SITE_CONFIG.adminPath}" class="nav-btn admin-btn">Admin</a>`
         }
         <button class="hamburger" id="hamburger" aria-label="เมนู">
-          <span></span><span></span><span></span>
+          <span></span><span></span>
         </button>
       </div>
     </nav>
@@ -78,6 +78,7 @@ function initHamburger() {
     btn.addEventListener('click', () => {
       links.classList.toggle('open');
       btn.classList.toggle('active');
+      document.body.classList.toggle('menu-open');
     });
   }
 }
