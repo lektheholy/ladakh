@@ -6,14 +6,11 @@
   <title>Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Noto+Sans+Thai:wght@300;400;500&display=swap" rel="stylesheet" />
-
-  <!-- ✦ Shared styles — แก้ nav.css เพื่อเปลี่ยนสไตล์ทั้งเว็บ -->
   <link rel="stylesheet" href="nav.css" />
 
   <style>
     /* ============================================================
-       index.html — PAGE-SPECIFIC STYLES
-       สไตล์เฉพาะหน้านี้เท่านั้น (nav/footer อยู่ใน nav.css)
+       index.html — PAGE-SPECIFIC STYLES (SPA)
        ============================================================ */
 
     body { cursor: none; }
@@ -50,6 +47,7 @@
       color: var(--text); text-decoration: none;
       font-size: 0.8rem; letter-spacing: .14em; text-transform: uppercase;
       white-space: nowrap; transition: gap var(--transition), color var(--transition);
+      cursor: pointer; background: none; border: none; font-family: var(--font-body);
     }
     .hero-cta-line { width: 48px; height: 1px; background: var(--text); transition: width var(--transition), background var(--transition); }
     .hero-cta:hover { color: var(--accent); gap: 1.5rem; }
@@ -78,7 +76,7 @@
     }
     .marquee-track {
       display: flex; gap: 0;
-      animation: marquee 18s linear infinite; white-space: nowrap;
+      animation: marquee 20s linear infinite; white-space: nowrap;
     }
     .marquee-item {
       display: inline-flex; align-items: center; gap: 2.5rem;
@@ -89,74 +87,147 @@
     .marquee-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
     @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-    /* ===== SECTIONS ===== */
-    section { padding: 7rem 3rem; }
-    .section-header {
-      display: flex; align-items: flex-end; justify-content: space-between;
-      margin-bottom: 4rem; flex-wrap: wrap; gap: 1rem;
-    }
+    /* ===== SECTION COMMON ===== */
+    .spa-page { padding-top: var(--nav-height); min-height: 100vh; }
+    .page-section { padding: 6rem 3rem; }
     .section-eyebrow { font-size: 0.68rem; letter-spacing: .24em; text-transform: uppercase; color: var(--accent); margin-bottom: .5rem; }
-    .section-title   { font-family: var(--font-display); font-size: clamp(2.5rem,5vw,5rem); letter-spacing: .02em; line-height: 1; color: var(--text); }
+    .section-title   { font-family: var(--font-display); font-size: clamp(2.5rem,5vw,5rem); letter-spacing: .02em; line-height: 1; color: var(--text); margin-bottom: 1rem; }
+    .section-lead    { color: var(--text-muted); max-width: 60ch; line-height: 1.9; font-weight: 300; font-size: .95rem; }
 
-    /* ===== FILTER TABS ===== */
-    .filter-tabs { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: 3rem; }
-    .filter-tab {
-      padding: .35rem 1rem; border: 1px solid var(--border);
-      background: transparent; font-family: var(--font-body);
-      font-size: 0.72rem; letter-spacing: .12em; text-transform: uppercase;
-      color: var(--text-muted); cursor: pointer; transition: all .3s ease;
+    /* ===== CS PAGE — วิทยาการคำนวณ ===== */
+    .cs-hero {
+      min-height: 60vh; display: flex; align-items: center;
+      position: relative; overflow: hidden;
+      background: linear-gradient(135deg, var(--bg) 60%, rgba(200,245,90,0.03));
+      border-bottom: 1px solid var(--border);
     }
-    .filter-tab:hover { border-color: var(--accent); color: var(--accent); }
-    .filter-tab.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
-
-    /* ===== PORTFOLIO GRID ===== */
-    .portfolio-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1.5rem; }
-    .portfolio-card {
-      cursor: pointer; overflow: hidden; position: relative;
-      border: 1px solid var(--border); background: var(--surface);
-      transition: border-color .4s, transform .5s var(--transition);
+    .cs-hero-bg {
+      position: absolute; right: 0; top: 0; bottom: 0; width: 45%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-size: 18rem; line-height: 1;
+      color: rgba(200,245,90,0.035); letter-spacing: -.02em; user-select: none;
+      pointer-events: none; overflow: hidden;
     }
-    .portfolio-card:nth-child(1)    { grid-column: span 5; grid-row: span 2; }
-    .portfolio-card:nth-child(2)    { grid-column: span 4; }
-    .portfolio-card:nth-child(3)    { grid-column: span 3; }
-    .portfolio-card:nth-child(4)    { grid-column: span 7; }
-    .portfolio-card:nth-child(5)    { grid-column: span 5; }
-    .portfolio-card:nth-child(6)    { grid-column: span 6; }
-    .portfolio-card:nth-child(n+7)  { grid-column: span 4; }
-    .portfolio-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+    .cs-topics {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1px; background: var(--border); border: 1px solid var(--border);
+      margin-top: 3rem;
+    }
+    .cs-topic-card {
+      background: var(--surface); padding: 2rem;
+      transition: background .3s;
+      position: relative; overflow: hidden;
+    }
+    .cs-topic-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: var(--accent); transform: scaleX(0); transform-origin: left;
+      transition: transform .4s var(--transition);
+    }
+    .cs-topic-card:hover { background: var(--surface2); }
+    .cs-topic-card:hover::before { transform: scaleX(1); }
+    .cs-topic-icon { font-size: 1.5rem; margin-bottom: 1rem; color: var(--accent); }
+    .cs-topic-title { font-family: var(--font-display); font-size: 1.3rem; letter-spacing: .06em; margin-bottom: .6rem; }
+    .cs-topic-desc { font-size: .82rem; color: var(--text-muted); line-height: 1.8; }
+    .cs-coming-soon {
+      display: inline-block; font-size: .6rem; letter-spacing: .16em;
+      text-transform: uppercase; color: var(--accent);
+      border: 1px solid rgba(200,245,90,0.3); padding: .15rem .5rem;
+      margin-top: .8rem;
+    }
 
-    .card-thumb { aspect-ratio: 4/3; background: var(--surface); position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-    .portfolio-card:nth-child(1) .card-thumb { aspect-ratio: 3/4; }
-    .card-thumb-placeholder { font-family: var(--font-display); font-size: 4rem; color: rgba(255,255,255,0.06); letter-spacing: .1em; }
-    .card-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s var(--transition), filter .5s; filter: saturate(0.7); }
-    .portfolio-card:hover .card-thumb img { transform: scale(1.06); filter: saturate(1); }
-    .card-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(8,8,8,0.85) 0%, transparent 55%); opacity: 0; transition: opacity .4s; }
-    .portfolio-card:hover .card-overlay { opacity: 1; }
-    .card-tag { position: absolute; top: 1rem; left: 1rem; font-size: 0.62rem; letter-spacing: .14em; text-transform: uppercase; background: rgba(8,8,8,0.75); color: var(--accent); padding: .22rem .65rem; backdrop-filter: blur(8px); border: 1px solid rgba(200,245,90,0.2); }
-    .card-body { padding: 1.2rem 1.4rem 1.4rem; }
-    .card-title { font-family: var(--font-display); font-size: 1.4rem; letter-spacing: .04em; color: var(--text); margin-bottom: .3rem; transition: color .3s; }
-    .portfolio-card:hover .card-title { color: var(--accent); }
-    .card-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.7; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .card-meta { display: flex; align-items: center; justify-content: space-between; margin-top: 1rem; padding-top: .8rem; border-top: 1px solid var(--border); font-size: 0.7rem; color: var(--text-muted); letter-spacing: .08em; }
-    .card-arrow { font-size: .8rem; color: var(--text-muted); transition: transform .3s, color .3s; }
-    .portfolio-card:hover .card-arrow { transform: translate(4px,-4px); color: var(--accent); }
-    .grid-loading { grid-column: 1 / -1; text-align: center; padding: 4rem; color: var(--text-muted); font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; }
+    /* ===== DESIGN PAGE — ออกแบบและเทคโนโลยี ===== */
+    .design-hero {
+      min-height: 60vh; display: flex; align-items: center;
+      position: relative; overflow: hidden;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg2);
+    }
+    .design-hero-decor {
+      position: absolute; right: 3rem; top: 50%; transform: translateY(-50%);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6px; opacity: .15;
+    }
+    .design-hero-decor span {
+      display: block; width: 56px; height: 56px;
+      border: 1px solid var(--accent);
+    }
+    .design-hero-decor span:nth-child(odd)  { background: rgba(200,245,90,0.08); }
+    .design-hero-decor span:nth-child(even) { background: transparent; }
 
-    /* ===== ABOUT ===== */
-    #about { position: relative; background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); overflow: hidden; }
-    #about::before { content: 'ABOUT'; position: absolute; right: -1rem; top: 50%; transform: translateY(-50%); font-family: var(--font-display); font-size: 18rem; line-height: 1; color: rgba(255,255,255,0.02); pointer-events: none; }
-    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; position: relative; z-index: 1; }
-    .about-text p { color: var(--text-muted); line-height: 1.9; margin-bottom: 1.2rem; font-size: .95rem; font-weight: 300; }
-    .about-img-wrap { aspect-ratio: 3/4; background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-    .about-img-inner { font-family: var(--font-display); font-size: 8rem; color: rgba(200,245,90,0.08); letter-spacing: .1em; }
-    .about-accent-line { position: absolute; top: 1.5rem; left: 1.5rem; right: 1.5rem; bottom: 1.5rem; border: 1px solid rgba(200,245,90,0.1); pointer-events: none; }
+    .design-topics {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1px; background: var(--border); border: 1px solid var(--border);
+      margin-top: 3rem;
+    }
+    .design-topic-card {
+      background: var(--surface); padding: 2rem;
+      transition: background .3s; position: relative; overflow: hidden;
+    }
+    .design-topic-card::after {
+      content: attr(data-num);
+      position: absolute; right: 1.2rem; bottom: 1rem;
+      font-family: var(--font-display); font-size: 5rem; line-height: 1;
+      color: rgba(255,255,255,0.03); pointer-events: none; user-select: none;
+    }
+    .design-topic-card:hover { background: var(--surface2); }
+    .design-topic-title { font-family: var(--font-display); font-size: 1.3rem; letter-spacing: .06em; margin-bottom: .6rem; }
+    .design-topic-desc { font-size: .82rem; color: var(--text-muted); line-height: 1.8; }
+
+    /* ===== ABOUT PAGE — เราคือใคร ===== */
+    .about-page { background: var(--bg); }
+    .about-hero {
+      min-height: 50vh; display: flex; align-items: center;
+      position: relative; overflow: hidden;
+      border-bottom: 1px solid var(--border);
+    }
+    .about-hero::before {
+      content: 'WHO'; position: absolute; right: -1rem; top: 50%;
+      transform: translateY(-50%);
+      font-family: var(--font-display); font-size: 20rem; line-height: 1;
+      color: rgba(255,255,255,0.02); pointer-events: none; user-select: none;
+    }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 5rem; align-items: start;
+    }
+    .about-text p {
+      color: var(--text-muted); line-height: 1.9;
+      margin-bottom: 1.2rem; font-size: .95rem; font-weight: 300;
+    }
+    .about-img-wrap {
+      aspect-ratio: 3/4; background: var(--surface); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .about-img-inner { font-family: var(--font-display); font-size: 8rem; color: rgba(200,245,90,0.08); }
+    .about-accent-line {
+      position: absolute; top: 1.5rem; left: 1.5rem; right: 1.5rem; bottom: 1.5rem;
+      border: 1px solid rgba(200,245,90,0.1); pointer-events: none;
+    }
+    .about-members {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1px; background: var(--border); border: 1px solid var(--border);
+      margin-top: 3rem;
+    }
+    .member-card {
+      background: var(--surface); padding: 1.8rem 1.6rem;
+      transition: background .3s;
+    }
+    .member-card:hover { background: var(--surface2); }
+    .member-avatar {
+      width: 52px; height: 52px; border-radius: 50%;
+      border: 1px solid var(--border2);
+      background: var(--bg2); display: flex; align-items: center;
+      justify-content: center; margin-bottom: 1rem;
+      font-family: var(--font-display); font-size: 1.2rem; color: var(--accent);
+    }
+    .member-name { font-weight: 500; font-size: .95rem; margin-bottom: .2rem; }
+    .member-role { font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); }
 
     /* ===== LIGHTBOX ===== */
     .lightbox { display: none; position: fixed; inset: 0; z-index: 999; background: rgba(8,8,8,0.95); backdrop-filter: blur(20px); align-items: center; justify-content: center; padding: 2rem; }
     .lightbox.open { display: flex; }
     .lightbox-box { background: var(--surface); border: 1px solid var(--border); max-width: 760px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; }
     .lightbox-img { width: 100%; aspect-ratio: 16/9; background: var(--bg2); display: flex; align-items: center; justify-content: center; overflow: hidden; }
-    .lightbox-img img { width: 100%; height: 100%; object-fit: cover; filter: saturate(0.8); }
     .lightbox-content { padding: 2rem 2.4rem 2.4rem; }
     .lightbox-tag   { font-size: 0.65rem; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); margin-bottom: .6rem; }
     .lightbox-title { font-family: var(--font-display); font-size: 2.5rem; letter-spacing: .04em; margin-bottom: .8rem; }
@@ -165,28 +236,17 @@
     .lightbox-close:hover { color: var(--accent); border-color: var(--accent); }
 
     /* ===== RESPONSIVE ===== */
-    @media (max-width: 1024px) {
-      .portfolio-grid { grid-template-columns: repeat(6,1fr); }
-      .portfolio-card:nth-child(1)    { grid-column: span 6; grid-row: span 1; }
-      .portfolio-card:nth-child(n+2)  { grid-column: span 3; }
-    }
     @media (max-width: 768px) {
       body { cursor: auto; }
       .cursor-dot, .cursor-ring { display: none; }
       .hero-content { padding: 0 1.5rem; }
       .hero-title   { font-size: clamp(3.5rem,16vw,7rem); }
       .hero-scroll  { display: none; }
-      section { padding: 4rem 1.5rem; }
-      .portfolio-grid { grid-template-columns: 1fr 1fr; display: grid; }
-      .portfolio-card:nth-child(n)  { grid-column: span 1; grid-row: span 1; }
-      .portfolio-card:nth-child(1)  { grid-column: span 2; }
-      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .page-section { padding: 4rem 1.5rem; }
+      .about-grid   { grid-template-columns: 1fr; gap: 2.5rem; }
       .about-img-wrap { aspect-ratio: 3/2; }
-      .footer-inner { flex-direction: column; align-items: flex-start; }
-    }
-    @media (max-width: 500px) {
-      .portfolio-grid { grid-template-columns: 1fr; }
-      .portfolio-card:nth-child(n) { grid-column: span 1; }
+      .cs-hero-bg   { display: none; }
+      .design-hero-decor { display: none; }
     }
   </style>
 </head>
@@ -198,80 +258,209 @@
 <!-- Nav inject point -->
 <div id="nav-root"></div>
 
-<main>
-  <!-- HERO -->
-  <section class="hero" id="home">
-    <canvas id="hero-canvas"></canvas>
-    <div class="hero-content">
-      <div class="hero-label">Creative Portfolio</div>
-      <h1 class="hero-title">งาน<span class="outline">ออก</span><br><span class="accent">แบบ</span></h1>
-      <div class="hero-bottom">
-        <p class="hero-desc">รวมผลงานการออกแบบ ภาพถ่าย และงานศิลป์ที่สร้างสรรค์ด้วยแรงบันดาลใจจากธรรมชาติและความเรียบง่าย</p>
-        <a href="#works" class="hero-cta"><div class="hero-cta-line"></div>ดูผลงานทั้งหมด</a>
+<main id="spa-root">
+
+  <!-- ========================================================
+       PAGE: วิทยาการคำนวณ (id="page-cs")
+       ======================================================== -->
+  <div class="spa-page" id="page-cs">
+
+    <!-- Hero -->
+    <div class="cs-hero">
+      <div class="page-section" style="position:relative;z-index:1;">
+        <p class="section-eyebrow">วิทยาการคำนวณ</p>
+        <h1 class="section-title">COMPUTING<br>SCIENCE</h1>
+        <p class="section-lead">เรียนรู้หลักการของวิทยาการคำนวณ ตั้งแต่พื้นฐานการคิดเชิงคอมพิวเตอร์ไปจนถึงการเขียนโปรแกรมและการแก้ปัญหาในชีวิตจริง</p>
+      </div>
+      <div class="cs-hero-bg">CS</div>
+    </div>
+
+    <!-- Topics grid -->
+    <div class="page-section">
+      <p class="section-eyebrow">หัวข้อ</p>
+      <h2 class="section-title" style="font-size:2rem;">หัวข้อการเรียนรู้</h2>
+      <div class="cs-topics">
+
+        <div class="cs-topic-card">
+          <div class="cs-topic-icon">◈</div>
+          <div class="cs-topic-title">การคิดเชิงคอมพิวเตอร์</div>
+          <p class="cs-topic-desc">ฝึกทักษะการแยกย่อยปัญหา การหารูปแบบ และการสร้างขั้นตอนการแก้ปัญหาแบบเป็นระบบ</p>
+          <span class="cs-coming-soon">เร็วๆ นี้</span>
+        </div>
+
+        <div class="cs-topic-card">
+          <div class="cs-topic-icon">✦</div>
+          <div class="cs-topic-title">การเขียนโปรแกรมเบื้องต้น</div>
+          <p class="cs-topic-desc">เริ่มต้นกับภาษา Python และ Scratch เรียนรู้การสร้างตัวแปร เงื่อนไข ลูป และฟังก์ชัน</p>
+          <span class="cs-coming-soon">เร็วๆ นี้</span>
+        </div>
+
+        <div class="cs-topic-card">
+          <div class="cs-topic-icon">◉</div>
+          <div class="cs-topic-title">ข้อมูลและอัลกอริทึม</div>
+          <p class="cs-topic-desc">ทำความเข้าใจโครงสร้างข้อมูล การจัดเรียง การค้นหา และการวิเคราะห์ประสิทธิภาพ</p>
+          <span class="cs-coming-soon">เร็วๆ นี้</span>
+        </div>
+
+        <div class="cs-topic-card">
+          <div class="cs-topic-icon">◌</div>
+          <div class="cs-topic-title">เครือข่ายและอินเทอร์เน็ต</div>
+          <p class="cs-topic-desc">รู้จักโปรโตคอล การส่งข้อมูล ความปลอดภัยในโลกออนไลน์ และพื้นฐานของเว็บ</p>
+          <span class="cs-coming-soon">เร็วๆ นี้</span>
+        </div>
+
+        <div class="cs-topic-card">
+          <div class="cs-topic-icon">◎</div>
+          <div class="cs-topic-title">ปัญญาประดิษฐ์เบื้องต้น</div>
+          <p class="cs-topic-desc">สำรวจโลกของ AI ตั้งแต่ Machine Learning พื้นฐานไปจนถึงการนำ AI ใช้อย่างมีจริยธรรม</p>
+          <span class="cs-coming-soon">เร็วๆ นี้</span>
+        </div>
+
+        <div class="cs-topic-card">
+          <div class="cs-topic-icon">✧</div>
+          <div class="cs-topic-title">โปรเจกต์และการแข่งขัน</div>
+          <p class="cs-topic-desc">แนะนำโปรเจกต์ฝึกทักษะ การเตรียมตัวแข่งขันวิทยาการคำนวณ และพอร์ตโฟลิโอ</p>
+          <span class="cs-coming-soon">เร็วๆ นี้</span>
+        </div>
+
       </div>
     </div>
-    <div class="hero-scroll"><div class="scroll-line"></div><span>Scroll</span></div>
-  </section>
 
-  <!-- MARQUEE -->
-  <div class="marquee-wrap">
-    <div class="marquee-track">
-      <span class="marquee-item">DESIGN <span class="marquee-dot"></span> PHOTOGRAPHY <span class="marquee-dot"></span> ART <span class="marquee-dot"></span> CREATIVE <span class="marquee-dot"></span></span>
-      <span class="marquee-item">ออกแบบ <span class="marquee-dot"></span> ภาพถ่าย <span class="marquee-dot"></span> ศิลปะ <span class="marquee-dot"></span> สร้างสรรค์ <span class="marquee-dot"></span></span>
-      <span class="marquee-item">DESIGN <span class="marquee-dot"></span> PHOTOGRAPHY <span class="marquee-dot"></span> ART <span class="marquee-dot"></span> CREATIVE <span class="marquee-dot"></span></span>
-      <span class="marquee-item">ออกแบบ <span class="marquee-dot"></span> ภาพถ่าย <span class="marquee-dot"></span> ศิลปะ <span class="marquee-dot"></span> สร้างสรรค์ <span class="marquee-dot"></span></span>
-    </div>
   </div>
+  <!-- end page-cs -->
 
-  <!-- WORKS -->
-  <section id="works">
-    <div class="section-header fade-up">
-      <div>
-        <p class="section-eyebrow">ผลงาน</p>
-        <h2 class="section-title">WORKS</h2>
-      </div>
-      <div id="stat-badge" style="font-family:var(--font-display);font-size:4rem;color:rgba(240,240,240,0.06);letter-spacing:.05em;"></div>
-    </div>
-    <div class="filter-tabs" id="filter-tabs">
-      <button class="filter-tab active" data-filter="all">All</button>
-      <button class="filter-tab" data-filter="design">Design</button>
-      <button class="filter-tab" data-filter="photo">Photo</button>
-      <button class="filter-tab" data-filter="art">Art</button>
-    </div>
-    <div class="portfolio-grid" id="portfolio-grid">
-      <div class="grid-loading">กำลังโหลด...</div>
-    </div>
-  </section>
 
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="about-grid">
-      <div class="about-text">
-        <p class="section-eyebrow">เกี่ยวกับ</p>
-        <h2 class="section-title" style="margin-bottom:2rem;">ABOUT</h2>
-        <p>ยินดีต้อนรับสู่พื้นที่รวบรวมผลงานสร้างสรรค์ที่ผสมผสานระหว่างความงดงามของธรรมชาติและการออกแบบร่วมสมัย ทุกชิ้นงานถูกสร้างด้วยความตั้งใจและความใส่ใจในรายละเอียด</p>
-        <p>งานแต่ละชิ้นเล่าเรื่องราว บอกอารมณ์ และสื่อสารความรู้สึก ผ่านสี พื้นผิว และองค์ประกอบที่ได้รับแรงบันดาลใจจากสิ่งรอบข้าง</p>
+  <!-- ========================================================
+       PAGE: ออกแบบและเทคโนโลยี (id="page-design")
+       ======================================================== -->
+  <div class="spa-page" id="page-design">
+
+    <!-- Hero -->
+    <div class="design-hero">
+      <div class="page-section" style="position:relative;z-index:1;">
+        <p class="section-eyebrow">ออกแบบและเทคโนโลยี</p>
+        <h1 class="section-title">DESIGN &amp;<br>TECHNOLOGY</h1>
+        <p class="section-lead">เชื่อมโยงความคิดสร้างสรรค์เข้ากับเครื่องมือดิจิทัล เรียนรู้การออกแบบกราฟิก UX/UI และการสร้างสรรค์งานด้วยเทคโนโลยียุคใหม่</p>
       </div>
-      <div class="about-img-wrap">
-        <div class="about-accent-line"></div>
-        <div class="about-img-inner">✦</div>
+      <div class="design-hero-decor" aria-hidden="true">
+        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
       </div>
     </div>
-  </section>
+
+    <!-- Topics grid -->
+    <div class="page-section">
+      <p class="section-eyebrow">หัวข้อ</p>
+      <h2 class="section-title" style="font-size:2rem;">หัวข้อการเรียนรู้</h2>
+      <div class="design-topics">
+
+        <div class="design-topic-card" data-num="01">
+          <div class="design-topic-title">หลักการออกแบบกราฟิก</div>
+          <p class="design-topic-desc">สี พื้นผิว ตัวอักษร และองค์ประกอบภาพ — พื้นฐานที่ทุกนักออกแบบต้องรู้</p>
+          <span class="cs-coming-soon">เร็วๆ นี้</span>
+        </div>
+
+        <div class="design-topic-card" data-num="02">
+          <div class="design-topic-title">UX/UI Design</div>
+          <p class="design-topic-desc">ออกแบบประสบการณ์ผู้ใช้ ทำ Wireframe Prototype และทดสอบกับผู้ใช้จริง</p>
+          <span class="cs-coming-soon">เร็วๆ นี้</span>
+        </div>
+
+        <div class="design-topic-card" data-num="03">
+          <div class="design-topic-title">เครื่องมือดิจิทัล</div>
+          <p class="design-topic-desc">Figma, Canva, Adobe Express และเครื่องมือ AI ช่วยสร้างสรรค์งานออกแบบ</p>
+          <span class="cs-coming-soon">เร็วๆ นี้</span>
+        </div>
+
+        <div class="design-topic-card" data-num="04">
+          <div class="design-topic-title">Web Design พื้นฐาน</div>
+          <p class="design-topic-desc">HTML, CSS เบื้องต้น และการสร้างเว็บไซต์ที่สวยงาม ตอบสนองได้ทุกอุปกรณ์</p>
+          <span class="cs-coming-soon">เร็วๆ นี้</span>
+        </div>
+
+        <div class="design-topic-card" data-num="05">
+          <div class="design-topic-title">Photography &amp; Video</div>
+          <p class="design-topic-desc">เทคนิคการถ่ายภาพ การตัดต่อวิดีโอ และการสื่อสารด้วยภาพในยุคดิจิทัล</p>
+          <span class="cs-coming-soon">เร็วๆ นี้</span>
+        </div>
+
+        <div class="design-topic-card" data-num="06">
+          <div class="design-topic-title">นวัตกรรมและการคิดเชิงออกแบบ</div>
+          <p class="design-topic-desc">กระบวนการ Design Thinking การระดมความคิด และการสร้าง Prototype จากไอเดีย</p>
+          <span class="cs-coming-soon">เร็วๆ นี้</span>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+  <!-- end page-design -->
+
+
+  <!-- ========================================================
+       PAGE: เราคือใคร (id="page-about")
+       ======================================================== -->
+  <div class="spa-page about-page" id="page-about">
+
+    <!-- Hero -->
+    <div class="about-hero">
+      <div class="page-section" style="position:relative;z-index:1;">
+        <p class="section-eyebrow">เราคือใคร</p>
+        <h1 class="section-title">ABOUT US</h1>
+        <p class="section-lead">ทีมครูและนักเรียนที่มีความหลงใหลในวิทยาการคำนวณและการออกแบบ รวมตัวกันเพื่อสร้างพื้นที่แห่งการเรียนรู้ที่สนุกและมีความหมาย</p>
+      </div>
+    </div>
+
+    <!-- About content -->
+    <div class="page-section">
+      <div class="about-grid">
+        <div class="about-text">
+          <p class="section-eyebrow">เรื่องราวของเรา</p>
+          <h2 class="section-title" style="font-size:2rem;margin-bottom:2rem;">OUR STORY</h2>
+          <p>เราเชื่อว่าทุกคนสามารถเรียนรู้และสร้างสรรค์ได้ ไม่ว่าจะเป็นการเขียนโปรแกรม การออกแบบ หรือการคิดค้นนวัตกรรม ทักษะเหล่านี้คือกุญแจสำคัญสู่อนาคต</p>
+          <p>พื้นที่นี้ถูกสร้างขึ้นเพื่อรวบรวมผลงาน ความรู้ และแรงบันดาลใจ เป็นบ้านของนักสร้างสรรค์รุ่นใหม่ที่พร้อมจะเปลี่ยนโลกด้วยความคิดและทักษะของตัวเอง</p>
+          <p>ทุกโปรเจกต์ที่นี่เกิดจากความตั้งใจ ความพยายาม และความกล้าที่จะลองสิ่งใหม่ เรายินดีต้อนรับทุกคนที่อยากเรียนรู้และเติบโตไปด้วยกัน</p>
+        </div>
+        <div class="about-img-wrap">
+          <div class="about-accent-line"></div>
+          <div class="about-img-inner">✦</div>
+        </div>
+      </div>
+
+      <!-- Team members -->
+      <div style="margin-top:5rem;">
+        <p class="section-eyebrow">ทีมของเรา</p>
+        <h2 class="section-title" style="font-size:2rem;margin-bottom:.5rem;">OUR TEAM</h2>
+        <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:0;">ผู้ที่อยู่เบื้องหลังการสร้างสรรค์งานทุกชิ้น</p>
+        <div class="about-members">
+          <div class="member-card">
+            <div class="member-avatar">◈</div>
+            <div class="member-name">ชื่อครู / อาจารย์</div>
+            <div class="member-role">ที่ปรึกษา</div>
+          </div>
+          <div class="member-card">
+            <div class="member-avatar">✦</div>
+            <div class="member-name">ชื่อนักเรียน</div>
+            <div class="member-role">วิทยาการคำนวณ</div>
+          </div>
+          <div class="member-card">
+            <div class="member-avatar">◉</div>
+            <div class="member-name">ชื่อนักเรียน</div>
+            <div class="member-role">ออกแบบและเทคโนโลยี</div>
+          </div>
+          <div class="member-card">
+            <div class="member-avatar">◌</div>
+            <div class="member-name">ชื่อนักเรียน</div>
+            <div class="member-role">ออกแบบและเทคโนโลยี</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- end page-about -->
+
 </main>
-
-<!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox">
-  <div class="lightbox-box">
-    <button class="lightbox-close" id="lightbox-close">✕</button>
-    <div class="lightbox-img" id="lightbox-img"><span style="font-family:var(--font-display);font-size:6rem;color:rgba(200,245,90,0.12);">✦</span></div>
-    <div class="lightbox-content">
-      <p class="lightbox-tag"   id="lb-tag"></p>
-      <h2 class="lightbox-title" id="lb-title"></h2>
-      <p class="lightbox-desc"  id="lb-desc"></p>
-    </div>
-  </div>
-</div>
 
 <!-- Footer inject point -->
 <div id="footer-root"></div>
@@ -279,11 +468,10 @@
 <!-- ✦ Shared nav/footer logic -->
 <script src="nav.js"></script>
 
-<!-- Firebase + Page Logic -->
+<!-- Page init -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getFirestore, collection, getDocs, query, orderBy }
-    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey:            "AIzaSyAFuMPVoy0jUamQtAFyTF_xZipjqjomEto",
@@ -294,11 +482,9 @@
     appId:             "1:730812029375:web:6e7f4907d4dff40f71290a",
     measurementId:     "G-58SK2SMS4D"
   };
-  const app = initializeApp(firebaseConfig);
-  const db  = getFirestore(app);
+  initializeApp(firebaseConfig);
 
-  // ===== INJECT NAV & FOOTER (ใช้ nav.js) =====
-  // initNav('index') จะ inject nav + footer และ init hamburger / scroll / auth
+  // ===== INJECT NAV & FOOTER =====
   initNav('index');
 
   // ===== CUSTOM CURSOR =====
@@ -307,30 +493,12 @@
   let mx = 0, my = 0, rx = 0, ry = 0;
   document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
   function animCursor() {
-    if (dot)  { dot.style.left  = mx + 'px'; dot.style.top  = my + 'px'; }
+    if (dot)  { dot.style.left = mx + 'px'; dot.style.top = my + 'px'; }
     rx += (mx - rx) * .12; ry += (my - ry) * .12;
     if (ring) { ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; }
     requestAnimationFrame(animCursor);
   }
   animCursor();
-
-  // ===== HERO CANVAS =====
-  const canvas = document.getElementById('hero-canvas');
-  const ctx    = canvas.getContext('2d');
-  let W, H, particles = [];
-  function resize() { W = canvas.width = canvas.offsetWidth; H = canvas.height = canvas.offsetHeight; }
-  resize(); window.addEventListener('resize', resize);
-  class Particle {
-    constructor() { this.reset(); }
-    reset() { this.x = Math.random()*W; this.y = Math.random()*H; this.vx = (Math.random()-.5)*.3; this.vy = -Math.random()*.5-.1; this.life = 0; this.maxLife = 180+Math.random()*200; this.size = .5+Math.random()*1.5; this.accent = Math.random()>.85; }
-    update() { this.x += this.vx; this.y += this.vy; this.life++; if (this.life > this.maxLife) this.reset(); }
-    draw() { const t = this.life/this.maxLife; const alpha = t<.1?t*10:t>.8?(1-t)*5:1; ctx.globalAlpha = alpha*(this.accent?.6:.2); ctx.fillStyle = this.accent?'#c8f55a':'#f0f0f0'; ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,Math.PI*2); ctx.fill(); }
-  }
-  for (let i = 0; i < 120; i++) { const p = new Particle(); p.life = Math.random()*p.maxLife; particles.push(p); }
-  function drawGrid() { ctx.globalAlpha=.03; ctx.strokeStyle='#f0f0f0'; ctx.lineWidth=.5; const gs=80; for(let x=0;x<=W;x+=gs){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();} for(let y=0;y<=H;y+=gs){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();} }
-  function drawHeroGlow() { const grd=ctx.createRadialGradient(W*.35,H*.5,0,W*.35,H*.5,W*.55); grd.addColorStop(0,'rgba(200,245,90,0.06)'); grd.addColorStop(1,'rgba(200,245,90,0)'); ctx.globalAlpha=1; ctx.fillStyle=grd; ctx.fillRect(0,0,W,H); }
-  function loop() { ctx.clearRect(0,0,W,H); drawGrid(); drawHeroGlow(); particles.forEach(p=>{p.update();p.draw();}); requestAnimationFrame(loop); }
-  loop();
 
   // ===== SCROLL REVEAL =====
   const observer = new IntersectionObserver(
@@ -338,79 +506,6 @@
     { threshold: 0.1 }
   );
   document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
-
-  // ===== FIRESTORE DATA =====
-  const SAMPLE_DATA = [
-    { id:'1', title:"Brand Identity Vol.1", category:"design", desc:"การออกแบบอัตลักษณ์แบรนด์สำหรับธุรกิจขนาดเล็ก", year:"2024", emoji:"◈" },
-    { id:'2', title:"Golden Hour",          category:"photo",  desc:"ชุดภาพถ่ายในช่วงเวลาทองของวัน",               year:"2024", emoji:"☀" },
-    { id:'3', title:"Forest Study",         category:"art",    desc:"ผลงานจิตรกรรมน้ำมันที่บันทึกความงามของป่า",    year:"2023", emoji:"✦" },
-    { id:'4', title:"Packaging Design",     category:"design", desc:"ออกแบบบรรจุภัณฑ์สำหรับผลิตภัณฑ์ออร์แกนิก",  year:"2024", emoji:"◉" },
-    { id:'5', title:"Quiet Morning",        category:"photo",  desc:"บรรยากาศเงียบสงบของเช้าวันใหม่ผ่านเลนส์ฟิล์ม",year:"2023", emoji:"◌" },
-    { id:'6', title:"Ceramic Series",       category:"art",    desc:"งานเซรามิกที่ได้แรงบันดาลใจจากรูปทรงอินทรีย์", year:"2024", emoji:"◎" },
-  ];
-  const CAT_LABEL = { design:'Design', photo:'Photo', art:'Art' };
-  let allWorks = [];
-
-  async function loadWorks() {
-    try {
-      const q    = query(collection(db,'works'), orderBy('createdAt','desc'));
-      const snap = await getDocs(q);
-      allWorks   = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    } catch (err) {
-      console.warn('Firestore load error, using sample data:', err);
-      allWorks = SAMPLE_DATA;
-    }
-    renderCards('all');
-  }
-
-  function renderCards(filter = 'all') {
-    const grid  = document.getElementById('portfolio-grid');
-    const badge = document.getElementById('stat-badge');
-    const shown = filter === 'all' ? allWorks : allWorks.filter(w => w.category === filter);
-    if (badge) badge.textContent = allWorks.length + ' Works';
-    grid.innerHTML = shown.map(w => `
-      <div class="portfolio-card" data-id="${w.id}" onclick="openLightbox('${w.id}')">
-        <div class="card-thumb">
-          ${w.image ? `<img src="${w.image}" alt="${w.title}" />` : `<div class="card-thumb-placeholder">${w.emoji||'✦'}</div>`}
-          <div class="card-overlay"></div>
-          <span class="card-tag">${CAT_LABEL[w.category]||w.category}</span>
-        </div>
-        <div class="card-body">
-          <h3 class="card-title">${w.title}</h3>
-          <p class="card-desc">${w.desc}</p>
-          <div class="card-meta"><span>${w.year||''}</span><span class="card-arrow">↗</span></div>
-        </div>
-      </div>
-    `).join('') || '<p style="color:var(--text-muted);grid-column:1/-1;text-align:center;padding:3rem;font-size:.85rem;letter-spacing:.1em;">— ยังไม่มีผลงานในหมวดนี้ —</p>';
-  }
-
-  window.openLightbox = function(id) {
-    const w = allWorks.find(x => x.id === id);
-    if (!w) return;
-    document.getElementById('lb-tag').textContent   = CAT_LABEL[w.category]||w.category;
-    document.getElementById('lb-title').textContent = w.title;
-    document.getElementById('lb-desc').textContent  = w.desc;
-    const imgEl = document.getElementById('lightbox-img');
-    imgEl.innerHTML = w.image
-      ? `<img src="${w.image}" alt="${w.title}" style="width:100%;height:100%;object-fit:cover;" />`
-      : `<span style="font-family:var(--font-display);font-size:6rem;color:rgba(200,245,90,0.12);">${w.emoji||'✦'}</span>`;
-    document.getElementById('lightbox').classList.add('open');
-    document.body.style.overflow = 'hidden';
-  };
-
-  document.getElementById('lightbox-close').onclick = closeLightbox;
-  document.getElementById('lightbox').onclick = e => { if (e.target === document.getElementById('lightbox')) closeLightbox(); };
-  function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); document.body.style.overflow = ''; }
-
-  document.querySelectorAll('.filter-tab').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      renderCards(btn.dataset.filter);
-    });
-  });
-
-  loadWorks();
 </script>
 </body>
 </html>

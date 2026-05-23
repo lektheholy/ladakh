@@ -13,19 +13,15 @@ const SITE_CONFIG = {
 };
 
 // ===== PUBLIC NAVIGATION MENU =====
-// เพิ่ม/ลด/แก้หัวข้อเมนูหน้าหลักที่นี่
 // - label   : ข้อความแสดงบนเมนู
-// - href    : ลิงก์ (ใช้ #section สำหรับ index, หรือ URL เต็มสำหรับหน้าอื่น)
-// - filter  : ถ้าเป็น filter-tab ใส่ key ของ filter (null ถ้าไม่ใช่)
+// - page    : key สำหรับ SPA page switching (null ถ้าไม่ใช่ SPA page)
+// - href    : fallback href
 // - newTab  : true ถ้าต้องการเปิดแท็บใหม่
 const NAV_MENU = [
-  { label: "ผลงานทั้งหมด", href: "#all",   filter: "all"    },
-  { label: "ออกแบบ",       href: "#design", filter: "design" },
-  { label: "ภาพถ่าย",      href: "#photo",  filter: "photo"  },
-  { label: "ศิลปะ",        href: "#art",    filter: "art"    },
-  { label: "เกี่ยวกับ",    href: "#about",  filter: null     },
+  { label: "วิทยาการคำนวณ",   page: "cs",     href: "#cs"     },
+  { label: "ออกแบบและเทคโนโลยี", page: "design", href: "#design" },
+  { label: "เราคือใคร",         page: "about",  href: "#about"  },
   // ---- เพิ่มหน้าใหม่ที่นี่ ----
-  // { label: "บล็อก", href: "blog.html", filter: null },
 ];
 
 // ===== ADMIN NAVIGATION MENU =====
@@ -66,15 +62,15 @@ const SOCIAL_LINKS = [
 function renderNav(activePage = "index", isAdmin = false) {
   const isOnAdmin = activePage === "admin" || isAdmin;
 
-  // Public links: ถ้าอยู่หน้า admin ให้ชี้ไปที่ index#section
+  // Public links
   const publicLinks = NAV_MENU.map(item => {
     const href = isOnAdmin
-      ? (item.href.startsWith('#') ? SITE_CONFIG.indexPath + item.href : item.href)
+      ? SITE_CONFIG.indexPath + (item.href.startsWith('#') ? item.href : '')
       : item.href;
     return `
       <a href="${href}"
-         class="nav-link${item.filter ? ' filter-link' : ''}"
-         data-filter="${item.filter || ''}"
+         class="nav-link${item.page ? ' spa-link' : ''}"
+         data-page="${item.page || ''}"
          data-label="${item.label}"
          ${item.newTab ? 'target="_blank"' : ''}
       ><span>${item.label}</span></a>`;
@@ -93,7 +89,9 @@ function renderNav(activePage = "index", isAdmin = false) {
     ).join('')}
   ` : '';
 
-  // Right side: Admin ปุ่ม (index) หรือ user chip (admin)
+  // Right side:
+  // - index: ปุ่ม Admin ซ่อนไว้ก่อน (initNavAuth จะแสดงเมื่อ login)
+  // - admin: แสดง user chip
   const actions = isOnAdmin
     ? `
       <div class="nav-user-chip" id="nav-user-chip">
@@ -101,7 +99,7 @@ function renderNav(activePage = "index", isAdmin = false) {
         <span class="nav-user-name" id="nav-user-name">—</span>
         <button class="nav-logout-btn" onclick="doLogout()">ออกจากระบบ</button>
       </div>`
-    : `<a href="${SITE_CONFIG.adminPath}" class="nav-btn admin-btn">Admin</a>`;
+    : `<a href="${SITE_CONFIG.adminPath}" class="nav-btn admin-btn" id="admin-nav-btn" style="display:none;">Admin</a>`;
 
   return `
     <nav class="main-nav${isOnAdmin ? ' nav-compact' : ''}" id="main-nav">
@@ -205,7 +203,7 @@ function initNavAuth() {
       const chipEl    = document.getElementById('nav-user-chip');
       const avatarEl  = document.getElementById('nav-user-avatar');
       const nameEl    = document.getElementById('nav-user-name');
-      const adminBtn  = document.querySelector('.admin-btn');
+      const adminBtn  = document.getElementById('admin-nav-btn');
 
       if (chipEl) {
         // admin page — chip มีอยู่แล้วใน DOM
@@ -213,21 +211,25 @@ function initNavAuth() {
           if (avatarEl) avatarEl.src = user.photoURL || '';
           if (nameEl)   nameEl.textContent = user.displayName || user.email;
           chipEl.classList.add('visible');
-          if (adminBtn) adminBtn.style.display = 'none';
         } else {
           chipEl.classList.remove('visible');
-          if (adminBtn) adminBtn.style.display = '';
         }
         return; // admin จัดการ auth state เองใน script หลัก
       }
 
-      // --- index.html: สร้าง chip แบบ dynamic ---
+      // --- index.html: แสดง/ซ่อน admin button + dynamic user chip ---
       const navActions = document.getElementById('nav-actions');
       if (!navActions) return;
+
+      // ลบ chip เดิม (ถ้ามี)
       const old = document.getElementById('_nav-user-chip-dyn');
       if (old) old.remove();
 
       if (user) {
+        // แสดงปุ่ม Admin (ซ่อนไว้ตอนไม่ login)
+        if (adminBtn) adminBtn.style.display = '';
+
+        // สร้าง user chip
         const chip = document.createElement('div');
         chip.id = '_nav-user-chip-dyn';
         chip.className = 'nav-user-chip visible';
@@ -242,21 +244,67 @@ function initNavAuth() {
             .addEventListener('click', () => signOut(auth));
         const hamburger = document.getElementById('hamburger');
         navActions.insertBefore(chip, hamburger || null);
-        if (adminBtn) adminBtn.style.display = 'none';
       } else {
-        if (adminBtn) adminBtn.style.display = '';
+        // ซ่อนปุ่ม Admin เมื่อไม่ได้ login
+        if (adminBtn) adminBtn.style.display = 'none';
       }
     });
   });
 }
 
 /**
+ * initSPA()
+ * จัดการ SPA navigation — เปลี่ยน section โดยไม่ reload
+ * เรียกอัตโนมัติจาก initNav ถ้าอยู่หน้า index
+ */
+function initSPA() {
+  function showPage(pageKey) {
+    // ซ่อนทุก spa-page
+    document.querySelectorAll('.spa-page').forEach(el => {
+      el.classList.remove('active');
+    });
+    // แสดง page ที่เลือก
+    const target = document.getElementById('page-' + pageKey);
+    if (target) {
+      target.classList.add('active');
+      // scroll ไปด้านบน
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    // อัปเดต active state ใน nav
+    document.querySelectorAll('.spa-link').forEach(a => {
+      a.classList.toggle('nav-active', a.dataset.page === pageKey);
+    });
+    // อัปเดต URL hash โดยไม่ reload
+    history.pushState({ page: pageKey }, '', '#' + pageKey);
+  }
+
+  // bind spa-link clicks
+  document.querySelectorAll('.spa-link').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const page = a.dataset.page;
+      if (page) showPage(page);
+      // ปิด mobile menu
+      document.getElementById('nav-links')?.classList.remove('open');
+      document.getElementById('hamburger')?.classList.remove('active');
+      document.body.classList.remove('menu-open');
+    });
+  });
+
+  // handle browser back/forward
+  window.addEventListener('popstate', e => {
+    const page = e.state?.page || location.hash.replace('#', '') || 'cs';
+    showPage(page);
+  });
+
+  // load initial page from hash
+  const initPage = location.hash.replace('#', '') || 'cs';
+  showPage(initPage);
+}
+
+/**
  * initNav(page, isAdmin)
  * เรียก function นี้ใน <script> ของทุกหน้า
- * ตัวอย่าง:
- *   initNav('index')         — หน้าหลัก
- *   initNav('admin', true)   — หน้า admin (แสดงเมนู admin)
- *   initNav('blog')          — หน้าใหม่ในอนาคต
  */
 function initNav(page = 'index', isAdmin = false) {
   // inject nav
@@ -273,4 +321,14 @@ function initNav(page = 'index', isAdmin = false) {
   initHamburger();
   initNavScroll();
   initNavAuth();
+
+  // เริ่ม SPA routing ถ้าอยู่หน้า index
+  if (page === 'index') {
+    // รอ DOM เสร็จก่อน (กรณีที่เรียกก่อน spa-pages render)
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initSPA);
+    } else {
+      initSPA();
+    }
+  }
 }
