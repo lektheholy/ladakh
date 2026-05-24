@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ติดต่อครู | ครูสมหญิง</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .contact-info-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: .9rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .contact-info-row:last-child { border-bottom: none; }
+    .contact-icon-wrap {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      background: var(--green-pale);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: 'Sarabun', sans-serif;
+      font-size: 14px;
+      background: var(--white);
+      color: var(--text-dark);
+      transition: border .15s;
+      margin-top: 4px;
+    }
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--green-mid);
+    }
+    .form-group { margin-bottom: 1rem; }
+    label { font-size: 14px; font-weight: 500; color: var(--text-mid); }
+    .success-msg {
+      display:none;
+      background: var(--green-pale);
+      border: 1px solid var(--green-light);
+      color: var(--green-dark);
+      padding: 1rem;
+      border-radius: var(--radius);
+      margin-top: 1rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero" style="padding:3rem 1.5rem;">
+  <h1 style="font-size:2rem;">📬 ติดต่อครู</h1>
+  <p>มีข้อสงสัยหรืออยากปรึกษา ติดต่อได้เลย!</p>
+</div>
+
+<div class="page-wrap">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem;">
+
+    <!-- ข้อมูลติดต่อ -->
+    <section>
+      <h2 class="section-title">📌 ช่องทางติดต่อ</h2>
+      <div class="card">
+        <div class="contact-info-row">
+          <div class="contact-icon-wrap">📧</div>
+          <div>
+            <p style="font-size:13px;color:var(--text-light);">อีเมล</p>
+            <a href="mailto:somying@school.ac.th" style="font-size:14px;font-weight:600;color:var(--green-mid);text-decoration:none;">somying@school.ac.th</a>
+          </div>
+        </div>
+        <div class="contact-info-row">
+          <div class="contact-icon-wrap">💬</div>
+          <div>
+            <p style="font-size:13px;color:var(--text-light);">Line OA</p>
+            <p style="font-size:14px;font-weight:600;color:var(--green-dark);">@krusom</p>
+          </div>
+        </div>
+        <div class="contact-info-row">
+          <div class="contact-icon-wrap">🏫</div>
+          <div>
+            <p style="font-size:13px;color:var(--text-light);">ห้องพักครู</p>
+            <p style="font-size:14px;font-weight:600;color:var(--green-dark);">อาคาร 2 ชั้น 3 ห้อง 301</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:1rem;">
+        <h3 style="font-size:15px;font-weight:600;color:var(--green-dark);margin-bottom:.75rem;">⏰ เวลารับนักเรียน</h3>
+        <div style="font-size:13px;display:flex;flex-direction:column;gap:.4rem;color:var(--text-mid);">
+          <div style="display:flex;justify-content:space-between;"><span>จันทร์–ศุกร์</span><span style="font-weight:600;color:var(--green-dark);">12:00–13:00 น.</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>วันอังคาร–พฤหัส</span><span style="font-weight:600;color:var(--green-dark);">15:30–16:30 น.</span></div>
+          <p style="margin-top:.5rem;color:var(--text-light);font-size:12px;">* หากต้องการนอกเวลา กรุณานัดล่วงหน้าทาง Line</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ฟอร์ม -->
+    <section>
+      <h2 class="section-title">✉️ ส่งข้อความหาครู</h2>
+      <div class="card">
+        <div class="form-group">
+          <label>ชื่อ–นามสกุล</label>
+          <input type="text" placeholder="ชื่อของคุณ" />
+        </div>
+        <div class="form-group">
+          <label>คุณเป็น</label>
+          <select>
+            <option>นักเรียน</option>
+            <option>ผู้ปกครอง</option>
+            <option>ครู / บุคลากร</option>
+            <option>บุคคลทั่วไป</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>ห้องเรียน (ถ้ามี)</label>
+          <input type="text" placeholder="เช่น ม.2/1" />
+        </div>
+        <div class="form-group">
+          <label>ข้อความ</label>
+          <textarea rows="5" placeholder="พิมพ์ข้อความของคุณที่นี่..."></textarea>
+        </div>
+        <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="sendMsg()">📤 ส่งข้อความ</button>
+        <div class="success-msg" id="successMsg">✅ ส่งข้อความเรียบร้อยแล้ว ครูจะตอบกลับโดยเร็ว</div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<footer class="site-footer">
+  © 2568 ครูสมหญิง วิชาการดี | โรงเรียนตัวอย่าง
+</footer>
+
+<script src="nav.js"></script>
+<script>
+function sendMsg() {
+  const msg = document.getElementById("successMsg");
+  msg.style.display = "block";
+  setTimeout(() => { msg.style.display = "none"; }, 4000);
+}
+</script>
+</body>
+</html>

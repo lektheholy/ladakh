@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ผลงานนักเรียน | ครูสมหญิง</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    .gallery-item {
+      background: var(--green-pale);
+      border-radius: var(--radius);
+      aspect-ratio: 4/3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .gallery-label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(26,71,49,.75);
+      color: #fff;
+      font-size: 12px;
+      padding: 6px 10px;
+      text-align: center;
+    }
+    .award-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero" style="padding:3rem 1.5rem;">
+  <h1 style="font-size:2rem;">🏆 ผลงานนักเรียน</h1>
+  <p>ความภาคภูมิใจของครูและโรงเรียน</p>
+</div>
+
+<div class="page-wrap">
+
+  <!-- รางวัลการแข่งขัน -->
+  <section style="margin-bottom:2.5rem;">
+    <h2 class="section-title">🥇 รางวัลการแข่งขัน</h2>
+    <div style="display:flex;flex-direction:column;gap:.75rem;">
+
+      <div class="award-card" style="border-left:4px solid #f5c518;">
+        <span style="font-size:2rem;">🥇</span>
+        <div>
+          <p style="font-size:15px;font-weight:600;color:var(--green-dark);">ชนะเลิศ ตอบปัญหาวิทยาศาสตร์ระดับภาค</p>
+          <p style="font-size:13px;color:var(--text-mid);">ด.ญ.สุชาดา และ ด.ช.พิพัฒน์ · ม.2/1 · มิถุนายน 2568</p>
+          <span class="badge badge-amber">ระดับภาค</span>
+        </div>
+      </div>
+
+      <div class="award-card" style="border-left:4px solid #b8b8b8;">
+        <span style="font-size:2rem;">🥈</span>
+        <div>
+          <p style="font-size:15px;font-weight:600;color:var(--green-dark);">รองชนะเลิศ โครงงานวิทยาศาสตร์ ระดับจังหวัด</p>
+          <p style="font-size:13px;color:var(--text-mid);">กลุ่ม Green Future ม.3/2 · มีนาคม 2568</p>
+          <span class="badge">ระดับจังหวัด</span>
+        </div>
+      </div>
+
+      <div class="award-card" style="border-left:4px solid #cd7f32;">
+        <span style="font-size:2rem;">🥉</span>
+        <div>
+          <p style="font-size:15px;font-weight:600;color:var(--green-dark);">อันดับที่ 3 วาดภาพสิ่งแวดล้อม ระดับเขต</p>
+          <p style="font-size:13px;color:var(--text-mid);">ด.ญ.นภัสสร ม.1/3 · กุมภาพันธ์ 2568</p>
+          <span class="badge">ระดับเขต</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- โปรเจกต์ดีเด่น -->
+  <section style="margin-bottom:2.5rem;">
+    <h2 class="section-title">📁 โปรเจกต์ดีเด่น</h2>
+    <div class="card-grid">
+
+      <div class="card">
+        <span class="badge" style="margin-bottom:.5rem;display:inline-block;">ม.2 ปีการศึกษา 2567</span>
+        <h3 style="font-size:15px;color:var(--green-dark);margin:.25rem 0;">โครงงาน "น้ำสะอาดจากพืชธรรมชาติ"</h3>
+        <p style="font-size:13px;color:var(--text-mid);">ศึกษาการกรองน้ำด้วยถ่านกัมมันต์จากไม้ไผ่ เปรียบเทียบประสิทธิภาพกับวิธีการกรองแบบต่างๆ</p>
+        <p style="font-size:12px;color:var(--text-light);margin-top:.5rem;">ทีม: ด.ช.ภูมิ, ด.ญ.ฟ้า, ด.ช.ก้อง</p>
+      </div>
+
+      <div class="card">
+        <span class="badge" style="margin-bottom:.5rem;display:inline-block;">ม.3 ปีการศึกษา 2567</span>
+        <h3 style="font-size:15px;color:var(--green-dark);margin:.25rem 0;">โครงงาน "แผงโซลาร์เซลล์จำลอง"</h3>
+        <p style="font-size:13px;color:var(--text-mid);">ออกแบบและทดสอบโมเดลแผงโซลาร์เซลล์ขนาดเล็กสำหรับชาร์จแบตเตอรี่โทรศัพท์</p>
+        <p style="font-size:12px;color:var(--text-light);margin-top:.5rem;">ทีม: ด.ช.ธนา, ด.ญ.เมย์, ด.ช.ปรินทร์</p>
+      </div>
+
+      <div class="card">
+        <span class="badge" style="margin-bottom:.5rem;display:inline-block;">ม.1 ปีการศึกษา 2567</span>
+        <h3 style="font-size:15px;color:var(--green-dark);margin:.25rem 0;">โครงงาน "สีจากธรรมชาติ"</h3>
+        <p style="font-size:13px;color:var(--text-mid);">สกัดสีธรรมชาติจากพืชในท้องถิ่น นำมาประยุกต์ใช้ย้อมผ้าและทำสีโปสเตอร์</p>
+        <p style="font-size:12px;color:var(--text-light);margin-top:.5rem;">ทีม: ด.ญ.มิ้น, ด.ญ.แพร, ด.ช.ไทกี้</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- แกลเลอรี่ -->
+  <section>
+    <h2 class="section-title">📸 แกลเลอรี่กิจกรรม</h2>
+    <p style="font-size:13px;color:var(--text-light);margin-bottom:1rem;">* ได้รับความยินยอมจากผู้ปกครองในการเผยแพร่ภาพทุกรูป</p>
+    <div class="gallery-grid">
+      <div class="gallery-item">🔬<span class="gallery-label">ทดลองในห้องวิทย์</span></div>
+      <div class="gallery-item">🌿<span class="gallery-label">สำรวจระบบนิเวศ</span></div>
+      <div class="gallery-item">🏆<span class="gallery-label">รับรางวัลตอบปัญหา</span></div>
+      <div class="gallery-item">🌱<span class="gallery-label">ปลูกพืชทดลอง</span></div>
+      <div class="gallery-item">🤝<span class="gallery-label">กิจกรรมกลุ่ม</span></div>
+      <div class="gallery-item">🎓<span class="gallery-label">นำเสนอผลงาน</span></div>
+    </div>
+  </section>
+
+</div>
+
+<footer class="site-footer">
+  © 2568 ครูสมหญิง วิชาการดี | โรงเรียนตัวอย่าง
+</footer>
+
+<script src="nav.js"></script>
+</body>
+</html>

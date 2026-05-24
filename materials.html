@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>สื่อการสอน | ครูสมหญิง</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .filter-bar { display:flex; flex-wrap:wrap; gap:.5rem; margin-bottom:1.5rem; }
+    .filter-btn {
+      padding:6px 14px; border-radius:99px; border:1.5px solid var(--border);
+      background:var(--white); font-size:13px; font-family:'Sarabun',sans-serif;
+      cursor:pointer; transition:all .15s; color:var(--text-mid);
+    }
+    .filter-btn.active, .filter-btn:hover {
+      background:var(--green-mid); color:#fff; border-color:var(--green-mid);
+    }
+    .material-card {
+      background:var(--white); border:1px solid var(--border);
+      border-radius:var(--radius); padding:1rem 1.25rem;
+      display:flex; gap:1rem; align-items:flex-start;
+      transition:box-shadow .2s;
+    }
+    .material-card:hover { box-shadow:0 4px 20px rgba(0,80,40,.1); }
+    .material-icon {
+      width:44px; height:44px; border-radius:10px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.4rem; flex-shrink:0;
+    }
+    .hidden { display:none; }
+  </style>
+</head>
+<body>
+
+<div class="hero" style="padding:3rem 1.5rem;">
+  <h1 style="font-size:2rem;">📚 สื่อการสอน</h1>
+  <p>ดาวน์โหลดสไลด์ ใบงาน และวิดีโอประกอบการเรียน</p>
+</div>
+
+<div class="page-wrap">
+
+  <!-- Filter -->
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterCards('all', this)">ทั้งหมด</button>
+    <button class="filter-btn" onclick="filterCards('m1', this)">ม.1</button>
+    <button class="filter-btn" onclick="filterCards('m2', this)">ม.2</button>
+    <button class="filter-btn" onclick="filterCards('m3', this)">ม.3</button>
+    <button class="filter-btn" onclick="filterCards('slide', this)">สไลด์</button>
+    <button class="filter-btn" onclick="filterCards('worksheet', this)">ใบงาน</button>
+    <button class="filter-btn" onclick="filterCards('video', this)">วิดีโอ</button>
+  </div>
+
+  <!-- ม.1 -->
+  <h2 class="section-title">ม.1 — วิทยาศาสตร์พื้นฐาน</h2>
+  <div class="card-grid" style="margin-bottom:2rem;">
+
+    <div class="material-card" data-tags="m1 slide">
+      <div class="material-icon" style="background:#e8f0fe;">📊</div>
+      <div>
+        <p style="font-size:14px;font-weight:600;color:var(--green-dark);">บทที่ 1 — สสารและการเปลี่ยนแปลง</p>
+        <p style="font-size:12px;color:var(--text-light);margin:.2rem 0 .5rem;">สไลด์ PowerPoint · อัพเดต 10 มิ.ย. 68</p>
+        <a href="#" class="btn btn-outline" style="font-size:12px;padding:5px 12px;">⬇ ดาวน์โหลด</a>
+      </div>
+    </div>
+
+    <div class="material-card" data-tags="m1 worksheet">
+      <div class="material-icon" style="background:#e8f5ee;">📝</div>
+      <div>
+        <p style="font-size:14px;font-weight:600;color:var(--green-dark);">ใบงาน 1.1 — สมบัติของสสาร</p>
+        <p style="font-size:12px;color:var(--text-light);margin:.2rem 0 .5rem;">PDF · 4 หน้า</p>
+        <a href="#" class="btn btn-outline" style="font-size:12px;padding:5px 12px;">⬇ ดาวน์โหลด</a>
+      </div>
+    </div>
+
+    <div class="material-card" data-tags="m1 video">
+      <div class="material-icon" style="background:#fce8e8;">🎥</div>
+      <div>
+        <p style="font-size:14px;font-weight:600;color:var(--green-dark);">วิดีโอ — การทดลองเรื่องสสาร</p>
+        <p style="font-size:12px;color:var(--text-light);margin:.2rem 0 .5rem;">YouTube · 12 นาที</p>
+        <a href="#" class="btn btn-outline" style="font-size:12px;padding:5px 12px;">▶ ดูวิดีโอ</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ม.2 -->
+  <h2 class="section-title">ม.2 — ชีววิทยาเบื้องต้น</h2>
+  <div class="card-grid" style="margin-bottom:2rem;">
+
+    <div class="material-card" data-tags="m2 slide">
+      <div class="material-icon" style="background:#e8f0fe;">📊</div>
+      <div>
+        <p style="font-size:14px;font-weight:600;color:var(--green-dark);">บทที่ 3 — เซลล์และการดำรงชีวิต</p>
+        <p style="font-size:12px;color:var(--text-light);margin:.2rem 0 .5rem;">สไลด์ PowerPoint · อัพเดต 15 มิ.ย. 68</p>
+        <a href="#" class="btn btn-outline" style="font-size:12px;padding:5px 12px;">⬇ ดาวน์โหลด</a>
+      </div>
+    </div>
+
+    <div class="material-card" data-tags="m2 slide">
+      <div class="material-icon" style="background:#e8f0fe;">📊</div>
+      <div>
+        <p style="font-size:14px;font-weight:600;color:var(--green-dark);">บทที่ 4 — ระบบนิเวศ</p>
+        <p style="font-size:12px;color:var(--text-light);margin:.2rem 0 .5rem;">สไลด์ PowerPoint · อัพเดต 20 มิ.ย. 68</p>
+        <div style="display:flex;gap:.5rem;align-items:center;margin-top:.25rem;">
+          <span class="badge" style="font-size:11px;">ใหม่</span>
+          <a href="#" class="btn btn-outline" style="font-size:12px;padding:5px 12px;">⬇ ดาวน์โหลด</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="material-card" data-tags="m2 worksheet">
+      <div class="material-icon" style="background:#e8f5ee;">📝</div>
+      <div>
+        <p style="font-size:14px;font-weight:600;color:var(--green-dark);">ใบงาน 4.1 — ห่วงโซ่อาหาร</p>
+        <p style="font-size:12px;color:var(--text-light);margin:.2rem 0 .5rem;">PDF · 3 หน้า</p>
+        <a href="#" class="btn btn-outline" style="font-size:12px;padding:5px 12px;">⬇ ดาวน์โหลด</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ม.3 -->
+  <h2 class="section-title">ม.3 — ฟิสิกส์และเคมีพื้นฐาน</h2>
+  <div class="card-grid">
+
+    <div class="material-card" data-tags="m3 slide">
+      <div class="material-icon" style="background:#e8f0fe;">📊</div>
+      <div>
+        <p style="font-size:14px;font-weight:600;color:var(--green-dark);">บทที่ 2 — แรงและการเคลื่อนที่</p>
+        <p style="font-size:12px;color:var(--text-light);margin:.2rem 0 .5rem;">สไลด์ PowerPoint</p>
+        <a href="#" class="btn btn-outline" style="font-size:12px;padding:5px 12px;">⬇ ดาวน์โหลด</a>
+      </div>
+    </div>
+
+    <div class="material-card" data-tags="m3 video">
+      <div class="material-icon" style="background:#fce8e8;">🎥</div>
+      <div>
+        <p style="font-size:14px;font-weight:600;color:var(--green-dark);">วิดีโอ — การทดลองแรงโน้มถ่วง</p>
+        <p style="font-size:12px;color:var(--text-light);margin:.2rem 0 .5rem;">YouTube · 8 นาที</p>
+        <a href="#" class="btn btn-outline" style="font-size:12px;padding:5px 12px;">▶ ดูวิดีโอ</a>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  © 2568 ครูสมหญิง วิชาการดี | โรงเรียนตัวอย่าง
+</footer>
+
+<script src="nav.js"></script>
+<script>
+function filterCards(tag, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.material-card').forEach(card => {
+    if (tag === 'all' || card.dataset.tags.includes(tag)) {
+      card.style.display = 'flex';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+</script>
+</body>
+</html>

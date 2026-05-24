@@ -3,153 +3,87 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Portfolio</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Noto+Sans+Thai:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="nav.css" />
-
-  <style>
-    /* ===== HERO ===== */
-    .hero {
-      min-height: 100vh;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      padding: 0 2rem;
-      text-align: center;
-      background: #fff;
-      position: relative;
-    }
-
-    /* subtle grid lines background */
-    .hero::before {
-      content: '';
-      position: absolute; inset: 0;
-      background-image:
-        linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
-      background-size: 60px 60px;
-      pointer-events: none;
-    }
-
-    .hero-inner { position: relative; z-index: 1; max-width: 800px; }
-
-    .hero-eyebrow {
-      display: inline-flex; align-items: center; gap: .7rem;
-      font-size: 0.68rem; letter-spacing: .26em; text-transform: uppercase;
-      color: var(--text-muted); margin-bottom: 2rem;
-      opacity: 0; animation: fadeUp .7s .2s both;
-    }
-    .hero-eyebrow::before,
-    .hero-eyebrow::after {
-      content: ''; display: block;
-      width: 24px; height: 1px; background: currentColor;
-    }
-
-    .hero-title {
-      font-family: var(--font-display);
-      font-size: clamp(5rem, 14vw, 14rem);
-      line-height: .9; letter-spacing: -.01em;
-      color: var(--text);
-      margin-bottom: 2.5rem;
-      opacity: 0; animation: fadeUp .9s .35s both;
-    }
-
-    .hero-desc {
-      font-size: .95rem; color: var(--text-muted);
-      line-height: 1.9; font-weight: 300; max-width: 44ch; margin: 0 auto 3rem;
-      opacity: 0; animation: fadeUp .8s .5s both;
-    }
-
-    .hero-actions {
-      display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
-      opacity: 0; animation: fadeUp .8s .65s both;
-    }
-
-    /* corner marks */
-    .corner {
-      position: absolute; width: 16px; height: 16px;
-      border-color: var(--border2); border-style: solid;
-    }
-    .corner-tl { top: 2rem; left: 2rem; border-width: 1px 0 0 1px; }
-    .corner-tr { top: 2rem; right: 2rem; border-width: 1px 1px 0 0; }
-    .corner-bl { bottom: 2rem; left: 2rem; border-width: 0 0 1px 1px; }
-    .corner-br { bottom: 2rem; right: 2rem; border-width: 0 1px 1px 0; }
-
-    /* scroll indicator */
-    .scroll-hint {
-      position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
-      display: flex; flex-direction: column; align-items: center; gap: .5rem;
-      font-size: 0.6rem; letter-spacing: .22em; text-transform: uppercase;
-      color: var(--text-muted);
-      opacity: 0; animation: fadeUp .6s 1.1s both;
-    }
-    .scroll-hint-line {
-      width: 1px; height: 48px;
-      background: linear-gradient(to bottom, transparent, var(--text-muted));
-      animation: scrollDrop 2.5s ease-in-out infinite;
-    }
-    @keyframes scrollDrop {
-      0%   { opacity: 0; transform: scaleY(0); transform-origin: top; }
-      40%  { opacity: 1; transform: scaleY(1); }
-      100% { opacity: 0; transform: scaleY(1); }
-    }
-
-    @media (max-width: 600px) {
-      .hero-title { font-size: clamp(4rem, 20vw, 8rem); }
-      .corner { display: none; }
-    }
-  </style>
+  <title>หน้าแรก | ครูสมหญิง</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<!-- Nav inject point -->
-<div id="nav-root"></div>
+<div class="hero">
+  <div class="hero-badge">ยินดีต้อนรับสู่เว็บไซต์ครู 👋</div>
+  <h1>ครูสมหญิง วิชาการดี</h1>
+  <p>วิทยาศาสตร์ | มัธยมศึกษาตอนต้น | โรงเรียนตัวอย่าง</p>
+  <div style="margin-top:1.5rem; display:flex; gap:.75rem; justify-content:center; flex-wrap:wrap;">
+    <a href="materials.html" class="btn btn-primary" style="background:#fff;color:var(--green-dark);">📚 สื่อการสอน</a>
+    <a href="students.html" class="btn btn-outline" style="border-color:#fff;color:#fff;">🏆 ผลงานนักเรียน</a>
+  </div>
+</div>
 
-<!-- Hero -->
-<main>
-  <section class="hero">
-    <div class="corner corner-tl"></div>
-    <div class="corner corner-tr"></div>
-    <div class="corner corner-bl"></div>
-    <div class="corner corner-br"></div>
+<div class="page-wrap">
 
-    <div class="hero-inner">
-      <p class="hero-eyebrow">Welcome</p>
-      <h1 class="hero-title">PORTFOLIO</h1>
-      <p class="hero-desc">พื้นที่สำหรับรวบรวมผลงาน ความคิด และนวัตกรรม จากทีมนักสร้างสรรค์รุ่นใหม่</p>
-      <div class="hero-actions">
-        <button class="nav-btn login-btn" onclick="doLogin()">เข้าสู่ระบบ</button>
+  <!-- ประกาศล่าสุด -->
+  <section style="margin-bottom:2.5rem;">
+    <h2 class="section-title">📢 ประกาศล่าสุด</h2>
+    <div class="card-grid">
+      <div class="card" style="border-left:4px solid var(--green-light);">
+        <span class="badge">ใหม่</span>
+        <h3 style="font-size:15px;margin:.5rem 0 .25rem;">อัพโหลดสื่อบทที่ 4 แล้ว</h3>
+        <p style="font-size:13px;color:var(--text-mid);">สไลด์และใบงาน "ระบบนิเวศ" พร้อมให้ดาวน์โหลด</p>
+        <p style="font-size:12px;color:var(--text-light);margin-top:.5rem;">20 มิ.ย. 2568</p>
+      </div>
+      <div class="card" style="border-left:4px solid var(--amber);">
+        <span class="badge badge-amber">สำคัญ</span>
+        <h3 style="font-size:15px;margin:.5rem 0 .25rem;">กำหนดส่งโปรเจกต์กลุ่ม</h3>
+        <p style="font-size:13px;color:var(--text-mid);">ม.2 ทุกห้อง ส่งรายงานวันที่ 30 มิ.ย. 2568</p>
+        <p style="font-size:12px;color:var(--text-light);margin-top:.5rem;">18 มิ.ย. 2568</p>
+      </div>
+      <div class="card" style="border-left:4px solid #9bcfb8;">
+        <span class="badge">กิจกรรม</span>
+        <h3 style="font-size:15px;margin:.5rem 0 .25rem;">แข่งขันตอบปัญหาวิทย์</h3>
+        <p style="font-size:13px;color:var(--text-mid);">ขอแสดงความยินดีกับนักเรียนที่ได้รับรางวัลชนะเลิศ!</p>
+        <p style="font-size:12px;color:var(--text-light);margin-top:.5rem;">15 มิ.ย. 2568</p>
       </div>
     </div>
+  </section>
 
-    <div class="scroll-hint" aria-hidden="true">
-      <div class="scroll-hint-line"></div>
+  <!-- ลิงก์ด่วน -->
+  <section style="margin-bottom:2.5rem;">
+    <h2 class="section-title">🔗 ลิงก์ด่วน</h2>
+    <div style="display:flex;flex-wrap:wrap;gap:.75rem;">
+      <a href="#" class="btn btn-outline">📁 Google Classroom</a>
+      <a href="#" class="btn btn-outline">📊 Google Form ส่งงาน</a>
+      <a href="#" class="btn btn-outline">🎥 ช่อง YouTube ครู</a>
+      <a href="contact.html" class="btn btn-outline">💬 ติดต่อครู</a>
     </div>
   </section>
-</main>
 
-<!-- Footer inject point -->
-<div id="footer-root"></div>
+  <!-- ไฮไลต์ -->
+  <section>
+    <h2 class="section-title">✨ ไฮไลต์</h2>
+    <div class="card-grid">
+      <a href="materials.html" class="card" style="text-decoration:none;display:block;transition:box-shadow .2s;" onmouseover="this.style.boxShadow='0 4px 24px rgba(0,80,40,.14)'" onmouseout="this.style.boxShadow=''">
+        <div style="font-size:2rem;margin-bottom:.5rem;">📚</div>
+        <h3 style="font-size:15px;color:var(--green-dark);">สื่อการสอน</h3>
+        <p style="font-size:13px;color:var(--text-mid);">สไลด์ ใบงาน วิดีโอ แบ่งตามบท</p>
+      </a>
+      <a href="students.html" class="card" style="text-decoration:none;display:block;transition:box-shadow .2s;" onmouseover="this.style.boxShadow='0 4px 24px rgba(0,80,40,.14)'" onmouseout="this.style.boxShadow=''">
+        <div style="font-size:2rem;margin-bottom:.5rem;">🏆</div>
+        <h3 style="font-size:15px;color:var(--green-dark);">ผลงานนักเรียน</h3>
+        <p style="font-size:13px;color:var(--text-mid);">โปรเจกต์ดีเด่น รางวัลการแข่งขัน</p>
+      </a>
+      <a href="about.html" class="card" style="text-decoration:none;display:block;transition:box-shadow .2s;" onmouseover="this.style.boxShadow='0 4px 24px rgba(0,80,40,.14)'" onmouseout="this.style.boxShadow=''">
+        <div style="font-size:2rem;margin-bottom:.5rem;">👩‍🏫</div>
+        <h3 style="font-size:15px;color:var(--green-dark);">เกี่ยวกับครู</h3>
+        <p style="font-size:13px;color:var(--text-mid);">ประวัติ ประสบการณ์ ผลงานวิชาการ</p>
+      </a>
+    </div>
+  </section>
 
-<!-- Shared nav/footer logic -->
+</div>
+
+<footer class="site-footer">
+  © 2568 ครูสมหญิง วิชาการดี | โรงเรียนตัวอย่าง
+</footer>
+
 <script src="nav.js"></script>
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-  const firebaseConfig = {
-    apiKey:            "AIzaSyAFuMPVoy0jUamQtAFyTF_xZipjqjomEto",
-    authDomain:        "ladakh-l.firebaseapp.com",
-    projectId:         "ladakh-l",
-    storageBucket:     "ladakh-l.firebasestorage.app",
-    messagingSenderId: "730812029375",
-    appId:             "1:730812029375:web:6e7f4907d4dff40f71290a",
-    measurementId:     "G-58SK2SMS4D"
-  };
-  initializeApp(firebaseConfig);
-
-  // inject nav & footer (no public menu)
-  initNav('index');
-</script>
 </body>
 </html>
