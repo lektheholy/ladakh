@@ -79,11 +79,11 @@ body {
 .nav-brand-text { display: flex; flex-direction: column; }
 .nav-name {
   font-family: 'Mitr', sans-serif;
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--text-dark);
   line-height: 1.2;
-  letter-spacing: .01em;
+  letter-spacing: .03em;
 }
 .nav-sub { font-size: 10.5px; color: var(--text-light); }
 
@@ -96,16 +96,18 @@ body {
 .nav-link {
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 0 14px;
+  padding: 0 16px;
   height: var(--nav-h);
   text-decoration: none;
+  font-family: 'Mitr', sans-serif;
   font-size: 13px;
   font-weight: 500;
-  color: var(--text-mid);
+  color: var(--text-light);
+  letter-spacing: .04em;
   transition: color .12s;
   white-space: nowrap;
   border-bottom: 2px solid transparent;
+  position: relative;
 }
 .nav-icon { display: none; }
 .nav-link:hover  { color: var(--text-dark); }
@@ -113,6 +115,7 @@ body {
   color: var(--forest);
   border-bottom-color: var(--forest);
   font-weight: 600;
+  letter-spacing: .02em;
 }
 
 .nav-hamburger {

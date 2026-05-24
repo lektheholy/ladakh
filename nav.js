@@ -40,18 +40,18 @@ function buildNav() {
         ${SITE.menuItems.map(item => `
           <li>
             <a href="${item.href}" class="nav-link ${currentPage === item.href ? "active" : ""}">
-              <span class="nav-icon">${item.icon}</span>${item.label}
+              ${item.label}
             </a>
           </li>
         `).join("")}
         <li id="navAdminItem" style="display:none;">
           <a href="admin.html" class="nav-link nav-link--admin ${currentPage === "admin.html" ? "active" : ""}">
-            <span class="nav-icon">⚙️</span>จัดการ
+            จัดการ
           </a>
         </li>
       </ul>
       <div id="navAuthArea" style="display:flex;align-items:center;gap:.5rem;margin-left:.5rem;flex-shrink:0;">
-        <a href="admin.html" class="btn-nav-login" id="navLoginBtn">🔐 ครูล็อกอิน</a>
+        <a href="admin.html" class="btn-nav-login" id="navLoginBtn">ครูล็อกอิน</a>
         <div id="navUserBadge" style="display:none;align-items:center;gap:.5rem;">
           <span style="font-size:12px;color:var(--green-mid);font-weight:600;" id="navUserEmail"></span>
           <button onclick="navLogout()" class="btn-nav-logout" title="ออกจากระบบ">↩</button>
@@ -77,7 +77,7 @@ function _syncNavAuth(user) {
   if (user) {
     loginBtn.style.display = "none";
     userBadge.style.display = "flex";
-    userEmail.textContent = "🟢 " + (user.email || "ครู");
+    userEmail.textContent = user.email || "ครู";
     adminItem.style.display = "list-item";
   } else {
     loginBtn.style.display = "inline-flex";
