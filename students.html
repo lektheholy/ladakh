@@ -58,7 +58,7 @@
     <h2 class="section-title">🥇 รางวัลการแข่งขัน</h2>
     <div style="display:flex;flex-direction:column;gap:.75rem;">
 
-      <div class="award-card" style="border-left:4px solid #f5c518;">
+      <div class="award-card" style="">
         <span style="font-size:2rem;">🥇</span>
         <div>
           <p style="font-size:15px;font-weight:600;color:var(--green-dark);">ชนะเลิศ ตอบปัญหาวิทยาศาสตร์ระดับภาค</p>
@@ -67,7 +67,7 @@
         </div>
       </div>
 
-      <div class="award-card" style="border-left:4px solid #b8b8b8;">
+      <div class="award-card" style="">
         <span style="font-size:2rem;">🥈</span>
         <div>
           <p style="font-size:15px;font-weight:600;color:var(--green-dark);">รองชนะเลิศ โครงงานวิทยาศาสตร์ ระดับจังหวัด</p>
@@ -76,7 +76,7 @@
         </div>
       </div>
 
-      <div class="award-card" style="border-left:4px solid #cd7f32;">
+      <div class="award-card" style="">
         <span style="font-size:2rem;">🥉</span>
         <div>
           <p style="font-size:15px;font-weight:600;color:var(--green-dark);">อันดับที่ 3 วาดภาพสิ่งแวดล้อม ระดับเขต</p>
@@ -165,7 +165,7 @@ import { getCollection } from "./firebase.js";
       const awardContainer = document.querySelector(".page-wrap > section:first-child > div");
       if (awardContainer) {
         const newItems = awards.map(a => `
-          <div class="award-card" style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;display:flex;gap:1rem;align-items:flex-start;border-left:4px solid ${medalColor[a.medal]||"var(--green-light)"};">
+          <div class="award-card" style="background:var(--white);border:1px solid var(--border);--radius);padding:1rem 1.25rem;display:flex;gap:1rem;align-items:flex-start;">
             <span style="font-size:2rem;">${a.medal}</span>
             <div>
               <p style="font-size:15px;font-weight:600;color:var(--green-dark);">${a.title}</p>

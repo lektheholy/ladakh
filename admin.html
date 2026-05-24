@@ -18,7 +18,6 @@
       border-radius: 16px;
       padding: 2.5rem 2rem;
       width: 100%; max-width: 400px;
-      box-shadow: 0 8px 40px rgba(0,60,30,.12);
       text-align: center;
     }
     .login-card h2 { font-family:'Mitr',sans-serif; color:var(--green-dark); margin:.75rem 0 .25rem; font-size:1.5rem; }
@@ -48,7 +47,7 @@
       display:flex; align-items:center; justify-content:center; gap:10px;
       transition:background .15s, box-shadow .15s; margin-top:.25rem;
     }
-    .google-btn:hover { background:#f8f9fa; box-shadow:0 2px 8px rgba(0,0,0,.12); }
+    .google-btn:hover { background:#f8f9fa; }
     .google-btn:active { background:#f1f3f4; }
 
     /* ── Admin layout ── */
@@ -284,7 +283,7 @@
           <p style="font-size:12px;color:var(--text-light);margin-top:4px;">* ถ้าไม่แนบรูป จะแสดงไอคอน 🏅 แทน</p>
         </div>
         <div id="hon_preview" style="display:none;margin-top:.5rem;">
-          <img id="hon_preview_img" style="max-width:200px;max-height:140px;border-radius:8px;border:1px solid var(--border);" />
+          <img id="hon_preview_img" style="max-width:200px;max-height:140px;border:1px solid var(--border);" />
         </div>
         <button class="btn btn-primary" id="hon_save_btn" onclick="saveHonor()">➕ เพิ่มรางวัล</button>
       </div>
@@ -308,7 +307,7 @@
           <p style="font-size:12px;color:var(--text-light);margin-top:4px;">* ถ้าไม่แนบรูป จะแสดงไอคอน 📜 แทน</p>
         </div>
         <div id="tr_preview" style="display:none;margin-top:.5rem;">
-          <img id="tr_preview_img" style="max-width:200px;max-height:140px;border-radius:8px;border:1px solid var(--border);" />
+          <img id="tr_preview_img" style="max-width:200px;max-height:140px;border:1px solid var(--border);" />
         </div>
         <button class="btn btn-primary" id="tr_save_btn" onclick="saveTraining()">➕ เพิ่มการอบรม</button>
       </div>
@@ -611,7 +610,7 @@ async function loadHonors() {
   items.sort((a,b) => b.createdAt - a.createdAt);
   renderList("hon_list", items, item => `
     <div class="item-row">
-      ${item.certURL ? `<img src="${item.certURL}" style="width:56px;height:42px;object-fit:cover;border-radius:6px;flex-shrink:0;border:1px solid var(--border);" />` : `<span style="font-size:1.6rem;flex-shrink:0;">🏅</span>`}
+      ${item.certURL ? `<img src="${item.certURL}" style="width:56px;height:42px;object-fit:cover;flex-shrink:0;border:1px solid var(--border);" />` : `<span style="font-size:1.6rem;flex-shrink:0;">🏅</span>`}
       <div class="item-row-body">
         <div class="item-row-title">${item.title}</div>
         <div class="item-row-sub">${item.org||""} ${item.year ? "· ปี "+item.year : ""}</div>
@@ -653,7 +652,7 @@ async function loadTrainings() {
   items.sort((a,b) => b.createdAt - a.createdAt);
   renderList("tr_list", items, item => `
     <div class="item-row">
-      ${item.certURL ? `<img src="${item.certURL}" style="width:56px;height:42px;object-fit:cover;border-radius:6px;flex-shrink:0;border:1px solid var(--border);" />` : `<span style="font-size:1.6rem;flex-shrink:0;">📜</span>`}
+      ${item.certURL ? `<img src="${item.certURL}" style="width:56px;height:42px;object-fit:cover;flex-shrink:0;border:1px solid var(--border);" />` : `<span style="font-size:1.6rem;flex-shrink:0;">📜</span>`}
       <div class="item-row-body">
         <div class="item-row-title">${item.title}</div>
         <div class="item-row-sub">${item.org||""} ${item.year ? "· ปี "+item.year : ""} ${item.hours ? "· "+item.hours+" ชม." : ""}</div>

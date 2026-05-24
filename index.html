@@ -13,8 +13,8 @@
   <h1 id="hero-name">ครูเล็ก</h1>
   <p id="hero-subject">วิทยาศาสตร์ | มัธยมศึกษาตอนต้น | <span id="hero-school">โรงเรียนตัวอย่าง</span></p>
   <div style="margin-top:1.5rem; display:flex; gap:.75rem; justify-content:center; flex-wrap:wrap;">
-    <a href="materials.html" class="btn btn-primary" style="background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.3);">📚 สื่อการสอน</a>
-    <a href="students.html" class="btn btn-outline" style="border-color:#fff;color:#fff;">🏆 ผลงานนักเรียน</a>
+    <a href="materials.html" class="btn btn-primary" style="background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.25);">📚 สื่อการสอน</a>
+    <a href="students.html" class="btn btn-outline" style="border-color:rgba(255,255,255,.4);color:#fff;background:transparent;">🏆 ผลงานนักเรียน</a>
   </div>
 </div>
 
@@ -24,19 +24,19 @@
   <section style="margin-bottom:2.5rem;">
     <h2 class="section-title">📢 ประกาศล่าสุด</h2>
     <div class="card-grid" id="announcements-grid">
-      <div class="card" style="border-left:4px solid var(--green-light);">
+      <div class="card" style="">
         <span class="badge">ใหม่</span>
         <h3 style="font-size:15px;margin:.5rem 0 .25rem;">อัพโหลดสื่อบทที่ 4 แล้ว</h3>
         <p style="font-size:13px;color:var(--text-mid);">สไลด์และใบงาน "ระบบนิเวศ" พร้อมให้ดาวน์โหลด</p>
         <p style="font-size:12px;color:var(--text-light);margin-top:.5rem;">20 มิ.ย. 2568</p>
       </div>
-      <div class="card" style="border-left:4px solid var(--amber);">
+      <div class="card" style="">
         <span class="badge badge-amber">สำคัญ</span>
         <h3 style="font-size:15px;margin:.5rem 0 .25rem;">กำหนดส่งโปรเจกต์กลุ่ม</h3>
         <p style="font-size:13px;color:var(--text-mid);">ม.2 ทุกห้อง ส่งรายงานวันที่ 30 มิ.ย. 2568</p>
         <p style="font-size:12px;color:var(--text-light);margin-top:.5rem;">18 มิ.ย. 2568</p>
       </div>
-      <div class="card" style="border-left:4px solid #9bcfb8;">
+      <div class="card" style="">
         <span class="badge">กิจกรรม</span>
         <h3 style="font-size:15px;margin:.5rem 0 .25rem;">แข่งขันตอบปัญหาวิทย์</h3>
         <p style="font-size:13px;color:var(--text-mid);">ขอแสดงความยินดีกับนักเรียนที่ได้รับรางวัลชนะเลิศ!</p>
@@ -120,7 +120,7 @@ import { getCollection, getDocument } from "./firebase.js";
     };
     grid.innerHTML = items.slice(0,3).map(item => {
       const t = typeMap[item.type] || typeMap.new;
-      return `<div class="card" style="border-left:4px solid ${t.color};">
+      return `<div class="card" style="">
         <span class="badge ${t.badge}">${t.label}</span>
         <h3 style="font-size:15px;margin:.5rem 0 .25rem;">${item.title}</h3>
         <p style="font-size:13px;color:var(--text-mid);">${item.body||""}</p>
