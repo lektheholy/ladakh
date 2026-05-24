@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>สื่อการสอน | ครูนัตพล</title>
+  <title>สื่อการสอน | ครูเล็ก</title>
   <link rel="stylesheet" href="style.css" />
   <style>
     .filter-bar { display:flex; flex-wrap:wrap; gap:.5rem; margin-bottom:1.5rem; }
@@ -146,7 +146,7 @@
 </div>
 
 <footer class="site-footer">
-  © 2568 ครูนัตพล ชะเมรัมย์ | โรงเรียนตัวอย่าง
+  © 2568 <span class="footer-teacher-name">ครูเล็ก</span> | <span class="footer-school">โรงเรียนตัวอย่าง</span>
 </footer>
 
 <script src="nav.js"></script>
@@ -162,6 +162,17 @@ function filterCards(tag, btn) {
     }
   });
 }
+</script>
+<script type="module">
+import { getDocument } from "./firebase.js";
+(async () => {
+  try {
+    const profile = await getDocument("settings/profile");
+    if (!profile) return;
+    if (profile.name)   document.querySelectorAll(".footer-teacher-name").forEach(el => el.textContent = profile.name);
+    if (profile.school) document.querySelectorAll(".footer-school").forEach(el => el.textContent = profile.school);
+  } catch(e) {}
+})();
 </script>
 </body>
 </html>

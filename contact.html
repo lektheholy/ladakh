@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ติดต่อครู | ครูนัตพล</title>
+  <title>ติดต่อครู | ครูเล็ก</title>
   <link rel="stylesheet" href="style.css" />
   <style>
     .contact-info-row {
@@ -70,21 +70,21 @@
           <div class="contact-icon-wrap">📧</div>
           <div>
             <p style="font-size:13px;color:var(--text-light);">อีเมล</p>
-            <a href="mailto:natthaphon@school.ac.th" style="font-size:14px;font-weight:600;color:var(--green-mid);text-decoration:none;">natthaphon@school.ac.th</a>
+            <a id="contact-email" href="mailto:natthaphon@school.ac.th" style="font-size:14px;font-weight:600;color:var(--green-mid);text-decoration:none;">natthaphon@school.ac.th</a>
           </div>
         </div>
         <div class="contact-info-row">
           <div class="contact-icon-wrap">💬</div>
           <div>
             <p style="font-size:13px;color:var(--text-light);">Line OA</p>
-            <p style="font-size:14px;font-weight:600;color:var(--green-dark);">@kru_lek</p>
+            <p id="contact-line" style="font-size:14px;font-weight:600;color:var(--green-dark);">@kru_lek</p>
           </div>
         </div>
         <div class="contact-info-row">
           <div class="contact-icon-wrap">🏫</div>
           <div>
             <p style="font-size:13px;color:var(--text-light);">ห้องพักครู</p>
-            <p style="font-size:14px;font-weight:600;color:var(--green-dark);">อาคาร 2 ชั้น 3 ห้อง 301</p>
+            <p id="contact-room" style="font-size:14px;font-weight:600;color:var(--green-dark);">อาคาร 2 ชั้น 3 ห้อง 301</p>
           </div>
         </div>
       </div>
@@ -133,7 +133,7 @@
 </div>
 
 <footer class="site-footer">
-  © 2568 ครูนัตพล ชะเมรัมย์ | โรงเรียนตัวอย่าง
+  © 2568 <span class="footer-teacher-name">ครูเล็ก</span> | <span class="footer-school">โรงเรียนตัวอย่าง</span>
 </footer>
 
 <script src="nav.js"></script>
@@ -143,6 +143,28 @@ function sendMsg() {
   msg.style.display = "block";
   setTimeout(() => { msg.style.display = "none"; }, 4000);
 }
+</script>
+<script type="module">
+import { getDocument } from "./firebase.js";
+(async () => {
+  try {
+    const profile = await getDocument("settings/profile");
+    if (!profile) return;
+    if (profile.name) {
+      document.querySelectorAll(".footer-teacher-name").forEach(el => el.textContent = profile.name);
+    }
+    if (profile.school) {
+      document.querySelectorAll(".footer-school").forEach(el => el.textContent = profile.school);
+    }
+    if (profile.email) {
+      const emailEl = document.getElementById("contact-email");
+      emailEl.textContent = profile.email;
+      emailEl.href = "mailto:" + profile.email;
+    }
+    if (profile.line) document.getElementById("contact-line").textContent = profile.line;
+    if (profile.room) document.getElementById("contact-room").textContent = profile.room;
+  } catch(e) {}
+})();
 </script>
 </body>
 </html>

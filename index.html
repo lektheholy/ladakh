@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>หน้าแรก | ครูนัตพล</title>
+  <title>หน้าแรก | ครูเล็ก</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
 <div class="hero">
   <div class="hero-badge">ยินดีต้อนรับสู่เว็บไซต์ครู 👋</div>
-  <h1>ครูนัตพล ชะเมรัมย์</h1>
-  <p>วิทยาศาสตร์ | มัธยมศึกษาตอนต้น | โรงเรียนตัวอย่าง</p>
+  <h1 id="hero-name">ครูเล็ก</h1>
+  <p id="hero-subject">วิทยาศาสตร์ | มัธยมศึกษาตอนต้น | <span id="hero-school">โรงเรียนตัวอย่าง</span></p>
   <div style="margin-top:1.5rem; display:flex; gap:.75rem; justify-content:center; flex-wrap:wrap;">
     <a href="materials.html" class="btn btn-primary" style="background:#fff;color:var(--green-dark);">📚 สื่อการสอน</a>
     <a href="students.html" class="btn btn-outline" style="border-color:#fff;color:#fff;">🏆 ผลงานนักเรียน</a>
@@ -23,7 +23,7 @@
   <!-- ประกาศล่าสุด -->
   <section style="margin-bottom:2.5rem;">
     <h2 class="section-title">📢 ประกาศล่าสุด</h2>
-    <div class="card-grid">
+    <div class="card-grid" id="announcements-grid">
       <div class="card" style="border-left:4px solid var(--green-light);">
         <span class="badge">ใหม่</span>
         <h3 style="font-size:15px;margin:.5rem 0 .25rem;">อัพโหลดสื่อบทที่ 4 แล้ว</h3>
@@ -81,36 +81,54 @@
 </div>
 
 <footer class="site-footer">
-  © 2568 ครูนัตพล ชะเมรัมย์ | โรงเรียนตัวอย่าง
+  © 2568 <span class="footer-teacher-name">ครูเล็ก</span> | <span class="footer-school">โรงเรียนตัวอย่าง</span>
 </footer>
 
 <script src="nav.js"></script>
-</body>
-</html>
 <script type="module">
-// โหลดประกาศจาก Firestore (ถ้ามี) แทน hardcoded
-import { getCollection } from "./firebase.js";
+import { getCollection, getDocument } from "./firebase.js";
+
+// โหลดโปรไฟล์
+(async () => {
+  try {
+    const profile = await getDocument("settings/profile");
+    if (!profile) return;
+    if (profile.name) {
+      document.getElementById("hero-name").textContent = profile.name;
+      document.querySelectorAll(".footer-teacher-name").forEach(el => el.textContent = profile.name);
+    }
+    if (profile.subject) document.getElementById("hero-subject").childNodes[0].textContent = profile.subject + " | ";
+    if (profile.school)  {
+      document.getElementById("hero-school").textContent = profile.school;
+      document.querySelectorAll(".footer-school").forEach(el => el.textContent = profile.school);
+    }
+  } catch(e) {}
+})();
+
+// โหลดประกาศ
 (async () => {
   try {
     const items = await getCollection("announcements");
     if (!items.length) return;
     items.sort((a,b) => b.createdAt - a.createdAt);
-    const grid = document.querySelector(".card-grid");
+    const grid = document.getElementById("announcements-grid");
     if (!grid) return;
     const typeMap = {
-      new: { label:"ใหม่", color:"var(--green-light)" },
-      important: { label:"สำคัญ", color:"var(--amber)", badge:"badge-amber" },
-      activity: { label:"กิจกรรม", color:"#9bcfb8" },
+      new:       { label:"ใหม่",     color:"var(--green-light)", badge:"" },
+      important: { label:"สำคัญ",   color:"var(--amber)",       badge:"badge-amber" },
+      activity:  { label:"กิจกรรม", color:"#9bcfb8",            badge:"" },
     };
     grid.innerHTML = items.slice(0,3).map(item => {
       const t = typeMap[item.type] || typeMap.new;
       return `<div class="card" style="border-left:4px solid ${t.color};">
-        <span class="badge ${t.badge||""}">${t.label}</span>
+        <span class="badge ${t.badge}">${t.label}</span>
         <h3 style="font-size:15px;margin:.5rem 0 .25rem;">${item.title}</h3>
         <p style="font-size:13px;color:var(--text-mid);">${item.body||""}</p>
         <p style="font-size:12px;color:var(--text-light);margin-top:.5rem;">${item.date||""}</p>
       </div>`;
     }).join("");
-  } catch(e) { /* ใช้ข้อมูล hardcoded ถ้าโหลดไม่ได้ */ }
+  } catch(e) {}
 })();
 </script>
+</body>
+</html>

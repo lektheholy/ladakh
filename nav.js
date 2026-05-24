@@ -3,7 +3,7 @@
 // ===================================================
 
 const SITE = {
-  teacherName: "ครูนัตพล ชะเมรัมย์",
+  teacherName: "ครูเล็ก",
   subject: "วิทยาศาสตร์ | มัธยมศึกษาตอนต้น",
   school: "โรงเรียนตัวอย่าง",
   logo: "🔬",
@@ -105,3 +105,25 @@ document.addEventListener("click", e => {
 });
 
 buildNav();
+
+// ── Sync nav with Firestore profile ──────────────
+(async () => {
+  try {
+    // dynamic import to avoid breaking pages that don't use modules
+    const { getDocument } = await import("./firebase.js");
+    const profile = await getDocument("settings/profile");
+    if (!profile) return;
+    if (profile.name) {
+      const el = document.querySelector(".nav-name");
+      if (el) el.textContent = profile.name;
+      document.querySelectorAll(".footer-teacher-name").forEach(e => e.textContent = profile.name);
+    }
+    if (profile.subject) {
+      const el = document.querySelector(".nav-sub");
+      if (el) el.textContent = profile.subject;
+    }
+    if (profile.school) {
+      document.querySelectorAll(".footer-school").forEach(e => e.textContent = profile.school);
+    }
+  } catch(e) {}
+})();
