@@ -135,7 +135,9 @@
     <button class="tab-btn" onclick="switchTab('awards',this)">🏆 รางวัล</button>
     <button class="tab-btn" onclick="switchTab('projects',this)">📁 โปรเจกต์</button>
     <button class="tab-btn" onclick="switchTab('events',this)">📅 กำหนดการ</button>
-    <button class="tab-btn" onclick="switchTab('profile',this)">👩‍🏫 โปรไฟล์ครู</button>
+    <button class="tab-btn" onclick="switchTab('honors',this)">🏅 รางวัลครู</button>
+    <button class="tab-btn" onclick="switchTab('trainings',this)">📋 การอบรม</button>
+    <button class="tab-btn" onclick="switchTab('profile',this)">👨‍🏫 โปรไฟล์ครู</button>
     <div style="margin-left:auto;display:flex;align-items:center;gap:.5rem;">
       <span style="font-size:13px;color:var(--text-light);" id="adminEmailLabel"></span>
       <button onclick="doLogout()" class="btn btn-outline" style="font-size:13px;padding:6px 14px;">↩ ออกจากระบบ</button>
@@ -266,6 +268,53 @@
       <div class="item-list" id="ev_list"></div>
     </div>
 
+    <!-- ── รางวัล / เกียรติยศ ครู ── -->
+    <div class="tab-panel" id="tab-honors">
+      <h2 class="section-title">🏅 รางวัล / เกียรติยศ ครู</h2>
+      <p class="section-desc">แสดงในหน้า "เกี่ยวกับครู" — แนบรูปเกียรติบัตรได้</p>
+      <div class="card admin-form">
+        <div class="form-row">
+          <div class="field"><label>ชื่อรางวัล</label><input type="text" id="hon_title" placeholder="เช่น ครูดีศรีสถาบัน" /></div>
+          <div class="field"><label>หน่วยงานที่มอบ</label><input type="text" id="hon_org" placeholder="เช่น คณะกรรมการสถานศึกษา" /></div>
+        </div>
+        <div class="field"><label>ปี พ.ศ.</label><input type="number" id="hon_year" placeholder="เช่น 2566" min="2500" max="2600" /></div>
+        <div class="field">
+          <label>รูปเกียรติบัตร (JPG/PNG ไม่เกิน 5 MB)</label>
+          <input type="file" id="hon_cert" accept="image/*" style="padding:6px;" />
+          <p style="font-size:12px;color:var(--text-light);margin-top:4px;">* ถ้าไม่แนบรูป จะแสดงไอคอน 🏅 แทน</p>
+        </div>
+        <div id="hon_preview" style="display:none;margin-top:.5rem;">
+          <img id="hon_preview_img" style="max-width:200px;max-height:140px;border-radius:8px;border:1px solid var(--border);" />
+        </div>
+        <button class="btn btn-primary" id="hon_save_btn" onclick="saveHonor()">➕ เพิ่มรางวัล</button>
+      </div>
+      <div class="item-list" id="hon_list"></div>
+    </div>
+
+    <!-- ── การอบรมพัฒนาตนเอง ครู ── -->
+    <div class="tab-panel" id="tab-trainings">
+      <h2 class="section-title">📋 การอบรมพัฒนาตนเอง</h2>
+      <p class="section-desc">แสดงในหน้า "เกี่ยวกับครู" — แนบรูปเกียรติบัตรได้</p>
+      <div class="card admin-form">
+        <div class="field"><label>ชื่อหลักสูตร</label><input type="text" id="tr_title" placeholder="เช่น Active Learning ในชั้นเรียนวิทย์" /></div>
+        <div class="form-row">
+          <div class="field"><label>หน่วยงาน</label><input type="text" id="tr_org" placeholder="เช่น สสวท." /></div>
+          <div class="field"><label>ปี พ.ศ.</label><input type="number" id="tr_year" placeholder="เช่น 2567" min="2500" max="2600" /></div>
+        </div>
+        <div class="field"><label>จำนวนชั่วโมง</label><input type="number" id="tr_hours" placeholder="เช่น 18" min="0" /></div>
+        <div class="field">
+          <label>รูปเกียรติบัตร (JPG/PNG ไม่เกิน 5 MB)</label>
+          <input type="file" id="tr_cert" accept="image/*" style="padding:6px;" />
+          <p style="font-size:12px;color:var(--text-light);margin-top:4px;">* ถ้าไม่แนบรูป จะแสดงไอคอน 📜 แทน</p>
+        </div>
+        <div id="tr_preview" style="display:none;margin-top:.5rem;">
+          <img id="tr_preview_img" style="max-width:200px;max-height:140px;border-radius:8px;border:1px solid var(--border);" />
+        </div>
+        <button class="btn btn-primary" id="tr_save_btn" onclick="saveTraining()">➕ เพิ่มการอบรม</button>
+      </div>
+      <div class="item-list" id="tr_list"></div>
+    </div>
+
     <!-- ── โปรไฟล์ครู ── -->
     <div class="tab-panel" id="tab-profile">
       <h2 class="section-title">👩‍🏫 แก้ไขข้อมูลครู</h2>
@@ -301,7 +350,7 @@
 <script type="module">
 import { auth, db, login, loginWithGoogle, logout, onAuth,
          getCollection, addDocument, deleteDocument,
-         getDocument, setDocument }
+         getDocument, setDocument, uploadFile }
   from "./firebase.js";
 
 const ADMIN_EMAIL = "lektheholy@gmail.com";
@@ -395,7 +444,7 @@ window.delItem = async function(col, id) {
 
 // ── Load all ─────────────────────────────────────
 async function loadAll() {
-  loadAnnouncements(); loadMaterials(); loadAwards(); loadProjects(); loadEvents(); loadProfile();
+  loadAnnouncements(); loadMaterials(); loadAwards(); loadProjects(); loadEvents(); loadHonors(); loadTrainings(); loadProfile();
 }
 
 // ─── ANNOUNCEMENTS ────────────────────────────────
@@ -535,6 +584,110 @@ window.saveEvent = async function() {
   ["ev_title","ev_date","ev_desc"].forEach(id => document.getElementById(id).value = "");
   toast("✅ เพิ่มกำหนดการแล้ว");
   loadEvents();
+};
+
+
+// ── Image preview helpers ─────────────────────────
+function setupImagePreview(inputId, previewWrapperId, previewImgId) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  input.addEventListener("change", () => {
+    const file = input.files[0];
+    if (!file) { document.getElementById(previewWrapperId).style.display = "none"; return; }
+    const reader = new FileReader();
+    reader.onload = e => {
+      document.getElementById(previewImgId).src = e.target.result;
+      document.getElementById(previewWrapperId).style.display = "block";
+    };
+    reader.readAsDataURL(file);
+  });
+}
+setupImagePreview("hon_cert", "hon_preview", "hon_preview_img");
+setupImagePreview("tr_cert",  "tr_preview",  "tr_preview_img");
+
+// ─── HONORS ───────────────────────────────────────
+async function loadHonors() {
+  const items = await getCollection("honors");
+  items.sort((a,b) => b.createdAt - a.createdAt);
+  renderList("hon_list", items, item => `
+    <div class="item-row">
+      ${item.certURL ? `<img src="${item.certURL}" style="width:56px;height:42px;object-fit:cover;border-radius:6px;flex-shrink:0;border:1px solid var(--border);" />` : `<span style="font-size:1.6rem;flex-shrink:0;">🏅</span>`}
+      <div class="item-row-body">
+        <div class="item-row-title">${item.title}</div>
+        <div class="item-row-sub">${item.org||""} ${item.year ? "· ปี "+item.year : ""}</div>
+      </div>
+      ${delBtn("honors", item.id)}
+    </div>`);
+}
+window.saveHonor = async function() {
+  const title = document.getElementById("hon_title").value.trim();
+  if (!title) return alert("กรุณากรอกชื่อรางวัล");
+  const btn = document.getElementById("hon_save_btn");
+  btn.disabled = true; btn.textContent = "⏳ กำลังบันทึก...";
+  try {
+    let certURL = "";
+    const fileInput = document.getElementById("hon_cert");
+    if (fileInput.files[0]) {
+      const file = fileInput.files[0];
+      if (file.size > 5 * 1024 * 1024) { alert("ไฟล์ใหญ่เกิน 5 MB"); btn.disabled=false; btn.textContent="➕ เพิ่มรางวัล"; return; }
+      certURL = await uploadFile(`certificates/honors/${Date.now()}_${file.name}`, file);
+    }
+    await addDocument("honors", {
+      title,
+      org:  document.getElementById("hon_org").value.trim(),
+      year: document.getElementById("hon_year").value || "",
+      certURL,
+    });
+    ["hon_title","hon_org","hon_year"].forEach(id => document.getElementById(id).value = "");
+    fileInput.value = "";
+    document.getElementById("hon_preview").style.display = "none";
+    toast("✅ เพิ่มรางวัลแล้ว");
+    loadHonors();
+  } catch(e) { alert("เกิดข้อผิดพลาด: " + e.message); }
+  btn.disabled=false; btn.textContent="➕ เพิ่มรางวัล";
+};
+
+// ─── TRAININGS ─────────────────────────────────────
+async function loadTrainings() {
+  const items = await getCollection("trainings");
+  items.sort((a,b) => b.createdAt - a.createdAt);
+  renderList("tr_list", items, item => `
+    <div class="item-row">
+      ${item.certURL ? `<img src="${item.certURL}" style="width:56px;height:42px;object-fit:cover;border-radius:6px;flex-shrink:0;border:1px solid var(--border);" />` : `<span style="font-size:1.6rem;flex-shrink:0;">📜</span>`}
+      <div class="item-row-body">
+        <div class="item-row-title">${item.title}</div>
+        <div class="item-row-sub">${item.org||""} ${item.year ? "· ปี "+item.year : ""} ${item.hours ? "· "+item.hours+" ชม." : ""}</div>
+      </div>
+      ${delBtn("trainings", item.id)}
+    </div>`);
+}
+window.saveTraining = async function() {
+  const title = document.getElementById("tr_title").value.trim();
+  if (!title) return alert("กรุณากรอกชื่อหลักสูตร");
+  const btn = document.getElementById("tr_save_btn");
+  btn.disabled = true; btn.textContent = "⏳ กำลังบันทึก...";
+  try {
+    let certURL = "";
+    const fileInput = document.getElementById("tr_cert");
+    if (fileInput.files[0]) {
+      const file = fileInput.files[0];
+      if (file.size > 5 * 1024 * 1024) { alert("ไฟล์ใหญ่เกิน 5 MB"); btn.disabled=false; btn.textContent="➕ เพิ่มการอบรม"; return; }
+      certURL = await uploadFile(`certificates/trainings/${Date.now()}_${file.name}`, file);
+    }
+    await addDocument("trainings", {
+      title,
+      org:   document.getElementById("tr_org").value.trim(),
+      year:  document.getElementById("tr_year").value || "",
+      hours: document.getElementById("tr_hours").value || "",
+      certURL,
+    });
+    ["tr_title","tr_org","tr_year","tr_hours"].forEach(id => document.getElementById(id).value = "");
+    fileInput.value = "";
+    document.getElementById("tr_preview").style.display = "none";
+    toast("✅ เพิ่มการอบรมแล้ว");
+    loadTrainings();
+  } catch(e) { alert("เกิดข้อผิดพลาด: " + e.message); }
+  btn.disabled=false; btn.textContent="➕ เพิ่มการอบรม";
 };
 
 // ─── PROFILE ──────────────────────────────────────

@@ -1,5 +1,5 @@
 // ===================================================
-// firebase.js — Firebase config + Auth + Firestore
+// firebase.js — Firebase config + Auth + Firestore + Storage
 // ===================================================
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -8,6 +8,8 @@ import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged,
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc, collection, getDocs, addDoc, deleteDoc, updateDoc, orderBy, query }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAFuMPVoy0jUamQtAFyTF_xZipjqjomEto",
@@ -22,6 +24,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+export const storage = getStorage(app);
 
 // ── Auth helpers ──────────────────────────────────
 export async function login(email, password) {
@@ -74,4 +77,29 @@ export async function deleteDocument(path) {
 /** อัพเดต document */
 export async function updateDocument(path, data) {
   await updateDoc(doc(db, ...path.split("/")), data);
+}
+
+// ── Storage helpers ───────────────────────────────
+
+/**
+ * อัปโหลดไฟล์ไปยัง Firebase Storage
+ * @param {string} storagePath  เช่น "certificates/award_123.jpg"
+ * @param {File}   file         File object จาก <input type="file">
+ * @returns {Promise<string>}   Download URL
+ */
+export async function uploadFile(storagePath, file) {
+  const storageRef = ref(storage, storagePath);
+  await uploadBytes(storageRef, file);
+  return getDownloadURL(storageRef);
+}
+
+/**
+ * ลบไฟล์จาก Storage (ถ้ามี URL)
+ * @param {string} downloadURL  URL ที่ได้จาก getDownloadURL
+ */
+export async function deleteFileByURL(downloadURL) {
+  try {
+    const storageRef = ref(storage, downloadURL);
+    await deleteObject(storageRef);
+  } catch(e) { /* ignore if not found */ }
 }

@@ -5,6 +5,89 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>เกี่ยวกับครู | ครูเล็ก</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    .timeline-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      padding: .85rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .timeline-item:last-child { border-bottom: none; }
+    .timeline-dot {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--green-pale);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; flex-shrink: 0; margin-top: 2px;
+    }
+
+    /* รางวัล cards */
+    .award-item {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: box-shadow .2s;
+    }
+    .award-item:hover { box-shadow: 0 4px 20px rgba(0,80,40,.1); }
+    .award-cert-thumb {
+      width: 100%; aspect-ratio: 4/3;
+      object-fit: cover;
+      display: block;
+      background: var(--green-pale);
+      cursor: pointer;
+    }
+    .award-cert-placeholder {
+      width: 100%; aspect-ratio: 4/3;
+      background: var(--green-pale);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem; color: var(--text-light);
+    }
+    .award-body { padding: .9rem 1rem; }
+
+    /* การอบรม rows */
+    .training-row {
+      display: flex; gap: 1rem; align-items: flex-start;
+      padding: .85rem 0; border-bottom: 1px solid var(--border);
+    }
+    .training-row:last-child { border-bottom: none; }
+    .training-cert-thumb {
+      width: 64px; height: 48px; border-radius: 6px;
+      object-fit: cover; flex-shrink: 0; cursor: pointer;
+      border: 1px solid var(--border);
+    }
+    .training-cert-placeholder {
+      width: 64px; height: 48px; border-radius: 6px;
+      background: var(--green-pale); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; border: 1px solid var(--border);
+    }
+
+    /* Lightbox */
+    #lightbox {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.85); z-index: 9999;
+      align-items: center; justify-content: center;
+      padding: 1.5rem;
+    }
+    #lightbox.open { display: flex; }
+    #lightbox img {
+      max-width: 90vw; max-height: 88vh;
+      border-radius: 10px; box-shadow: 0 8px 40px rgba(0,0,0,.5);
+    }
+    #lightbox-close {
+      position: absolute; top: 1rem; right: 1.25rem;
+      color: #fff; font-size: 2rem; cursor: pointer;
+      line-height: 1; background: none; border: none;
+    }
+
+    .empty-state { font-size:13px; color:var(--text-light); padding:.5rem 0; }
+    .awards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px,1fr));
+      gap: 1rem;
+    }
+  </style>
 </head>
 <body>
 
@@ -15,99 +98,109 @@
 
 <div class="page-wrap">
 
-  <!-- โปรไฟล์ -->
+  <!-- ── โปรไฟล์ ─────────────────────────────── -->
   <section style="margin-bottom:2.5rem;">
     <div class="card" style="display:flex;gap:2rem;flex-wrap:wrap;align-items:flex-start;">
-      <div style="width:120px;height:120px;border-radius:50%;background:var(--green-pale);display:flex;align-items:center;justify-content:center;font-size:4rem;flex-shrink:0;">👩‍🏫</div>
-      <div>
+      <div style="width:120px;height:120px;border-radius:50%;background:var(--green-pale);display:flex;align-items:center;justify-content:center;font-size:4rem;flex-shrink:0;">👨‍🏫</div>
+      <div style="flex:1;min-width:200px;">
         <h2 id="prof-name" style="font-family:'Mitr',sans-serif;font-size:1.5rem;color:var(--green-dark);">ครูเล็ก</h2>
-        <p id="prof-position" style="color:var(--text-mid);margin:.25rem 0 .75rem;">ครูวิทยาศาสตร์ | ประสบการณ์ 15 ปี</p>
-        <div style="display:flex;flex-wrap:wrap;gap:.5rem;">
-          <span class="badge">วิทยาศาสตร์ ม.1–3</span>
-          <span class="badge">ชีววิทยา ม.4</span>
-          <span class="badge badge-amber">ครูดีศรีสถาบัน 2566</span>
-        </div>
-        <p id="prof-bio" style="margin-top:1rem;color:var(--text-mid);font-size:14px;line-height:1.8;">
-          มุ่งมั่นสร้างการเรียนรู้ที่สนุกและมีความหมายสำหรับนักเรียนทุกคน เชื่อว่าวิทยาศาสตร์ไม่ใช่แค่เนื้อหาในหนังสือ
-          แต่คือวิธีมองโลกที่ทำให้เราตั้งคำถามและหาคำตอบอย่างเป็นระบบ
+        <p id="prof-position" style="color:var(--text-mid);margin:.25rem 0 .75rem;">ครูวิทยาศาสตร์</p>
+        <p id="prof-bio" style="color:var(--text-mid);font-size:14px;line-height:1.8;">
+          มุ่งมั่นสร้างการเรียนรู้ที่สนุกและมีความหมายสำหรับนักเรียนทุกคน
         </p>
       </div>
     </div>
   </section>
 
+  <!-- ── การศึกษา + ฝึกประสบการณ์ ─────────── -->
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-bottom:2.5rem;">
 
-    <!-- การศึกษา -->
     <section>
       <h2 class="section-title">🎓 การศึกษา</h2>
       <div class="card">
         <ul style="list-style:none;display:flex;flex-direction:column;gap:.9rem;">
           <li style="padding-bottom:.9rem;border-bottom:1px solid var(--border);">
-            <p style="font-size:14px;font-weight:600;color:var(--green-dark);">ปริญญาโท วิทยาศาสตรมหาบัณฑิต</p>
-            <p style="font-size:13px;color:var(--text-mid);">มหาวิทยาลัยเกษตรศาสตร์ · 2553</p>
-          </li>
-          <li style="padding-bottom:.9rem;border-bottom:1px solid var(--border);">
             <p style="font-size:14px;font-weight:600;color:var(--green-dark);">ปริญญาตรี ครุศาสตร์บัณฑิต (วิทยาศาสตร์ทั่วไป)</p>
-            <p style="font-size:13px;color:var(--text-mid);">มหาวิทยาลัยเชียงใหม่ · 2550</p>
+            <p style="font-size:13px;color:var(--text-mid);">มหาวิทยาลัยขอนแก่น · 2559</p>
           </li>
           <li>
             <p style="font-size:14px;font-weight:600;color:var(--green-dark);">ใบประกอบวิชาชีพครู</p>
-            <p style="font-size:13px;color:var(--text-mid);">คุรุสภา · ต่ออายุ 2567</p>
+            <p style="font-size:13px;color:var(--text-mid);">คุรุสภา</p>
           </li>
         </ul>
       </div>
     </section>
 
-    <!-- รางวัล -->
     <section>
-      <h2 class="section-title">🏅 รางวัล / เกียรติยศ</h2>
+      <h2 class="section-title">🏫 การฝึกประสบการณ์</h2>
       <div class="card">
-        <ul style="list-style:none;display:flex;flex-direction:column;gap:.9rem;">
-          <li style="display:flex;gap:.75rem;align-items:flex-start;">
-            <span style="font-size:1.3rem;">🥇</span>
-            <div>
-              <p style="font-size:14px;font-weight:600;color:var(--green-dark);">ครูดีศรีสถาบัน</p>
-              <p style="font-size:13px;color:var(--text-mid);">คณะกรรมการสถานศึกษา · 2566</p>
-            </div>
-          </li>
-          <li style="display:flex;gap:.75rem;align-items:flex-start;padding-top:.75rem;border-top:1px solid var(--border);">
-            <span style="font-size:1.3rem;">📜</span>
-            <div>
-              <p style="font-size:14px;font-weight:600;color:var(--green-dark);">นวัตกรรมการสอนดีเด่น</p>
-              <p style="font-size:13px;color:var(--text-mid);">สพม. เขต 5 · 2565</p>
-            </div>
-          </li>
-          <li style="display:flex;gap:.75rem;align-items:flex-start;padding-top:.75rem;border-top:1px solid var(--border);">
-            <span style="font-size:1.3rem;">🔬</span>
-            <div>
-              <p style="font-size:14px;font-weight:600;color:var(--green-dark);">ผู้นำการอบรม STEM</p>
-              <p style="font-size:13px;color:var(--text-mid);">สสวท. · 2564</p>
-            </div>
-          </li>
-        </ul>
+        <div class="timeline-item">
+          <div class="timeline-dot">📍</div>
+          <div>
+            <p style="font-size:14px;font-weight:600;color:var(--green-dark);">โรงเรียนบ้านไผ่</p>
+            <p style="font-size:13px;color:var(--text-mid);">ขอนแก่น</p>
+            <p style="font-size:12px;color:var(--text-light);">ภาคการศึกษาต้น 2559</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">📍</div>
+          <div>
+            <p style="font-size:14px;font-weight:600;color:var(--green-dark);">โรงเรียนสาธิตมหาวิทยาลัยขอนแก่น (ศึกษาศาสตร์)</p>
+            <p style="font-size:13px;color:var(--text-mid);">ขอนแก่น</p>
+            <p style="font-size:12px;color:var(--text-light);">ภาคการศึกษาปลาย 2559</p>
+          </div>
+        </div>
       </div>
     </section>
 
   </div>
 
-  <!-- การอบรม -->
+  <!-- ── ประสบการณ์การสอน ───────────────────── -->
   <section style="margin-bottom:2.5rem;">
-    <h2 class="section-title">📋 การอบรมพัฒนาตนเอง</h2>
-    <div class="table-wrap card" style="padding:0;overflow:hidden;">
-      <table>
-        <thead>
-          <tr><th>หลักสูตร</th><th>หน่วยงาน</th><th>ปี</th><th>ชั่วโมง</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Active Learning ในชั้นเรียนวิทย์</td><td>สสวท.</td><td>2567</td><td>18</td></tr>
-          <tr><td>การใช้ AI ในการจัดการเรียนรู้</td><td>สพฐ.</td><td>2567</td><td>12</td></tr>
-          <tr><td>STEM Education ระดับชาติ</td><td>สสวท.</td><td>2566</td><td>30</td></tr>
-          <tr><td>การวิจัยในชั้นเรียน</td><td>คุรุสภา</td><td>2565</td><td>24</td></tr>
-        </tbody>
-      </table>
+    <h2 class="section-title">💼 ประสบการณ์การสอน</h2>
+    <div class="card">
+      <div class="timeline-item">
+        <div class="timeline-dot">🏫</div>
+        <div>
+          <p style="font-size:14px;font-weight:600;color:var(--green-dark);">โรงเรียนวัดหนองชิ่ม</p>
+          <p style="font-size:13px;color:var(--text-mid);">จันทบุรี</p>
+          <p style="font-size:12px;color:var(--text-light);">ปีการศึกษา 2560–2567</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background:var(--amber-pale);">🏫</div>
+        <div>
+          <p style="font-size:14px;font-weight:600;color:var(--green-dark);">โรงเรียนหนองกี่พิทยาคม</p>
+          <p style="font-size:13px;color:var(--text-mid);">บุรีรัมย์</p>
+          <p style="font-size:12px;color:var(--text-light);">ปีการศึกษา 2568–ปัจจุบัน</p>
+          <span class="badge badge-amber" style="margin-top:.35rem;display:inline-block;font-size:11px;">ปัจจุบัน</span>
+        </div>
+      </div>
     </div>
   </section>
 
+  <!-- ── รางวัล / เกียรติยศ (Firebase) ────── -->
+  <section style="margin-bottom:2.5rem;">
+    <h2 class="section-title">🏅 รางวัล / เกียรติยศ</h2>
+    <div class="awards-grid" id="awards-list">
+      <p class="empty-state">กำลังโหลด...</p>
+    </div>
+  </section>
+
+  <!-- ── การอบรมพัฒนาตนเอง (Firebase) ─────── -->
+  <section style="margin-bottom:2.5rem;">
+    <h2 class="section-title">📋 การอบรมพัฒนาตนเอง</h2>
+    <div class="card" id="training-list" style="padding:.5rem 1.5rem;">
+      <p class="empty-state">กำลังโหลด...</p>
+    </div>
+  </section>
+
+</div>
+
+<!-- Lightbox -->
+<div id="lightbox" onclick="closeLightbox()">
+  <button id="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightbox-img" src="" alt="เกียรติบัตร" onclick="event.stopPropagation()" />
 </div>
 
 <footer class="site-footer">
@@ -116,20 +209,88 @@
 
 <script src="nav.js"></script>
 <script type="module">
-import { getDocument } from "./firebase.js";
+import { getDocument, getCollection } from "./firebase.js";
+
+// ── Lightbox ──────────────────────────────────────
+window.openLightbox = function(url) {
+  document.getElementById("lightbox-img").src = url;
+  document.getElementById("lightbox").classList.add("open");
+  document.body.style.overflow = "hidden";
+};
+window.closeLightbox = function() {
+  document.getElementById("lightbox").classList.remove("open");
+  document.body.style.overflow = "";
+};
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeLightbox(); });
+
+// ── โปรไฟล์ ──────────────────────────────────────
 (async () => {
   try {
-    const profile = await getDocument("settings/profile");
-    if (!profile) return;
-    if (profile.name) {
-      document.getElementById("prof-name").textContent = profile.name;
-      document.querySelectorAll(".footer-teacher-name").forEach(el => el.textContent = profile.name);
-      document.querySelectorAll(".nav-name").forEach(el => el.textContent = profile.name);
-    }
-    if (profile.position) document.getElementById("prof-position").textContent = profile.position;
-    if (profile.bio)      document.getElementById("prof-bio").textContent = profile.bio;
-    if (profile.school)   document.querySelectorAll(".footer-school").forEach(el => el.textContent = profile.school);
+    const p = await getDocument("settings/profile");
+    if (!p) return;
+    if (p.name)     document.getElementById("prof-name").textContent = p.name;
+    if (p.position) document.getElementById("prof-position").textContent = p.position;
+    if (p.bio)      document.getElementById("prof-bio").textContent = p.bio;
+    if (p.name)     document.querySelectorAll(".footer-teacher-name").forEach(el => el.textContent = p.name);
+    if (p.school)   document.querySelectorAll(".footer-school").forEach(el => el.textContent = p.school);
   } catch(e) {}
+})();
+
+// ── รางวัล ────────────────────────────────────────
+(async () => {
+  const container = document.getElementById("awards-list");
+  try {
+    const items = await getCollection("honors");
+    if (!items.length) {
+      container.innerHTML = '<p class="empty-state">ยังไม่มีรายการ</p>';
+      return;
+    }
+    items.sort((a,b) => b.createdAt - a.createdAt);
+    container.innerHTML = items.map(item => `
+      <div class="award-item">
+        ${item.certURL
+          ? `<img class="award-cert-thumb" src="${item.certURL}" alt="${item.title}" loading="lazy" onclick="openLightbox('${item.certURL}')" title="คลิกเพื่อขยาย" />`
+          : `<div class="award-cert-placeholder">🏅</div>`
+        }
+        <div class="award-body">
+          <p style="font-size:14px;font-weight:600;color:var(--green-dark);margin-bottom:.25rem;">${item.title}</p>
+          <p style="font-size:13px;color:var(--text-mid);">${item.org || ""}</p>
+          ${item.year ? `<p style="font-size:12px;color:var(--text-light);margin-top:.2rem;">ปี ${item.year}</p>` : ""}
+        </div>
+      </div>`).join("");
+  } catch(e) {
+    container.innerHTML = '<p class="empty-state">โหลดไม่ได้ในขณะนี้</p>';
+  }
+})();
+
+// ── การอบรม ──────────────────────────────────────
+(async () => {
+  const container = document.getElementById("training-list");
+  try {
+    const items = await getCollection("trainings");
+    if (!items.length) {
+      container.innerHTML = '<p class="empty-state">ยังไม่มีรายการ</p>';
+      return;
+    }
+    items.sort((a,b) => (b.year||0) - (a.year||0));
+    container.innerHTML = items.map(item => `
+      <div class="training-row">
+        ${item.certURL
+          ? `<img class="training-cert-thumb" src="${item.certURL}" alt="${item.title}" loading="lazy" onclick="openLightbox('${item.certURL}')" title="คลิกเพื่อขยาย" />`
+          : `<div class="training-cert-placeholder">📜</div>`
+        }
+        <div style="flex:1;min-width:0;">
+          <p style="font-size:14px;font-weight:600;color:var(--green-dark);">${item.title}</p>
+          <p style="font-size:13px;color:var(--text-mid);">${item.org || ""}</p>
+          <div style="display:flex;gap:.75rem;margin-top:.25rem;flex-wrap:wrap;">
+            ${item.year  ? `<span style="font-size:12px;color:var(--text-light);">ปี ${item.year}</span>` : ""}
+            ${item.hours ? `<span class="badge" style="font-size:11px;">${item.hours} ชม.</span>` : ""}
+          </div>
+        </div>
+      </div>`).join("");
+  } catch(e) {
+    container.innerHTML = '<p class="empty-state">โหลดไม่ได้ในขณะนี้</p>';
+  }
 })();
 </script>
 </body>
