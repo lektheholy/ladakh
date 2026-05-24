@@ -3,11 +3,11 @@
 // ===================================================
 
 const SITE = {
-  teacherName: "ครูสมหญิง วิชาการดี",
+  teacherName: "ครูนัตพล ชะเมรัมย์",
   subject: "วิทยาศาสตร์ | มัธยมศึกษาตอนต้น",
   school: "โรงเรียนตัวอย่าง",
   logo: "🔬",
-  contact: { email: "somying@school.ac.th", line: "@krusom" },
+  contact: { email: "natthaphon@school.ac.th", line: "@kru_lek" },
   menuItems: [
     { label: "หน้าแรก",       href: "index.html",    icon: "🏠" },
     { label: "เกี่ยวกับครู",   href: "about.html",    icon: "👩‍🏫" },
