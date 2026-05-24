@@ -87,3 +87,30 @@
 <script src="nav.js"></script>
 </body>
 </html>
+<script type="module">
+// โหลดประกาศจาก Firestore (ถ้ามี) แทน hardcoded
+import { getCollection } from "./firebase.js";
+(async () => {
+  try {
+    const items = await getCollection("announcements");
+    if (!items.length) return;
+    items.sort((a,b) => b.createdAt - a.createdAt);
+    const grid = document.querySelector(".card-grid");
+    if (!grid) return;
+    const typeMap = {
+      new: { label:"ใหม่", color:"var(--green-light)" },
+      important: { label:"สำคัญ", color:"var(--amber)", badge:"badge-amber" },
+      activity: { label:"กิจกรรม", color:"#9bcfb8" },
+    };
+    grid.innerHTML = items.slice(0,3).map(item => {
+      const t = typeMap[item.type] || typeMap.new;
+      return `<div class="card" style="border-left:4px solid ${t.color};">
+        <span class="badge ${t.badge||""}">${t.label}</span>
+        <h3 style="font-size:15px;margin:.5rem 0 .25rem;">${item.title}</h3>
+        <p style="font-size:13px;color:var(--text-mid);">${item.body||""}</p>
+        <p style="font-size:12px;color:var(--text-light);margin-top:.5rem;">${item.date||""}</p>
+      </div>`;
+    }).join("");
+  } catch(e) { /* ใช้ข้อมูล hardcoded ถ้าโหลดไม่ได้ */ }
+})();
+</script>

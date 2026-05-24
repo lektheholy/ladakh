@@ -256,3 +256,44 @@ tr:nth-child(even) td { background: var(--green-pale); }
   .nav-links.open { display: flex; }
   .nav-hamburger { display: flex; }
 }
+
+/* ── Admin nav buttons ── */
+.btn-nav-login {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: 8px;
+  background: var(--green-pale);
+  color: var(--green-dark);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1.5px solid var(--green-light);
+  transition: background .15s;
+  white-space: nowrap;
+}
+.btn-nav-login:hover { background: var(--green-light); color: #fff; }
+
+.btn-nav-logout {
+  background: #fce8e8;
+  color: #a32d2d;
+  border: none;
+  border-radius: 7px;
+  padding: 4px 9px;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: 'Sarabun', sans-serif;
+  transition: background .15s;
+}
+.btn-nav-logout:hover { background: #f5c6c6; }
+
+.nav-link--admin {
+  background: var(--amber-pale) !important;
+  color: #a06800 !important;
+}
+.nav-link--admin:hover,
+.nav-link--admin.active {
+  background: var(--amber) !important;
+  color: #fff !important;
+}

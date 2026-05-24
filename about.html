@@ -117,3 +117,21 @@
 <script src="nav.js"></script>
 </body>
 </html>
+<script type="module">
+import { getDocument } from "./firebase.js";
+(async () => {
+  try {
+    const profile = await getDocument("settings/profile");
+    if (!profile) return;
+    // อัพเดตชื่อ
+    const nameEl = document.querySelector("h2[style*='green-dark']");
+    if (nameEl && profile.name) nameEl.textContent = profile.name;
+    // อัพเดตตำแหน่ง
+    const posEl = nameEl?.nextElementSibling;
+    if (posEl && profile.position) posEl.textContent = profile.position;
+    // อัพเดต bio
+    const bioEls = document.querySelectorAll("p[style*='text-mid'][style*='font-size:14px']");
+    bioEls.forEach(el => { if (profile.bio) el.textContent = profile.bio; });
+  } catch(e) {}
+})();
+</script>

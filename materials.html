@@ -165,3 +165,39 @@ function filterCards(tag, btn) {
 </script>
 </body>
 </html>
+<script type="module">
+import { getCollection } from "./firebase.js";
+(async () => {
+  try {
+    const items = await getCollection("materials");
+    if (!items.length) return;
+    items.sort((a,b) => b.createdAt - a.createdAt);
+    const typeIcon = { slide:"📊", worksheet:"📝", video:"🎥" };
+    const typeBg   = { slide:"#e8f0fe", worksheet:"#e8f5ee", video:"#fce8e8" };
+    const typeBtn  = { slide:"⬇ ดาวน์โหลด", worksheet:"⬇ ดาวน์โหลด", video:"▶ ดูวิดีโอ" };
+    const levels   = { m1:"ม.1", m2:"ม.2", m3:"ม.3" };
+    // สร้าง section ใหม่ต่อจากเดิม
+    const wrap = document.querySelector(".page-wrap");
+    const header = document.createElement("h2");
+    header.className = "section-title";
+    header.style.marginTop = "2rem";
+    header.textContent = "✨ สื่อที่เพิ่มล่าสุด";
+    const grid = document.createElement("div");
+    grid.className = "card-grid";
+    grid.innerHTML = items.slice(0,6).map(item => `
+      <div class="material-card" data-tags="${item.level} ${item.type}" style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;display:flex;gap:1rem;align-items:flex-start;">
+        <div style="width:44px;height:44px;border-radius:10px;background:${typeBg[item.type]||"#eee"};display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;">${typeIcon[item.type]||"📄"}</div>
+        <div>
+          <p style="font-size:14px;font-weight:600;color:var(--green-dark);">${item.title}</p>
+          <p style="font-size:12px;color:var(--text-light);margin:.2rem 0 .5rem;">${levels[item.level]||""} · ${item.desc||""}</p>
+          <span class="badge" style="margin-right:.4rem;">${levels[item.level]||""}</span>
+          ${item.url ? `<a href="${item.url}" target="_blank" class="btn btn-outline" style="font-size:12px;padding:5px 12px;">${typeBtn[item.type]||"เปิด"}</a>` : ""}
+        </div>
+      </div>`).join("");
+    // แทรกก่อน filter bar
+    const filterBar = wrap.querySelector(".filter-bar");
+    wrap.insertBefore(grid, filterBar);
+    wrap.insertBefore(header, grid);
+  } catch(e) {}
+})();
+</script>

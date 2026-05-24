@@ -143,3 +143,41 @@
 <script src="nav.js"></script>
 </body>
 </html>
+<script type="module">
+import { getCollection } from "./firebase.js";
+(async () => {
+  try {
+    const events = await getCollection("events");
+    if (!events.length) return;
+    events.sort((a,b) => (a.date||"").localeCompare(b.date||""));
+    const typeColor = { exam:"#e74c3c", submit:"#f5a623", activity:"#2d7a52", other:"#3498db" };
+    const typeLabel = { exam:"สอบ", submit:"ส่งงาน", activity:"กิจกรรม", other:"อื่นๆ" };
+    const wrap = document.querySelector(".page-wrap");
+    const header = document.createElement("h2");
+    header.className = "section-title";
+    header.textContent = "📌 กำหนดการที่เพิ่มโดยครู";
+    const card = document.createElement("div");
+    card.className = "card";
+    card.style.marginBottom = "2.5rem";
+    card.innerHTML = events.map(ev => {
+      const d = ev.date ? new Date(ev.date) : null;
+      const day = d ? d.getDate() : "–";
+      const months = ["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
+      const mon = d ? months[d.getMonth()] : "";
+      return `<div class="event-row">
+        <div class="event-date"><div class="event-day">${day}</div><div class="event-month">${mon}</div></div>
+        <span class="dot" style="background:${typeColor[ev.type]||"#3498db"};width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:5px;"></span>
+        <div>
+          <p style="font-size:14px;font-weight:600;">${ev.title}</p>
+          <p style="font-size:12px;color:var(--text-light);">${ev.desc||""}</p>
+          <span class="badge" style="margin-top:.4rem;font-size:11px;">${typeLabel[ev.type]||""}</span>
+        </div>
+      </div>`;
+    }).join("");
+    // แทรกก่อน section แรก
+    const firstSection = wrap.querySelector("section");
+    wrap.insertBefore(card, firstSection);
+    wrap.insertBefore(header, card);
+  } catch(e) {}
+})();
+</script>

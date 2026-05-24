@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>จัดการเนื้อหา | ครูสมหญิง</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Login screen ── */
+    #loginScreen {
+      min-height: calc(100vh - var(--nav-h));
+      display: flex; align-items: center; justify-content: center;
+      padding: 2rem;
+    }
+    .login-card {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      width: 100%; max-width: 400px;
+      box-shadow: 0 8px 40px rgba(0,60,30,.12);
+      text-align: center;
+    }
+    .login-card h2 { font-family:'Mitr',sans-serif; color:var(--green-dark); margin:.75rem 0 .25rem; font-size:1.5rem; }
+    .login-card p  { font-size:13px; color:var(--text-light); margin-bottom:1.75rem; }
+    .login-field { margin-bottom:1rem; text-align:left; }
+    .login-field label { font-size:13px; font-weight:500; color:var(--text-mid); display:block; margin-bottom:4px; }
+    .login-field input {
+      width:100%; padding:10px 14px; border:1.5px solid var(--border);
+      border-radius:10px; font-family:'Sarabun',sans-serif; font-size:14px;
+      background:var(--bg); color:var(--text-dark); transition:border .15s;
+    }
+    .login-field input:focus { outline:none; border-color:var(--green-mid); background:#fff; }
+    .login-btn {
+      width:100%; padding:12px; border:none; border-radius:10px;
+      background:var(--green-mid); color:#fff;
+      font-family:'Sarabun',sans-serif; font-size:15px; font-weight:600;
+      cursor:pointer; transition:opacity .15s, transform .1s;
+      margin-top:.5rem;
+    }
+    .login-btn:hover { opacity:.88; }
+    .login-btn:active { transform:scale(.97); }
+    #loginError { color:#c0392b; font-size:13px; margin-top:.75rem; display:none; }
+
+    /* ── Admin layout ── */
+    #adminScreen { display:none; }
+
+    .admin-tabs {
+      display: flex; gap: 4px; flex-wrap: wrap;
+      background: var(--white); border-bottom: 1.5px solid var(--border);
+      padding: .75rem 1.5rem; position: sticky; top: var(--nav-h); z-index: 100;
+    }
+    .tab-btn {
+      padding: 7px 16px; border-radius: 8px; border: 1.5px solid transparent;
+      background: transparent; font-family:'Sarabun',sans-serif; font-size:14px;
+      font-weight:500; cursor:pointer; color:var(--text-mid); transition:all .15s;
+    }
+    .tab-btn:hover { background:var(--green-pale); color:var(--green-dark); }
+    .tab-btn.active { background:var(--green-mid); color:#fff; border-color:var(--green-mid); }
+    .tab-panel { display:none; }
+    .tab-panel.active { display:block; }
+
+    /* ── Admin form ── */
+    .admin-form { display:flex; flex-direction:column; gap:1rem; }
+    .form-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:.75rem; }
+    .field label { font-size:13px; font-weight:500; color:var(--text-mid); display:block; margin-bottom:4px; }
+    .field input, .field textarea, .field select {
+      width:100%; padding:9px 12px; border:1.5px solid var(--border);
+      border-radius:8px; font-family:'Sarabun',sans-serif; font-size:14px;
+      background:var(--bg); color:var(--text-dark); transition:border .15s;
+    }
+    .field input:focus, .field textarea:focus, .field select:focus {
+      outline:none; border-color:var(--green-mid); background:#fff;
+    }
+    .field textarea { resize:vertical; min-height:80px; }
+
+    /* ── Items list ── */
+    .item-list { display:flex; flex-direction:column; gap:.6rem; margin-top:1.25rem; }
+    .item-row {
+      background:var(--white); border:1px solid var(--border); border-radius:10px;
+      padding:.8rem 1rem; display:flex; align-items:flex-start; gap:.75rem;
+    }
+    .item-row-body { flex:1; min-width:0; }
+    .item-row-title { font-size:14px; font-weight:600; color:var(--green-dark); }
+    .item-row-sub   { font-size:12px; color:var(--text-light); margin-top:2px; }
+    .btn-del {
+      background:#fce8e8; color:#a32d2d; border:none; border-radius:7px;
+      padding:5px 10px; font-size:12px; cursor:pointer; flex-shrink:0;
+      font-family:'Sarabun',sans-serif; transition:background .15s;
+    }
+    .btn-del:hover { background:#f5c6c6; }
+
+    /* ── Toast ── */
+    #toast {
+      position:fixed; bottom:2rem; left:50%; transform:translateX(-50%) translateY(20px);
+      background:var(--green-dark); color:#fff; padding:.7rem 1.4rem;
+      border-radius:99px; font-size:14px; font-weight:500; z-index:9999;
+      opacity:0; transition:opacity .2s, transform .2s; pointer-events:none;
+    }
+    #toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+    .section-desc { font-size:13px; color:var(--text-light); margin-bottom:1.25rem; }
+  </style>
+</head>
+<body>
+
+<!-- ── LOGIN ─────────────────────────────────────── -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div style="font-size:3rem;">🔐</div>
+    <h2>เข้าสู่ระบบครู</h2>
+    <p>สำหรับครูสมหญิง วิชาการดี เท่านั้น</p>
+    <div class="login-field">
+      <label>อีเมล</label>
+      <input type="email" id="loginEmail" placeholder="somying@school.ac.th" />
+    </div>
+    <div class="login-field">
+      <label>รหัสผ่าน</label>
+      <input type="password" id="loginPassword" placeholder="••••••••"
+             onkeydown="if(event.key==='Enter') doLogin()" />
+    </div>
+    <button class="login-btn" onclick="doLogin()" id="loginSubmitBtn">เข้าสู่ระบบ</button>
+    <p id="loginError"></p>
+  </div>
+</div>
+
+<!-- ── ADMIN DASHBOARD ───────────────────────────── -->
+<div id="adminScreen">
+  <div class="admin-tabs">
+    <button class="tab-btn active" onclick="switchTab('announcements',this)">📢 ประกาศ</button>
+    <button class="tab-btn" onclick="switchTab('materials',this)">📚 สื่อการสอน</button>
+    <button class="tab-btn" onclick="switchTab('awards',this)">🏆 รางวัล</button>
+    <button class="tab-btn" onclick="switchTab('projects',this)">📁 โปรเจกต์</button>
+    <button class="tab-btn" onclick="switchTab('events',this)">📅 กำหนดการ</button>
+    <button class="tab-btn" onclick="switchTab('profile',this)">👩‍🏫 โปรไฟล์ครู</button>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:.5rem;">
+      <span style="font-size:13px;color:var(--text-light);" id="adminEmailLabel"></span>
+      <button onclick="doLogout()" class="btn btn-outline" style="font-size:13px;padding:6px 14px;">↩ ออกจากระบบ</button>
+    </div>
+  </div>
+
+  <div class="page-wrap">
+
+    <!-- ── ประกาศ ── -->
+    <div class="tab-panel active" id="tab-announcements">
+      <h2 class="section-title">📢 จัดการประกาศ</h2>
+      <p class="section-desc">ประกาศจะแสดงบนหน้าแรกในส่วน "ประกาศล่าสุด"</p>
+      <div class="card admin-form">
+        <div class="form-row">
+          <div class="field"><label>หัวข้อประกาศ</label><input type="text" id="ann_title" placeholder="เช่น อัพโหลดสื่อบทที่ 5 แล้ว" /></div>
+          <div class="field">
+            <label>ประเภท</label>
+            <select id="ann_type">
+              <option value="new">ใหม่</option>
+              <option value="important">สำคัญ</option>
+              <option value="activity">กิจกรรม</option>
+            </select>
+          </div>
+        </div>
+        <div class="field"><label>รายละเอียด</label><textarea id="ann_body" placeholder="รายละเอียดประกาศ..."></textarea></div>
+        <div class="field"><label>วันที่</label><input type="date" id="ann_date" /></div>
+        <button class="btn btn-primary" onclick="saveAnnouncement()">➕ เพิ่มประกาศ</button>
+      </div>
+      <div class="item-list" id="ann_list"></div>
+    </div>
+
+    <!-- ── สื่อการสอน ── -->
+    <div class="tab-panel" id="tab-materials">
+      <h2 class="section-title">📚 จัดการสื่อการสอน</h2>
+      <p class="section-desc">สื่อที่เพิ่มจะแสดงในหน้าสื่อการสอน</p>
+      <div class="card admin-form">
+        <div class="form-row">
+          <div class="field"><label>ชื่อสื่อ</label><input type="text" id="mat_title" placeholder="เช่น บทที่ 5 — แรงและพลังงาน" /></div>
+          <div class="field">
+            <label>ระดับชั้น</label>
+            <select id="mat_level">
+              <option value="m1">ม.1</option>
+              <option value="m2">ม.2</option>
+              <option value="m3">ม.3</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>ประเภท</label>
+            <select id="mat_type">
+              <option value="slide">📊 สไลด์</option>
+              <option value="worksheet">📝 ใบงาน</option>
+              <option value="video">🎥 วิดีโอ</option>
+            </select>
+          </div>
+          <div class="field"><label>ลิงก์ดาวน์โหลด / ดูวิดีโอ</label><input type="url" id="mat_url" placeholder="https://..." /></div>
+        </div>
+        <div class="field"><label>รายละเอียดเพิ่มเติม</label><input type="text" id="mat_desc" placeholder="เช่น PDF · 5 หน้า" /></div>
+        <button class="btn btn-primary" onclick="saveMaterial()">➕ เพิ่มสื่อ</button>
+      </div>
+      <div class="item-list" id="mat_list"></div>
+    </div>
+
+    <!-- ── รางวัล ── -->
+    <div class="tab-panel" id="tab-awards">
+      <h2 class="section-title">🏆 จัดการรางวัลนักเรียน</h2>
+      <p class="section-desc">รางวัลจะแสดงในหน้า "ผลงานนักเรียน"</p>
+      <div class="card admin-form">
+        <div class="field"><label>ชื่อรางวัล</label><input type="text" id="aw_title" placeholder="เช่น ชนะเลิศ ตอบปัญหาวิทยาศาสตร์" /></div>
+        <div class="form-row">
+          <div class="field"><label>นักเรียน / ทีม</label><input type="text" id="aw_student" placeholder="เช่น ด.ญ.สุชาดา และ ด.ช.พิพัฒน์" /></div>
+          <div class="field"><label>ห้อง / ปี</label><input type="text" id="aw_class" placeholder="เช่น ม.2/1 · มิถุนายน 2568" /></div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>เหรียญ</label>
+            <select id="aw_medal">
+              <option value="🥇">🥇 ทอง</option>
+              <option value="🥈">🥈 เงิน</option>
+              <option value="🥉">🥉 ทองแดง</option>
+              <option value="🏅">🏅 อื่นๆ</option>
+            </select>
+          </div>
+          <div class="field"><label>ระดับการแข่งขัน</label><input type="text" id="aw_level" placeholder="เช่น ระดับภาค" /></div>
+        </div>
+        <button class="btn btn-primary" onclick="saveAward()">➕ เพิ่มรางวัล</button>
+      </div>
+      <div class="item-list" id="aw_list"></div>
+    </div>
+
+    <!-- ── โปรเจกต์ ── -->
+    <div class="tab-panel" id="tab-projects">
+      <h2 class="section-title">📁 จัดการโปรเจกต์ดีเด่น</h2>
+      <div class="card admin-form">
+        <div class="field"><label>ชื่อโปรเจกต์</label><input type="text" id="pj_title" placeholder="เช่น โครงงานน้ำสะอาดจากพืชธรรมชาติ" /></div>
+        <div class="form-row">
+          <div class="field"><label>ระดับชั้น / ปี</label><input type="text" id="pj_class" placeholder="เช่น ม.2 ปีการศึกษา 2568" /></div>
+          <div class="field"><label>ชื่อทีม</label><input type="text" id="pj_team" placeholder="เช่น ด.ช.ภูมิ, ด.ญ.ฟ้า" /></div>
+        </div>
+        <div class="field"><label>คำอธิบาย</label><textarea id="pj_desc" placeholder="อธิบายโปรเจกต์..."></textarea></div>
+        <button class="btn btn-primary" onclick="saveProject()">➕ เพิ่มโปรเจกต์</button>
+      </div>
+      <div class="item-list" id="pj_list"></div>
+    </div>
+
+    <!-- ── กำหนดการ ── -->
+    <div class="tab-panel" id="tab-events">
+      <h2 class="section-title">📅 จัดการกำหนดการ</h2>
+      <p class="section-desc">กำหนดการจะแสดงในหน้าปฏิทิน</p>
+      <div class="card admin-form">
+        <div class="field"><label>ชื่อกิจกรรม / กำหนดการ</label><input type="text" id="ev_title" placeholder="เช่น สอบกลางภาค ม.1" /></div>
+        <div class="form-row">
+          <div class="field"><label>วันที่</label><input type="date" id="ev_date" /></div>
+          <div class="field">
+            <label>ประเภท</label>
+            <select id="ev_type">
+              <option value="exam">🔴 สอบ</option>
+              <option value="submit">🟠 ส่งงาน</option>
+              <option value="activity">🟢 กิจกรรม</option>
+              <option value="other">🔵 อื่นๆ</option>
+            </select>
+          </div>
+        </div>
+        <div class="field"><label>รายละเอียด (สถานที่ / เวลา)</label><input type="text" id="ev_desc" placeholder="เช่น ห้อง 201 · 09:00–11:00 น." /></div>
+        <button class="btn btn-primary" onclick="saveEvent()">➕ เพิ่มกำหนดการ</button>
+      </div>
+      <div class="item-list" id="ev_list"></div>
+    </div>
+
+    <!-- ── โปรไฟล์ครู ── -->
+    <div class="tab-panel" id="tab-profile">
+      <h2 class="section-title">👩‍🏫 แก้ไขข้อมูลครู</h2>
+      <div class="card admin-form" id="profileForm">
+        <div class="form-row">
+          <div class="field"><label>ชื่อ-นามสกุล</label><input type="text" id="pr_name" placeholder="ครูสมหญิง วิชาการดี" /></div>
+          <div class="field"><label>ตำแหน่ง / วิชา</label><input type="text" id="pr_position" placeholder="ครูวิทยาศาสตร์ | ประสบการณ์ 15 ปี" /></div>
+        </div>
+        <div class="field"><label>คำแนะนำตัว</label><textarea id="pr_bio" rows="4"></textarea></div>
+        <div class="form-row">
+          <div class="field"><label>อีเมล</label><input type="email" id="pr_email" /></div>
+          <div class="field"><label>Line OA</label><input type="text" id="pr_line" /></div>
+        </div>
+        <div class="field"><label>ห้องพักครู</label><input type="text" id="pr_room" /></div>
+        <button class="btn btn-primary" onclick="saveProfile()">💾 บันทึกข้อมูล</button>
+      </div>
+    </div>
+
+  </div><!-- .page-wrap -->
+</div><!-- #adminScreen -->
+
+<div id="toast"></div>
+
+<footer class="site-footer">
+  © 2568 ครูสมหญิง วิชาการดี | โรงเรียนตัวอย่าง
+</footer>
+
+<script src="nav.js"></script>
+<script type="module">
+import { auth, db, login, logout, onAuth,
+         getCollection, addDocument, deleteDocument,
+         getDocument, setDocument }
+  from "./firebase.js";
+
+// ── Expose logout to nav ──────────────────────────
+window._fbLogout = () => logout();
+
+// ── Auth state ────────────────────────────────────
+onAuth(user => {
+  window._fbAuth = user;
+  window.dispatchEvent(new CustomEvent("authChanged", { detail: user }));
+  if (user) {
+    document.getElementById("loginScreen").style.display = "none";
+    document.getElementById("adminScreen").style.display = "block";
+    document.getElementById("adminEmailLabel").textContent = user.email;
+    loadAll();
+  } else {
+    document.getElementById("loginScreen").style.display = "flex";
+    document.getElementById("adminScreen").style.display = "none";
+  }
+});
+
+// ── Login ─────────────────────────────────────────
+window.doLogin = async function() {
+  const email = document.getElementById("loginEmail").value.trim();
+  const pass  = document.getElementById("loginPassword").value;
+  const errEl = document.getElementById("loginError");
+  const btn   = document.getElementById("loginSubmitBtn");
+  errEl.style.display = "none";
+  btn.textContent = "กำลังเข้าสู่ระบบ...";
+  btn.disabled = true;
+  try {
+    await login(email, pass);
+  } catch(e) {
+    errEl.textContent = "อีเมลหรือรหัสผ่านไม่ถูกต้อง";
+    errEl.style.display = "block";
+    btn.textContent = "เข้าสู่ระบบ";
+    btn.disabled = false;
+  }
+};
+
+// ── Logout ────────────────────────────────────────
+window.doLogout = async function() {
+  await logout();
+  location.reload();
+};
+
+// ── Toast ─────────────────────────────────────────
+function toast(msg) {
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.classList.add("show");
+  setTimeout(() => el.classList.remove("show"), 2500);
+}
+
+// ── Tab switch ────────────────────────────────────
+window.switchTab = function(id, btn) {
+  document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  document.getElementById("tab-" + id).classList.add("active");
+  btn.classList.add("active");
+};
+
+// ── Render helpers ────────────────────────────────
+function renderList(listId, items, renderFn) {
+  const el = document.getElementById(listId);
+  if (!el) return;
+  if (!items.length) { el.innerHTML = '<p style="font-size:13px;color:var(--text-light);padding:.5rem 0;">ยังไม่มีรายการ</p>'; return; }
+  el.innerHTML = items.map(renderFn).join("");
+}
+function delBtn(col, id, loadFn) {
+  return `<button class="btn-del" onclick="delItem('${col}','${id}')">🗑 ลบ</button>`;
+}
+window.delItem = async function(col, id) {
+  if (!confirm("ลบรายการนี้?")) return;
+  await deleteDocument(`${col}/${id}`);
+  toast("ลบแล้ว");
+  loadAll();
+};
+
+// ── Load all ─────────────────────────────────────
+async function loadAll() {
+  loadAnnouncements(); loadMaterials(); loadAwards(); loadProjects(); loadEvents(); loadProfile();
+}
+
+// ─── ANNOUNCEMENTS ────────────────────────────────
+async function loadAnnouncements() {
+  const items = await getCollection("announcements");
+  items.sort((a,b) => b.createdAt - a.createdAt);
+  renderList("ann_list", items, item => `
+    <div class="item-row">
+      <div class="item-row-body">
+        <div class="item-row-title">${item.title}</div>
+        <div class="item-row-sub">${item.body || ""} · ${item.date || ""} · <span class="badge">${item.type || ""}</span></div>
+      </div>
+      ${delBtn("announcements", item.id)}
+    </div>`);
+}
+window.saveAnnouncement = async function() {
+  const title = document.getElementById("ann_title").value.trim();
+  if (!title) return alert("กรุณากรอกหัวข้อ");
+  await addDocument("announcements", {
+    title,
+    body: document.getElementById("ann_body").value.trim(),
+    type: document.getElementById("ann_type").value,
+    date: document.getElementById("ann_date").value,
+  });
+  ["ann_title","ann_body","ann_date"].forEach(id => document.getElementById(id).value = "");
+  toast("✅ เพิ่มประกาศแล้ว");
+  loadAnnouncements();
+};
+
+// ─── MATERIALS ────────────────────────────────────
+async function loadMaterials() {
+  const items = await getCollection("materials");
+  items.sort((a,b) => b.createdAt - a.createdAt);
+  renderList("mat_list", items, item => `
+    <div class="item-row">
+      <div class="item-row-body">
+        <div class="item-row-title">${item.title}</div>
+        <div class="item-row-sub">${item.level?.toUpperCase()} · ${item.type} · ${item.desc || ""}</div>
+      </div>
+      ${delBtn("materials", item.id)}
+    </div>`);
+}
+window.saveMaterial = async function() {
+  const title = document.getElementById("mat_title").value.trim();
+  if (!title) return alert("กรุณากรอกชื่อสื่อ");
+  await addDocument("materials", {
+    title,
+    level: document.getElementById("mat_level").value,
+    type:  document.getElementById("mat_type").value,
+    url:   document.getElementById("mat_url").value.trim(),
+    desc:  document.getElementById("mat_desc").value.trim(),
+  });
+  ["mat_title","mat_url","mat_desc"].forEach(id => document.getElementById(id).value = "");
+  toast("✅ เพิ่มสื่อแล้ว");
+  loadMaterials();
+};
+
+// ─── AWARDS ───────────────────────────────────────
+async function loadAwards() {
+  const items = await getCollection("awards");
+  items.sort((a,b) => b.createdAt - a.createdAt);
+  renderList("aw_list", items, item => `
+    <div class="item-row">
+      <span style="font-size:1.6rem;flex-shrink:0;">${item.medal}</span>
+      <div class="item-row-body">
+        <div class="item-row-title">${item.title}</div>
+        <div class="item-row-sub">${item.student} · ${item.class_} · <span class="badge">${item.level}</span></div>
+      </div>
+      ${delBtn("awards", item.id)}
+    </div>`);
+}
+window.saveAward = async function() {
+  const title = document.getElementById("aw_title").value.trim();
+  if (!title) return alert("กรุณากรอกชื่อรางวัล");
+  await addDocument("awards", {
+    title,
+    student: document.getElementById("aw_student").value.trim(),
+    class_:  document.getElementById("aw_class").value.trim(),
+    medal:   document.getElementById("aw_medal").value,
+    level:   document.getElementById("aw_level").value.trim(),
+  });
+  ["aw_title","aw_student","aw_class","aw_level"].forEach(id => document.getElementById(id).value = "");
+  toast("✅ เพิ่มรางวัลแล้ว");
+  loadAwards();
+};
+
+// ─── PROJECTS ─────────────────────────────────────
+async function loadProjects() {
+  const items = await getCollection("projects");
+  items.sort((a,b) => b.createdAt - a.createdAt);
+  renderList("pj_list", items, item => `
+    <div class="item-row">
+      <div class="item-row-body">
+        <div class="item-row-title">${item.title}</div>
+        <div class="item-row-sub">${item.class_} · ทีม: ${item.team}</div>
+      </div>
+      ${delBtn("projects", item.id)}
+    </div>`);
+}
+window.saveProject = async function() {
+  const title = document.getElementById("pj_title").value.trim();
+  if (!title) return alert("กรุณากรอกชื่อโปรเจกต์");
+  await addDocument("projects", {
+    title,
+    class_: document.getElementById("pj_class").value.trim(),
+    team:   document.getElementById("pj_team").value.trim(),
+    desc:   document.getElementById("pj_desc").value.trim(),
+  });
+  ["pj_title","pj_class","pj_team","pj_desc"].forEach(id => document.getElementById(id).value = "");
+  toast("✅ เพิ่มโปรเจกต์แล้ว");
+  loadProjects();
+};
+
+// ─── EVENTS ───────────────────────────────────────
+async function loadEvents() {
+  const items = await getCollection("events");
+  items.sort((a,b) => (a.date||"").localeCompare(b.date||""));
+  const typeLabel = { exam:"🔴 สอบ", submit:"🟠 ส่งงาน", activity:"🟢 กิจกรรม", other:"🔵 อื่นๆ" };
+  renderList("ev_list", items, item => `
+    <div class="item-row">
+      <div class="item-row-body">
+        <div class="item-row-title">${item.title}</div>
+        <div class="item-row-sub">${item.date} · ${typeLabel[item.type]||item.type} · ${item.desc||""}</div>
+      </div>
+      ${delBtn("events", item.id)}
+    </div>`);
+}
+window.saveEvent = async function() {
+  const title = document.getElementById("ev_title").value.trim();
+  if (!title) return alert("กรุณากรอกชื่อกิจกรรม");
+  await addDocument("events", {
+    title,
+    date: document.getElementById("ev_date").value,
+    type: document.getElementById("ev_type").value,
+    desc: document.getElementById("ev_desc").value.trim(),
+  });
+  ["ev_title","ev_date","ev_desc"].forEach(id => document.getElementById(id).value = "");
+  toast("✅ เพิ่มกำหนดการแล้ว");
+  loadEvents();
+};
+
+// ─── PROFILE ──────────────────────────────────────
+async function loadProfile() {
+  const data = await getDocument("settings/profile");
+  if (!data) return;
+  const fields = { pr_name:"name", pr_position:"position", pr_bio:"bio", pr_email:"email", pr_line:"line", pr_room:"room" };
+  for (const [elId, key] of Object.entries(fields)) {
+    const el = document.getElementById(elId);
+    if (el && data[key]) el.value = data[key];
+  }
+}
+window.saveProfile = async function() {
+  await setDocument("settings/profile", {
+    name:     document.getElementById("pr_name").value.trim(),
+    position: document.getElementById("pr_position").value.trim(),
+    bio:      document.getElementById("pr_bio").value.trim(),
+    email:    document.getElementById("pr_email").value.trim(),
+    line:     document.getElementById("pr_line").value.trim(),
+    room:     document.getElementById("pr_room").value.trim(),
+  });
+  toast("✅ บันทึกข้อมูลครูแล้ว");
+};
+</script>
+</body>
+</html>

@@ -140,3 +140,47 @@
 <script src="nav.js"></script>
 </body>
 </html>
+<script type="module">
+import { getCollection } from "./firebase.js";
+(async () => {
+  try {
+    // โหลดรางวัล
+    const awards = await getCollection("awards");
+    if (awards.length) {
+      awards.sort((a,b) => b.createdAt - a.createdAt);
+      const medalColor = { "🥇":"#f5c518", "🥈":"#b8b8b8", "🥉":"#cd7f32", "🏅":"var(--green-light)" };
+      const awardSec = document.querySelector(".award-card")?.closest("section") || document.querySelector(".page-wrap section");
+      // หา container ของ award-card
+      const awardContainer = document.querySelector(".page-wrap > section:first-child > div");
+      if (awardContainer) {
+        const newItems = awards.map(a => `
+          <div class="award-card" style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;display:flex;gap:1rem;align-items:flex-start;border-left:4px solid ${medalColor[a.medal]||"var(--green-light)"};">
+            <span style="font-size:2rem;">${a.medal}</span>
+            <div>
+              <p style="font-size:15px;font-weight:600;color:var(--green-dark);">${a.title}</p>
+              <p style="font-size:13px;color:var(--text-mid);">${a.student} · ${a.class_}</p>
+              <span class="badge">${a.level}</span>
+            </div>
+          </div>`).join("");
+        awardContainer.insertAdjacentHTML("afterbegin", newItems);
+      }
+    }
+    // โหลดโปรเจกต์
+    const projects = await getCollection("projects");
+    if (projects.length) {
+      projects.sort((a,b) => b.createdAt - a.createdAt);
+      const pjGrid = document.querySelectorAll(".page-wrap section")[1]?.querySelector(".card-grid");
+      if (pjGrid) {
+        const newItems = projects.map(p => `
+          <div class="card">
+            <span class="badge" style="margin-bottom:.5rem;display:inline-block;">${p.class_}</span>
+            <h3 style="font-size:15px;color:var(--green-dark);margin:.25rem 0;">${p.title}</h3>
+            <p style="font-size:13px;color:var(--text-mid);">${p.desc||""}</p>
+            <p style="font-size:12px;color:var(--text-light);margin-top:.5rem;">ทีม: ${p.team}</p>
+          </div>`).join("");
+        pjGrid.insertAdjacentHTML("afterbegin", newItems);
+      }
+    }
+  } catch(e) {}
+})();
+</script>
