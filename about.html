@@ -9,7 +9,7 @@
 
     /* ── Hero profile card ─────────────────────── */
     .profile-hero {
-      background: var(--forest);
+      background: var(--black);
       padding: 2rem 2rem 2.25rem;
       display: flex; gap: 2rem; flex-wrap: wrap; align-items: center;
       margin-bottom: 2.5rem;
@@ -25,7 +25,7 @@
       }
     .profile-info { flex: 1; min-width: 200px; }
     .profile-name {
-      font-family: 'Mitr', sans-serif;
+      font-family: 'Special Elite', 'Courier Prime', monospace;
       font-size: 1.75rem; font-weight: 600;
       color: #fff; line-height: 1.2; margin-bottom: .3rem;
     }
@@ -48,7 +48,7 @@
     .info-card-header {
       display: flex; align-items: center; gap: .65rem;
       padding: .9rem 1.25rem;
-      background: var(--off-white);
+      background: var(--gray-pale);
       border-bottom: 1px solid var(--border);
     }
     .info-card-header .icon-wrap {
@@ -59,7 +59,7 @@
       border: 1px solid var(--border);
     }
     .info-card-header h2 {
-      font-family: 'Mitr', sans-serif;
+      font-family: 'Special Elite', 'Courier Prime', monospace;
       font-size: 1rem; font-weight: 600;
       color: var(--green-dark); margin: 0;
     }
@@ -70,7 +70,7 @@
     .tl::before {
       content: "";
       position: absolute; left: .6rem; top: .6rem; bottom: .6rem;
-      width: 1px; background: var(--border);
+      width: 1px; background: var(--border-dark);
     }
     .tl-item {
       position: relative;
@@ -111,7 +111,7 @@
 
     /* ── Degree highlight block ─────────────────── */
     .degree-block {
-      background: var(--forest);
+      background: var(--black);
       padding: 1.1rem 1.25rem;
       margin-bottom: .85rem;
       position: relative;
@@ -124,7 +124,7 @@
       font-size: 2.2rem; opacity: .18;
     }
     .degree-block .deg-name {
-      font-family: 'Mitr', sans-serif;
+      font-family: 'Special Elite', 'Courier Prime', monospace;
       font-size: 15px; font-weight: 600;
       color: #fff; line-height: 1.3;
     }
@@ -137,9 +137,9 @@
       margin-top: .6rem; align-items: center;
     }
     .deg-badge {
-      background: rgba(255,255,255,.2);
-      border: 1px solid rgba(255,255,255,.3);
-      color: #fff;
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.2);
+      color: var(--paper);
       padding: 3px 10px; font-size: 11px; font-weight: 600;
     }
     .deg-badge-gold {
@@ -157,7 +157,7 @@
       background: var(--white); border: 1px solid var(--border);
       overflow: hidden;
     }
-    .award-item:hover { background: var(--off-white); }
+    .award-item:hover { background: var(--gray-pale); }
     .award-thumb {
       width: 100%; aspect-ratio: 4/3; object-fit: cover;
       display: block; cursor: pointer; background: var(--green-pale);
