@@ -63,7 +63,7 @@ function buildNav() {
       <div id="navAuthArea" style="display:flex;align-items:center;gap:.5rem;margin-left:.5rem;flex-shrink:0;">
         <a href="admin.html" class="btn-nav-login" id="navLoginBtn">ครูล็อกอิน</a>
         <div id="navUserBadge" style="display:none;align-items:center;gap:.5rem;">
-          <span style="font-family:'Courier Prime',monospace;font-size:11px;color:var(--gray-dark);font-weight:700;" id="navUserEmail"></span>
+          <span style="font-family: 'Kanit', sans-serif;font-size:11px;color:var(--gray-dark);font-weight:700;" id="navUserEmail"></span>
           <button onclick="navLogout()" class="btn-nav-logout" title="ออกจากระบบ">↩</button>
         </div>
       </div>

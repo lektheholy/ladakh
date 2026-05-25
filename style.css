@@ -2,7 +2,7 @@
    style.css — typewriter / editorial
    =================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Noto+Serif+Thai:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
 
 /* ── Font preload: hide body until fonts ready to prevent FOUT ── */
 body.fonts-loading { visibility: hidden; }
@@ -44,7 +44,7 @@ body.fonts-loading { visibility: hidden; }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: 'Courier Prime', 'Noto Serif Thai', monospace;
+  font-family: 'Kanit', sans-serif;
   background: var(--paper);
   color: var(--black);
   line-height: 1.85;
@@ -82,7 +82,7 @@ body {
   margin-right: auto;
 }
 .nav-logo {
-  font-family: 'Courier Prime', monospace;
+  font-family: 'Kanit', sans-serif;
   font-size: 16px;
   font-weight: 700;
   width: 30px; height: 30px;
@@ -93,7 +93,7 @@ body {
 .nav-name {
   /* default hidden until Firebase syncs */
   transition: opacity .15s;
-  font-family: 'Courier Prime', monospace;
+  font-family: 'Kanit', sans-serif;
   font-size: 14px;
   font-weight: 400;
   color: var(--black);
@@ -101,8 +101,8 @@ body {
   letter-spacing: .06em;
 }
 .nav-sub {
-  font-family: 'Courier Prime', monospace;
-  font-size: 10.5px;
+  font-family: 'Kanit', sans-serif;
+  font-size: 11px;
   color: var(--gray-mid);
   letter-spacing: .08em;
 }
@@ -118,7 +118,7 @@ body {
   padding: 0 14px;
   height: var(--nav-h);
   text-decoration: none;
-  font-family: 'Courier Prime', 'Noto Serif Thai', monospace;
+  font-family: 'Kanit', sans-serif;
   font-size: 13px;
   font-weight: 400;
   color: var(--gray-mid);
@@ -170,14 +170,14 @@ body {
   text-align: left;
 }
 .hero h1 {
-  font-family: 'Courier Prime', monospace;
+  font-family: 'Kanit', sans-serif;
   font-size: clamp(1.9rem, 5vw, 3.2rem);
-  font-weight: 400;
+  font-weight: 600;
   line-height: 1.25;
   letter-spacing: .04em;
 }
 .hero p {
-  font-family: 'Courier Prime', monospace;
+  font-family: 'Kanit', sans-serif;
   font-size: .9rem;
   opacity: .65;
   margin-top: .75rem;
@@ -189,8 +189,8 @@ body {
   background: transparent;
   border: 1px solid rgba(255,255,255,.25);
   padding: 2px 10px;
-  font-family: 'Courier Prime', monospace;
-  font-size: 10.5px;
+  font-family: 'Kanit', sans-serif;
+  font-size: 11px;
   letter-spacing: .14em;
   text-transform: uppercase;
   margin-bottom: 1.2rem;
@@ -219,11 +219,11 @@ body {
    SECTION TITLE
 ───────────────────────────────────────── */
 .section-title {
-  font-family: 'Courier Prime', monospace;
-  font-size: .68rem;
-  font-weight: 700;
+  font-family: 'Kanit', sans-serif;
+  font-size: .72rem;
+  font-weight: 600;
   color: var(--gray-mid);
-  letter-spacing: .18em;
+  letter-spacing: .14em;
   text-transform: uppercase;
   margin-bottom: 1.5rem;
   padding-bottom: .75rem;
@@ -236,8 +236,8 @@ body {
 .badge {
   display: inline-block;
   padding: 1px 8px;
-  font-family: 'Courier Prime', monospace;
-  font-size: 10.5px;
+  font-family: 'Kanit', sans-serif;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: .08em;
   background: var(--gray-pale);
@@ -259,10 +259,10 @@ body {
   align-items: center;
   gap: 6px;
   padding: 8px 18px;
-  font-family: 'Courier Prime', monospace;
-  font-size: 12.5px;
-  font-weight: 700;
-  letter-spacing: .08em;
+  font-family: 'Kanit', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .03em;
   cursor: pointer;
   text-decoration: none;
   border: 1px solid transparent;
@@ -297,8 +297,8 @@ th {
   color: var(--paper);
   padding: 9px 16px;
   text-align: left;
-  font-family: 'Courier Prime', monospace;
-  font-size: 10.5px;
+  font-family: 'Kanit', sans-serif;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: .12em;
   text-transform: uppercase;
@@ -306,7 +306,7 @@ th {
 td {
   padding: 9px 16px;
   border-bottom: 1px solid var(--border);
-  font-family: 'Courier Prime', 'Noto Serif Thai', monospace;
+  font-family: 'Kanit', sans-serif;
 }
 tr:last-child td { border-bottom: none; }
 tr:hover td { background: var(--gray-pale); }
@@ -317,10 +317,10 @@ tr:hover td { background: var(--gray-pale); }
 .site-footer {
   text-align: center;
   padding: 2rem 1rem;
-  font-family: 'Courier Prime', monospace;
-  font-size: 11px;
+  font-family: 'Kanit', sans-serif;
+  font-size: 12px;
   color: var(--gray-light);
-  letter-spacing: .1em;
+  letter-spacing: .06em;
   border-top: 1px solid var(--border);
   margin-top: 5rem;
 }
@@ -364,10 +364,10 @@ tr:hover td { background: var(--gray-pale); }
   padding: 4px 12px;
   background: transparent;
   color: var(--gray-mid);
-  font-family: 'Courier Prime', monospace;
-  font-size: 11.5px;
-  font-weight: 700;
-  letter-spacing: .08em;
+  font-family: 'Kanit', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .04em;
   text-decoration: none;
   border: 1px solid var(--border);
   transition: border-color .1s, color .1s;
@@ -380,8 +380,8 @@ tr:hover td { background: var(--gray-pale); }
   color: var(--gray-light);
   border: 1px solid var(--border);
   padding: 4px 10px;
-  font-family: 'Courier Prime', monospace;
-  font-size: 11.5px;
+  font-family: 'Kanit', sans-serif;
+  font-size: 12px;
   cursor: pointer;
   transition: color .1s, border-color .1s;
 }
