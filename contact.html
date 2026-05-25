@@ -17,7 +17,7 @@
     .contact-icon-wrap {
       width: 40px; height: 40px;
       border-radius: 10px;
-      background: var(--green-pale);
+      background: var(--gray-pale);
       display: flex; align-items: center; justify-content: center;
       font-size: 1.2rem;
       flex-shrink: 0;
@@ -36,21 +36,25 @@
     }
     input:focus, textarea:focus, select:focus {
       outline: none;
-      border-color: var(--green-mid);
+      border-color: var(--text-dark);
     }
     .form-group { margin-bottom: 1rem; }
     label { font-size: 14px; font-weight: 500; color: var(--text-mid); }
     .success-msg {
       display:none;
-      background: var(--green-pale);
-      border: 1px solid var(--green-light);
-      color: var(--green-dark);
+      background: var(--gray-pale);
+      border: 1px solid var(--border);
+      color: var(--text-dark);
       padding: 1rem;
       border-radius: var(--radius);
       margin-top: 1rem;
       text-align: center;
     }
   </style>
+<style>
+  .footer-teacher-name, .footer-school,
+  #hero-name, #hero-subject, #hero-school { opacity: 0; transition: opacity .15s; }
+</style>
 </head>
 <body>
 
@@ -70,30 +74,30 @@
           <div class="contact-icon-wrap">📧</div>
           <div>
             <p style="font-size:13px;color:var(--text-light);">อีเมล</p>
-            <a id="contact-email" href="mailto:natthaphon@school.ac.th" style="font-size:14px;font-weight:600;color:var(--green-mid);text-decoration:none;">natthaphon@school.ac.th</a>
+            <a id="contact-email" href="mailto:natthaphon@school.ac.th" style="font-size:14px;font-weight:600;color:var(--text-dark);text-decoration:none;">natthaphon@school.ac.th</a>
           </div>
         </div>
         <div class="contact-info-row">
           <div class="contact-icon-wrap">💬</div>
           <div>
             <p style="font-size:13px;color:var(--text-light);">Line OA</p>
-            <p id="contact-line" style="font-size:14px;font-weight:600;color:var(--green-dark);">@kru_lek</p>
+            <p id="contact-line" style="font-size:14px;font-weight:600;color:var(--text-dark);">@kru_lek</p>
           </div>
         </div>
         <div class="contact-info-row">
           <div class="contact-icon-wrap">🏫</div>
           <div>
             <p style="font-size:13px;color:var(--text-light);">ห้องพักครู</p>
-            <p id="contact-room" style="font-size:14px;font-weight:600;color:var(--green-dark);">อาคาร 2 ชั้น 3 ห้อง 301</p>
+            <p id="contact-room" style="font-size:14px;font-weight:600;color:var(--text-dark);">อาคาร 2 ชั้น 3 ห้อง 301</p>
           </div>
         </div>
       </div>
 
       <div class="card" style="margin-top:1rem;">
-        <h3 style="font-size:15px;font-weight:600;color:var(--green-dark);margin-bottom:.75rem;">⏰ เวลารับนักเรียน</h3>
+        <h3 style="font-size:15px;font-weight:600;color:var(--text-dark);margin-bottom:.75rem;">⏰ เวลารับนักเรียน</h3>
         <div style="font-size:13px;display:flex;flex-direction:column;gap:.4rem;color:var(--text-mid);">
-          <div style="display:flex;justify-content:space-between;"><span>จันทร์–ศุกร์</span><span style="font-weight:600;color:var(--green-dark);">12:00–13:00 น.</span></div>
-          <div style="display:flex;justify-content:space-between;"><span>วันอังคาร–พฤหัส</span><span style="font-weight:600;color:var(--green-dark);">15:30–16:30 น.</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>จันทร์–ศุกร์</span><span style="font-weight:600;color:var(--text-dark);">12:00–13:00 น.</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>วันอังคาร–พฤหัส</span><span style="font-weight:600;color:var(--text-dark);">15:30–16:30 น.</span></div>
           <p style="margin-top:.5rem;color:var(--text-light);font-size:12px;">* หากต้องการนอกเวลา กรุณานัดล่วงหน้าทาง Line</p>
         </div>
       </div>

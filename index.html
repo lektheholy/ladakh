@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>หน้าแรก | ครูเล็ก</title>
   <link rel="stylesheet" href="style.css" />
+<style>
+  .footer-teacher-name, .footer-school,
+  #hero-name, #hero-subject, #hero-school { opacity: 0; transition: opacity .15s; }
+</style>
 </head>
 <body>
 
@@ -62,17 +66,17 @@
     <div class="card-grid">
       <a href="materials.html" class="card" style="text-decoration:none;display:block;transition:box-shadow .2s;" onmouseover="this.style.boxShadow='0 4px 24px rgba(0,80,40,.14)'" onmouseout="this.style.boxShadow=''">
         <div style="font-size:2rem;margin-bottom:.5rem;">📚</div>
-        <h3 style="font-size:15px;color:var(--green-dark);">สื่อการสอน</h3>
+        <h3 style="font-size:15px;color:var(--text-dark);">สื่อการสอน</h3>
         <p style="font-size:13px;color:var(--text-mid);">สไลด์ ใบงาน วิดีโอ แบ่งตามบท</p>
       </a>
       <a href="students.html" class="card" style="text-decoration:none;display:block;transition:box-shadow .2s;" onmouseover="this.style.boxShadow='0 4px 24px rgba(0,80,40,.14)'" onmouseout="this.style.boxShadow=''">
         <div style="font-size:2rem;margin-bottom:.5rem;">🏆</div>
-        <h3 style="font-size:15px;color:var(--green-dark);">ผลงานนักเรียน</h3>
+        <h3 style="font-size:15px;color:var(--text-dark);">ผลงานนักเรียน</h3>
         <p style="font-size:13px;color:var(--text-mid);">โปรเจกต์ดีเด่น รางวัลการแข่งขัน</p>
       </a>
       <a href="about.html" class="card" style="text-decoration:none;display:block;transition:box-shadow .2s;" onmouseover="this.style.boxShadow='0 4px 24px rgba(0,80,40,.14)'" onmouseout="this.style.boxShadow=''">
         <div style="font-size:2rem;margin-bottom:.5rem;">👩‍🏫</div>
-        <h3 style="font-size:15px;color:var(--green-dark);">เกี่ยวกับครู</h3>
+        <h3 style="font-size:15px;color:var(--text-dark);">เกี่ยวกับครู</h3>
         <p style="font-size:13px;color:var(--text-mid);">ประวัติ ประสบการณ์ ผลงานวิชาการ</p>
       </a>
     </div>
@@ -114,9 +118,9 @@ import { getCollection, getDocument } from "./firebase.js";
     const grid = document.getElementById("announcements-grid");
     if (!grid) return;
     const typeMap = {
-      new:       { label:"ใหม่",     color:"var(--green-light)", badge:"" },
+      new:       { label:"ใหม่",     color:"var(--border)", badge:"" },
       important: { label:"สำคัญ",   color:"var(--amber)",       badge:"badge-amber" },
-      activity:  { label:"กิจกรรม", color:"#9bcfb8",            badge:"" },
+      activity:  { label:"กิจกรรม", color:"var(--border)",            badge:"" },
     };
     grid.innerHTML = items.slice(0,3).map(item => {
       const t = typeMap[item.type] || typeMap.new;

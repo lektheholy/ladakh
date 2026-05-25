@@ -143,6 +143,9 @@ buildNav();
     }
   } catch(e) {}
 
-  // แสดง nav-name หลัง fetch ไม่ว่าจะสำเร็จหรือไม่
+  // แสดงทุก element หลัง fetch ไม่ว่าจะสำเร็จหรือไม่
   if (nameEl) nameEl.style.opacity = "1";
+  document.querySelectorAll(
+    ".footer-teacher-name, .footer-school, #hero-name, #hero-subject, #hero-school"
+  ).forEach(el => el.style.opacity = "1");
 })();

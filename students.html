@@ -12,7 +12,7 @@
       gap: 1rem;
     }
     .gallery-item {
-      background: var(--green-pale);
+      background: var(--gray-pale);
       border-radius: var(--radius);
       aspect-ratio: 4/3;
       display: flex;
@@ -43,6 +43,10 @@
       align-items: flex-start;
     }
   </style>
+<style>
+  .footer-teacher-name, .footer-school,
+  #hero-name, #hero-subject, #hero-school { opacity: 0; transition: opacity .15s; }
+</style>
 </head>
 <body>
 
@@ -61,7 +65,7 @@
       <div class="award-card" style="">
         <span style="font-size:2rem;">🥇</span>
         <div>
-          <p style="font-size:15px;font-weight:600;color:var(--green-dark);">ชนะเลิศ ตอบปัญหาวิทยาศาสตร์ระดับภาค</p>
+          <p style="font-size:15px;font-weight:600;color:var(--text-dark);">ชนะเลิศ ตอบปัญหาวิทยาศาสตร์ระดับภาค</p>
           <p style="font-size:13px;color:var(--text-mid);">ด.ญ.สุชาดา และ ด.ช.พิพัฒน์ · ม.2/1 · มิถุนายน 2568</p>
           <span class="badge badge-amber">ระดับภาค</span>
         </div>
@@ -70,7 +74,7 @@
       <div class="award-card" style="">
         <span style="font-size:2rem;">🥈</span>
         <div>
-          <p style="font-size:15px;font-weight:600;color:var(--green-dark);">รองชนะเลิศ โครงงานวิทยาศาสตร์ ระดับจังหวัด</p>
+          <p style="font-size:15px;font-weight:600;color:var(--text-dark);">รองชนะเลิศ โครงงานวิทยาศาสตร์ ระดับจังหวัด</p>
           <p style="font-size:13px;color:var(--text-mid);">กลุ่ม Green Future ม.3/2 · มีนาคม 2568</p>
           <span class="badge">ระดับจังหวัด</span>
         </div>
@@ -79,7 +83,7 @@
       <div class="award-card" style="">
         <span style="font-size:2rem;">🥉</span>
         <div>
-          <p style="font-size:15px;font-weight:600;color:var(--green-dark);">อันดับที่ 3 วาดภาพสิ่งแวดล้อม ระดับเขต</p>
+          <p style="font-size:15px;font-weight:600;color:var(--text-dark);">อันดับที่ 3 วาดภาพสิ่งแวดล้อม ระดับเขต</p>
           <p style="font-size:13px;color:var(--text-mid);">ด.ญ.นภัสสร ม.1/3 · กุมภาพันธ์ 2568</p>
           <span class="badge">ระดับเขต</span>
         </div>
@@ -95,21 +99,21 @@
 
       <div class="card">
         <span class="badge" style="margin-bottom:.5rem;display:inline-block;">ม.2 ปีการศึกษา 2567</span>
-        <h3 style="font-size:15px;color:var(--green-dark);margin:.25rem 0;">โครงงาน "น้ำสะอาดจากพืชธรรมชาติ"</h3>
+        <h3 style="font-size:15px;color:var(--text-dark);margin:.25rem 0;">โครงงาน "น้ำสะอาดจากพืชธรรมชาติ"</h3>
         <p style="font-size:13px;color:var(--text-mid);">ศึกษาการกรองน้ำด้วยถ่านกัมมันต์จากไม้ไผ่ เปรียบเทียบประสิทธิภาพกับวิธีการกรองแบบต่างๆ</p>
         <p style="font-size:12px;color:var(--text-light);margin-top:.5rem;">ทีม: ด.ช.ภูมิ, ด.ญ.ฟ้า, ด.ช.ก้อง</p>
       </div>
 
       <div class="card">
         <span class="badge" style="margin-bottom:.5rem;display:inline-block;">ม.3 ปีการศึกษา 2567</span>
-        <h3 style="font-size:15px;color:var(--green-dark);margin:.25rem 0;">โครงงาน "แผงโซลาร์เซลล์จำลอง"</h3>
+        <h3 style="font-size:15px;color:var(--text-dark);margin:.25rem 0;">โครงงาน "แผงโซลาร์เซลล์จำลอง"</h3>
         <p style="font-size:13px;color:var(--text-mid);">ออกแบบและทดสอบโมเดลแผงโซลาร์เซลล์ขนาดเล็กสำหรับชาร์จแบตเตอรี่โทรศัพท์</p>
         <p style="font-size:12px;color:var(--text-light);margin-top:.5rem;">ทีม: ด.ช.ธนา, ด.ญ.เมย์, ด.ช.ปรินทร์</p>
       </div>
 
       <div class="card">
         <span class="badge" style="margin-bottom:.5rem;display:inline-block;">ม.1 ปีการศึกษา 2567</span>
-        <h3 style="font-size:15px;color:var(--green-dark);margin:.25rem 0;">โครงงาน "สีจากธรรมชาติ"</h3>
+        <h3 style="font-size:15px;color:var(--text-dark);margin:.25rem 0;">โครงงาน "สีจากธรรมชาติ"</h3>
         <p style="font-size:13px;color:var(--text-mid);">สกัดสีธรรมชาติจากพืชในท้องถิ่น นำมาประยุกต์ใช้ย้อมผ้าและทำสีโปสเตอร์</p>
         <p style="font-size:12px;color:var(--text-light);margin-top:.5rem;">ทีม: ด.ญ.มิ้น, ด.ญ.แพร, ด.ช.ไทกี้</p>
       </div>
@@ -159,7 +163,7 @@ import { getCollection } from "./firebase.js";
     const awards = await getCollection("awards");
     if (awards.length) {
       awards.sort((a,b) => b.createdAt - a.createdAt);
-      const medalColor = { "🥇":"#f5c518", "🥈":"#b8b8b8", "🥉":"#cd7f32", "🏅":"var(--green-light)" };
+      const medalColor = { "🥇":"#f5c518", "🥈":"#b8b8b8", "🥉":"#cd7f32", "🏅":"var(--border)" };
       const awardSec = document.querySelector(".award-card")?.closest("section") || document.querySelector(".page-wrap section");
       // หา container ของ award-card
       const awardContainer = document.querySelector(".page-wrap > section:first-child > div");
@@ -168,7 +172,7 @@ import { getCollection } from "./firebase.js";
           <div class="award-card" style="background:var(--white);border:1px solid var(--border);--radius);padding:1rem 1.25rem;display:flex;gap:1rem;align-items:flex-start;">
             <span style="font-size:2rem;">${a.medal}</span>
             <div>
-              <p style="font-size:15px;font-weight:600;color:var(--green-dark);">${a.title}</p>
+              <p style="font-size:15px;font-weight:600;color:var(--text-dark);">${a.title}</p>
               <p style="font-size:13px;color:var(--text-mid);">${a.student} · ${a.class_}</p>
               <span class="badge">${a.level}</span>
             </div>
@@ -185,7 +189,7 @@ import { getCollection } from "./firebase.js";
         const newItems = projects.map(p => `
           <div class="card">
             <span class="badge" style="margin-bottom:.5rem;display:inline-block;">${p.class_}</span>
-            <h3 style="font-size:15px;color:var(--green-dark);margin:.25rem 0;">${p.title}</h3>
+            <h3 style="font-size:15px;color:var(--text-dark);margin:.25rem 0;">${p.title}</h3>
             <p style="font-size:13px;color:var(--text-mid);">${p.desc||""}</p>
             <p style="font-size:12px;color:var(--text-light);margin-top:.5rem;">ทีม: ${p.team}</p>
           </div>`).join("");
