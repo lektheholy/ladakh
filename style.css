@@ -2,7 +2,10 @@
    style.css — typewriter / editorial
    =================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@300;400;500;600;700&family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Noto+Serif+Thai:wght@400;500;600;700&display=swap');
+
+/* ── Font preload: hide body until fonts ready to prevent FOUT ── */
+body.fonts-loading { visibility: hidden; }
 
 :root {
   --black:       #111010;
@@ -41,7 +44,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: 'Noto Serif Thai', 'Courier Prime', serif;
+  font-family: 'Courier Prime', 'Noto Serif Thai', monospace;
   background: var(--paper);
   color: var(--black);
   line-height: 1.85;
@@ -79,13 +82,18 @@ body {
   margin-right: auto;
 }
 .nav-logo {
-  font-size: 18px;
+  font-family: 'Courier Prime', monospace;
+  font-size: 16px;
+  font-weight: 700;
   width: 30px; height: 30px;
   display: flex; align-items: center; justify-content: center;
+  color: var(--black);
 }
 .nav-brand-text { display: flex; flex-direction: column; }
 .nav-name {
-  font-family: 'Special Elite', 'Courier Prime', monospace;
+  /* default hidden until Firebase syncs */
+  transition: opacity .15s;
+  font-family: 'Courier Prime', monospace;
   font-size: 14px;
   font-weight: 400;
   color: var(--black);
@@ -94,7 +102,7 @@ body {
 }
 .nav-sub {
   font-family: 'Courier Prime', monospace;
-  font-size: 10px;
+  font-size: 10.5px;
   color: var(--gray-mid);
   letter-spacing: .08em;
 }
@@ -110,7 +118,7 @@ body {
   padding: 0 14px;
   height: var(--nav-h);
   text-decoration: none;
-  font-family: 'Noto Serif Thai', serif;
+  font-family: 'Courier Prime', 'Noto Serif Thai', monospace;
   font-size: 13px;
   font-weight: 400;
   color: var(--gray-mid);
@@ -162,7 +170,7 @@ body {
   text-align: left;
 }
 .hero h1 {
-  font-family: 'Special Elite', 'Courier Prime', monospace;
+  font-family: 'Courier Prime', monospace;
   font-size: clamp(1.9rem, 5vw, 3.2rem);
   font-weight: 400;
   line-height: 1.25;
@@ -171,7 +179,7 @@ body {
 .hero p {
   font-family: 'Courier Prime', monospace;
   font-size: .9rem;
-  opacity: .6;
+  opacity: .65;
   margin-top: .75rem;
   letter-spacing: .04em;
   max-width: 480px;
@@ -298,7 +306,7 @@ th {
 td {
   padding: 9px 16px;
   border-bottom: 1px solid var(--border);
-  font-family: 'Noto Serif Thai', serif;
+  font-family: 'Courier Prime', 'Noto Serif Thai', monospace;
 }
 tr:last-child td { border-bottom: none; }
 tr:hover td { background: var(--gray-pale); }

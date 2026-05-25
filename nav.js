@@ -2,19 +2,29 @@
 // nav.js — เมนูกลาง + Admin indicator
 // ===================================================
 
+// ── ป้องกัน FOUT: ซ่อนหน้าจนกว่าฟอนต์จะพร้อม ──────
+document.documentElement.classList.add('fonts-loading');
+if (document.fonts && document.fonts.ready) {
+  document.fonts.ready.then(() => {
+    document.documentElement.classList.remove('fonts-loading');
+  });
+} else {
+  document.documentElement.classList.remove('fonts-loading');
+}
+
 const SITE = {
   teacherName: "ครูเล็ก",
-  subject: "วิทยาศาสตร์ | มัธยมศึกษาตอนต้น",
+  subject: "วิทยาการคำนวณ, ออกแบบและเทคโนโลยี",
   school: "โรงเรียนตัวอย่าง",
-  logo: "🔬",
+  logo: "◆",
   contact: { email: "natthaphon@school.ac.th", line: "@kru_lek" },
   menuItems: [
-    { label: "หน้าแรก",       href: "index.html",    icon: "🏠" },
-    { label: "เกี่ยวกับครู",   href: "about.html",    icon: "👩‍🏫" },
-    { label: "สื่อการสอน",    href: "materials.html", icon: "📚" },
-    { label: "ผลงานนักเรียน", href: "students.html",  icon: "🏆" },
-    { label: "ปฏิทิน",        href: "calendar.html",  icon: "📅" },
-    { label: "ติดต่อครู",      href: "contact.html",   icon: "📬" },
+    { label: "หน้าแรก",       href: "index.html"    },
+    { label: "เกี่ยวกับครู",   href: "about.html"    },
+    { label: "สื่อการสอน",    href: "materials.html" },
+    { label: "ผลงานนักเรียน", href: "students.html"  },
+    { label: "ปฏิทิน",        href: "calendar.html"  },
+    { label: "ติดต่อครู",      href: "contact.html"   },
   ],
 };
 
@@ -29,8 +39,8 @@ function buildNav() {
       <a href="index.html" class="nav-brand">
         <span class="nav-logo">${SITE.logo}</span>
         <div class="nav-brand-text">
-          <span class="nav-name">${SITE.teacherName}</span>
-          <span class="nav-sub">${SITE.subject}</span>
+          <span class="nav-name" id="navTeacherName">${SITE.teacherName}</span>
+          <span class="nav-sub" id="navSubject">${SITE.subject}</span>
         </div>
       </a>
       <button class="nav-hamburger" onclick="toggleMenu()" aria-label="เปิดเมนู">
@@ -53,7 +63,7 @@ function buildNav() {
       <div id="navAuthArea" style="display:flex;align-items:center;gap:.5rem;margin-left:.5rem;flex-shrink:0;">
         <a href="admin.html" class="btn-nav-login" id="navLoginBtn">ครูล็อกอิน</a>
         <div id="navUserBadge" style="display:none;align-items:center;gap:.5rem;">
-          <span style="font-size:12px;color:var(--green-mid);font-weight:600;" id="navUserEmail"></span>
+          <span style="font-family:'Courier Prime',monospace;font-size:11px;color:var(--gray-dark);font-weight:700;" id="navUserEmail"></span>
           <button onclick="navLogout()" class="btn-nav-logout" title="ออกจากระบบ">↩</button>
         </div>
       </div>
@@ -61,18 +71,14 @@ function buildNav() {
   `;
   document.body.prepend(nav);
 
-  // Firebase auth listener — ถ้าโหลด Firebase
-  if (typeof firebase !== "undefined" || window._fbAuth) {
-    _syncNavAuth(window._fbAuth);
-  }
   window.addEventListener("authChanged", e => _syncNavAuth(e.detail));
 }
 
 function _syncNavAuth(user) {
-  const loginBtn    = document.getElementById("navLoginBtn");
-  const userBadge   = document.getElementById("navUserBadge");
-  const userEmail   = document.getElementById("navUserEmail");
-  const adminItem   = document.getElementById("navAdminItem");
+  const loginBtn  = document.getElementById("navLoginBtn");
+  const userBadge = document.getElementById("navUserBadge");
+  const userEmail = document.getElementById("navUserEmail");
+  const adminItem = document.getElementById("navAdminItem");
   if (!loginBtn) return;
   if (user) {
     loginBtn.style.display = "none";
@@ -87,10 +93,7 @@ function _syncNavAuth(user) {
 }
 
 async function navLogout() {
-  // ลองเรียก logout จาก firebase module ถ้ามี
-  if (window._fbLogout) {
-    await window._fbLogout();
-  }
+  if (window._fbLogout) await window._fbLogout();
   window.dispatchEvent(new CustomEvent("authChanged", { detail: null }));
   window.location.href = "index.html";
 }
@@ -106,24 +109,40 @@ document.addEventListener("click", e => {
 
 buildNav();
 
-// ── Sync nav with Firestore profile ──────────────
+// ── Sync nav + footer กับ Firestore profile ──────────────
+// ซ่อน nav-name ก่อน แล้วแสดงหลัง Firebase ตอบกลับ เพื่อไม่ให้เห็นกระพริบ
 (async () => {
+  const nameEl    = document.getElementById("navTeacherName");
+  const subjectEl = document.getElementById("navSubject");
+  if (nameEl) nameEl.style.opacity = "0";
+
   try {
-    // dynamic import to avoid breaking pages that don't use modules
     const { getDocument } = await import("./firebase.js");
     const profile = await getDocument("settings/profile");
-    if (!profile) return;
-    if (profile.name) {
-      const el = document.querySelector(".nav-name");
-      if (el) el.textContent = profile.name;
-      document.querySelectorAll(".footer-teacher-name").forEach(e => e.textContent = profile.name);
-    }
-    if (profile.subject) {
-      const el = document.querySelector(".nav-sub");
-      if (el) el.textContent = profile.subject;
-    }
-    if (profile.school) {
-      document.querySelectorAll(".footer-school").forEach(e => e.textContent = profile.school);
+
+    if (profile) {
+      if (profile.name) {
+        if (nameEl) nameEl.textContent = profile.name;
+        document.querySelectorAll(".footer-teacher-name").forEach(e => e.textContent = profile.name);
+        // อัพเดต hero ด้วยถ้ามี
+        const heroName = document.getElementById("hero-name");
+        if (heroName) heroName.textContent = profile.name;
+      }
+      if (profile.subject) {
+        if (subjectEl) subjectEl.textContent = profile.subject;
+        const heroSubject = document.getElementById("hero-subject");
+        if (heroSubject) {
+          const schoolSpan = document.getElementById("hero-school");
+          const schoolText = schoolSpan ? schoolSpan.textContent : "";
+          heroSubject.innerHTML = profile.subject + (schoolText ? ' | <span id="hero-school">' + schoolText + '</span>' : "");
+        }
+      }
+      if (profile.school) {
+        document.querySelectorAll(".footer-school, #hero-school").forEach(e => e.textContent = profile.school);
+      }
     }
   } catch(e) {}
+
+  // แสดง nav-name หลัง fetch ไม่ว่าจะสำเร็จหรือไม่
+  if (nameEl) nameEl.style.opacity = "1";
 })();
